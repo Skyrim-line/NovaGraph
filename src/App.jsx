@@ -12,6 +12,7 @@ function App() {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [colorMap, setColorMap] = useState({});
+  const [red, setRed] = useState(false);
 
   useEffect(() => {
     createModule().then(mod => {
@@ -46,6 +47,11 @@ function App() {
 
   const doDijkstra = () => {
     alg.dijkstra_source_to_target(wasmModule, setColorMap)
+    setRed(false)
+  }
+  const doDijkstra2 = () => {
+    alg.dijkstra_source_to_all(wasmModule, setColorMap)
+    setRed(true)
   }
 
   return (
@@ -53,8 +59,9 @@ function App() {
       <h1>NovaGraph</h1>
       
       <button onClick={doDijkstra}>Dijkstra &#40;A to B&#41;</button>
+      <button onClick={doDijkstra2}>Dijkstra &#40;A to all&#41;</button>
       <CosmographProvider nodes={nodes} links={edges} id="hicosmos">
-        <GraphRenderer colors={colorMap} />
+        <GraphRenderer colors={colorMap} nodes={nodes} colorAll={red} />
       </CosmographProvider>
 
       <div className="card">

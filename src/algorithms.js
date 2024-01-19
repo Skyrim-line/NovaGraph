@@ -10,13 +10,36 @@ const dijkstra_source_to_target = (wasmModule, setColorMap) => {
 
       setColorMap(map => ({
         ...map,
-        [nodeId]: '#fff',
-        ...(linkId && { [linkId]: '#fff' })
+        [nodeId]: (map[nodeId] || 0) + 1,
+        ...(linkId && { [linkId]: (map[linkId] || 0) + 1 })
       }))
+    }
+}
+
+const dijkstra_source_to_all = (wasmModule, setColorMap) => {
+    const source = prompt("Enter source vertex", "0");
+    setColorMap({})
+
+
+    // TODO: do something cool with frequencies
+    const paths = wasmModule.dijkstra_source_to_all(parseInt(source));
+    for (let i = 0; i < paths.size(); i++) {
+      const path = paths.get(i);
+      for (let j = 0; j < path.size(); j++) {
+        const nodeId = path.get(j);
+        const linkId = j > 0 && `${path.get(j - 1)}-${nodeId}`;
+
+        setColorMap(map => ({
+            ...map,
+            [nodeId]: (map[nodeId] || 0) + 1,
+            ...(linkId && { [linkId]: (map[linkId] || 0) + 1 })
+          }))
+      }
     }
 }
 
 export const alg = {
     dijkstra_source_to_target,
+    dijkstra_source_to_all
     // add more here when implemented
 }
