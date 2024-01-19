@@ -22,6 +22,6 @@ struct ShortestPath {
 };
 
 VecInt dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar);
-
+std::vector<VecInt> dijkstra_source_to_all(igraph_integer_t src);
 
 #endif

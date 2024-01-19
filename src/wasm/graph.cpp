@@ -87,6 +87,7 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("generateGraph", &generateGraph);
   function("sum", &sum);
   function("dijkstra_source_to_target", &dijkstra_source_to_target);
+  function("dijkstra_source_to_all", &dijkstra_source_to_all);
   function("cleanupGraph", &cleanupGraph);
 }
 
