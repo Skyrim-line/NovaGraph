@@ -3,6 +3,15 @@ A WebAssembly Project which uses C++ to deliver high-performance graph analytics
 
 ## Build
 TO compile, ensure the igraph library has been built and `build-wasm.sh` includes the correct header files.
+```bash
+chmod +x build-wasm.sh
+./build-wasm.sh
+```
+
+To run the development server:
+```bash
+npm run dev
+```
 
 
 <!---
