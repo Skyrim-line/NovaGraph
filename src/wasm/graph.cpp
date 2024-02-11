@@ -11,11 +11,17 @@ GraphData generateGraph(void) {
     igraph_empty(&globalGraph, 0, IGRAPH_UNDIRECTED);
 
     // manipulate
-    igraph_add_vertices(&globalGraph, 5, 0);
+    igraph_add_vertices(&globalGraph, 11, 0);
     igraph_add_edge(&globalGraph, 0, 1);
-    igraph_add_edge(&globalGraph, 1, 2);
-    igraph_add_edge(&globalGraph, 2, 3);
+    igraph_add_edge(&globalGraph, 0, 2);
+    igraph_add_edge(&globalGraph, 0, 9);
+    igraph_add_edge(&globalGraph, 2, 5);
+    igraph_add_edge(&globalGraph, 2, 7);
     igraph_add_edge(&globalGraph, 3, 1);
+    igraph_add_edge(&globalGraph, 3, 4);
+    igraph_add_edge(&globalGraph, 4, 5);
+    igraph_add_edge(&globalGraph, 6, 1);
+    igraph_add_edge(&globalGraph, 8, 1);
 
     // Get the number of vertices and edges
     igraph_integer_t num_vertices = igraph_vcount(&globalGraph);
@@ -81,13 +87,16 @@ EMSCRIPTEN_BINDINGS(graph) {
     .field("nodes", &GraphData::nodes)
     .field("edges", &GraphData::edges);
 
-  value_object<ShortestPath>("SP");
-
   // Expose the functions
   function("generateGraph", &generateGraph);
   function("sum", &sum);
+
+  function("vertices_are_connected", &vertices_are_connected);
   function("dijkstra_source_to_target", &dijkstra_source_to_target);
   function("dijkstra_source_to_all", &dijkstra_source_to_all);
+  function("yens_algorithm", &yen_source_to_target);
+  function("bellman_ford_source_to_target", &bf_source_to_target);
+  function("bellman_ford_source_to_all", &bf_source_to_all);
   function("cleanupGraph", &cleanupGraph);
 }
 

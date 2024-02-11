@@ -2,6 +2,8 @@
 #define GRAPH_H
 
 #include "igraph/include/igraph.h"
+#include <emscripten/val.h>
+#include <emscripten/bind.h>
 #include <vector>
 
 extern igraph_t globalGraph;
@@ -16,12 +18,17 @@ struct GraphData {
 GraphData generateGraph(void);
 void cleanupGraph(void);
 
-
-struct ShortestPath {
-    // related fields for shortest path return
+struct PathData {
+    int* data;
+    size_t size;
 };
 
+
+bool vertices_are_connected(igraph_integer_t src, igraph_integer_t tar);
 VecInt dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar);
 std::vector<VecInt> dijkstra_source_to_all(igraph_integer_t src);
+std::vector<VecInt> yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_integer_t k);
+VecInt bf_source_to_target(igraph_integer_t src, igraph_integer_t tar);
+std::vector<VecInt> bf_source_to_all(igraph_integer_t src);
 
 #endif

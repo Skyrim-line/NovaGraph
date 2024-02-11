@@ -31,7 +31,6 @@ export function GraphRenderer({ colors, nodes, colorAll }) {
         } else if (colorAll) {
             return '#F05480'
         } else {
-            console.log("hi", freq)
             return '#fff'
         }
     }
@@ -52,10 +51,11 @@ export function GraphRenderer({ colors, nodes, colorAll }) {
         //renderHoveredNodeRing={true}
         //hoveredNodeRingColor='#4B5BBF'
         linkGreyoutOpacity={0}
-        simulationLinkDistance={20}
-        simulationLinkSpring={2}
-        simulationRepulsion={1}
-        simulationGravity={0.01}
+        //simulationLinkDistance={20}
+        //simulationLinkSpring={1.5}
+        simulationRepulsion={2}
+        //simulationGravity={1}
+        simulationLinkSpring={0.01}
         simulationDecay={100000}
         onClick={zoomToNode}
     />)
