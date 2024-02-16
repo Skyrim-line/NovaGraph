@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "../graph.h"
 #include <iostream>
 
 // Check connection

@@ -1,4 +1,4 @@
-em++ src/wasm/graph.cpp src/wasm/algorithms.cpp -o src/graph.js \
+em++ src/wasm/graph.cpp src/wasm/algorithms/*.cpp -o src/graph.js \
     -s WASM=1 \
     -I./src/wasm -I./src/wasm/igraph/build/include -I./src/wasm/igraph/include \
     -s EXPORT_ES6=1 \
