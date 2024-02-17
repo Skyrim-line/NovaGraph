@@ -30,5 +30,6 @@ std::vector<VecInt> dijkstra_source_to_all(igraph_integer_t src);
 std::vector<VecInt> yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_integer_t k);
 VecInt bf_source_to_target(igraph_integer_t src, igraph_integer_t tar);
 std::vector<VecInt> bf_source_to_all(igraph_integer_t src);
+std::vector<VecInt> bfs(igraph_integer_t src);
 
 #endif

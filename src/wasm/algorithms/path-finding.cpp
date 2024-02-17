@@ -146,3 +146,35 @@ std::vector<VecInt> bf_source_to_all(igraph_integer_t src) {
 
     return res;
 }
+
+
+// BFS
+std::vector<VecInt> bfs(igraph_integer_t src) {
+    std::vector<VecInt> result;
+    igraph_vector_int_t order;
+    igraph_vector_int_init(&order, 0);
+    igraph_vector_int_t layers;
+    igraph_vector_int_init(&layers, 0);
+
+    igraph_bfs_simple(&globalGraph, src, IGRAPH_OUT, &order, &layers, NULL);
+
+    igraph_integer_t current_layer = 1;
+    VecInt current_layer_vertices;
+
+    for (igraph_integer_t i = 0; i < igraph_vector_int_size(&order); ++i) {
+        int vertex = VECTOR(order)[i];
+        int layer = VECTOR(layers)[current_layer];
+    
+        if (i == layer) {
+            result.push_back(current_layer_vertices);
+            current_layer_vertices.clear();
+            ++current_layer;
+        }
+        current_layer_vertices.push_back(vertex);        
+    }
+    result.push_back(current_layer_vertices);
+
+    igraph_vector_int_destroy(&order);
+    igraph_vector_int_destroy(&layers);
+    return result;
+}

@@ -98,6 +98,7 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("bellman_ford_source_to_target", &bf_source_to_target);
   function("bellman_ford_source_to_all", &bf_source_to_all);
   function("cleanupGraph", &cleanupGraph);
+  function("bfs", &bfs);
 }
 
 // emcc demo.cpp -O3 -s WASM=1 -s -sEXPORTED_FUNCTIONS=_sum,_subtract --no-entry -o demo.wasm

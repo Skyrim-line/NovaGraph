@@ -132,11 +132,41 @@ const bf_source_to_all = (wasmModule, setColorMap) => {
   return msg;
 }
 
+const bfs = (wasmModule, setColorMap, numNodes) => {
+  const source = prompt("Enter source vertex", "0");
+  let newCMap = {}
+  let nodesRemaining = numNodes
+
+  const layers = wasmModule.bfs(parseInt(source));
+  let msg = `BFS from [${source}]\n`
+
+  for (let i = 0; i < layers.size(); i++) {
+    const layer = layers.get(i)
+    msg += `Iteration ${i}: [`
+    for (let j = 0; j < layer.size(); j++) {
+      let nodeId = layer.get(j)
+      newCMap[nodeId] = nodesRemaining,
+
+      msg += `${layer.get(j)}`
+      if (j != layer.size() - 1) {
+        msg += ', '
+      }
+    }
+    msg += ']\n'
+    nodesRemaining -= layer.size()
+  }
+
+  setColorMap(newCMap)
+  return msg;
+
+}
+
 export const alg = {
     dijkstra_source_to_target,
     dijkstra_source_to_all,
     yens_shortest_paths_algorithm,
     bf_source_to_target,
-    bf_source_to_all
+    bf_source_to_all,
+    bfs
     // add more here when implemented
 }

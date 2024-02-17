@@ -42,6 +42,10 @@ function App() {
     })
   }, []);
 
+  useEffect(() => {
+    console.log(colorMap)
+  }, [colorMap])
+
   const doAreConnected = () => {
     // single edge?
     let test = wasmModule.vertices_are_connected(2,9)
@@ -68,6 +72,10 @@ function App() {
     setText(alg.bf_source_to_all(wasmModule, setColorMap))
     setRed(true)
   }
+  const doBFS = () => {
+    setText(alg.bfs(wasmModule, setColorMap, nodes.length))
+    setRed(true)
+  }
 
   return (
     <>
@@ -86,6 +94,7 @@ function App() {
         <button onClick={doYen}>Yen's Shortest &#40;A to B&#41;</button>
         <button onClick={doBFSingle}>Bellman-Ford &#40;A to B&#41;</button>
         <button onClick={doBFMulti}>Bellman-Ford &#40;A to all&#41;</button>
+        <button onClick={doBFS}>BFS</button>
       </div>
       
       <pre>{text}</pre>
