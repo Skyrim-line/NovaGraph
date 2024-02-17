@@ -76,6 +76,9 @@ function App() {
     setText(alg.bfs(wasmModule, setColorMap, nodes.length))
     setRed(true)
   }
+  const doDFS = () => {
+    alg.dfs(wasmModule, setColorMap)
+  }
 
   return (
     <>
@@ -95,6 +98,7 @@ function App() {
         <button onClick={doBFSingle}>Bellman-Ford &#40;A to B&#41;</button>
         <button onClick={doBFMulti}>Bellman-Ford &#40;A to all&#41;</button>
         <button onClick={doBFS}>BFS</button>
+        <button onClick={doDFS}>DFS</button>
       </div>
       
       <pre>{text}</pre>

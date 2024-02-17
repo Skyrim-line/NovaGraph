@@ -161,12 +161,19 @@ const bfs = (wasmModule, setColorMap, numNodes) => {
 
 }
 
+const dfs = (wasmModule, setColorMap) => {
+  const res = wasmModule.dfs(1);
+  // res.get(0) will get printed
+  // res.get(1) will be rendered (find max and scale it)
+}
+
 export const alg = {
     dijkstra_source_to_target,
     dijkstra_source_to_all,
     yens_shortest_paths_algorithm,
     bf_source_to_target,
     bf_source_to_all,
-    bfs
+    bfs,
+    dfs
     // add more here when implemented
 }

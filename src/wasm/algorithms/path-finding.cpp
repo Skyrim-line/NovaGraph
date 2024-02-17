@@ -178,3 +178,44 @@ std::vector<VecInt> bfs(igraph_integer_t src) {
     igraph_vector_int_destroy(&layers);
     return result;
 }
+
+
+std::vector<VecInt> dfs(igraph_integer_t src) {
+    igraph_vector_int_t order;
+    igraph_vector_int_init(&order, 0);
+    igraph_vector_int_t dist;
+    igraph_vector_int_init(&dist, 0);
+
+    igraph_dfs(&globalGraph, src, IGRAPH_OUT, false, &order, NULL, NULL, &dist, NULL, NULL, NULL);
+
+    std::vector<std::vector<int>> result;
+
+    long int size_a = igraph_vector_int_size(&order);
+    long int size_b = igraph_vector_int_size(&dist);
+    long int min_size = std::min(size_a, size_b);
+
+    // Iterate over the vectors and construct the result
+    for (long int i = 0; i < min_size; ++i) {
+        std::vector<int> temp;
+        temp.push_back(VECTOR(order)[i]);
+        temp.push_back(VECTOR(dist)[i]);
+        result.push_back(temp);
+    }
+
+    // Handle the remaining elements of the longer vector, if any
+    for (long int i = min_size; i < size_a; ++i) {
+        std::vector<int> temp;
+        temp.push_back(VECTOR(order)[i]);
+        result.push_back(temp);
+    }
+
+    for (long int i = min_size; i < size_b; ++i) {
+        std::vector<int> temp;
+        temp.push_back(VECTOR(dist)[i]);
+        result.push_back(temp);
+    }
+
+    igraph_vector_int_destroy(&order);
+    igraph_vector_int_destroy(&dist);
+    return result;
+}
