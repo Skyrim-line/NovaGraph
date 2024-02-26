@@ -32,5 +32,7 @@ VecInt bf_source_to_target(igraph_integer_t src, igraph_integer_t tar);
 std::vector<VecInt> bf_source_to_all(igraph_integer_t src);
 std::vector<VecInt> bfs(igraph_integer_t src);
 std::vector<VecInt> dfs(igraph_integer_t src);
+VecInt randomWalk(igraph_integer_t start, int steps);
+
 
 #endif

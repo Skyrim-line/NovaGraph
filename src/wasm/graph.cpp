@@ -100,6 +100,7 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("cleanupGraph", &cleanupGraph);
   function("bfs", &bfs);
   function("dfs", &dfs);
+  function("random_walk", &randomWalk);
 }
 
 // emcc demo.cpp -O3 -s WASM=1 -s -sEXPORTED_FUNCTIONS=_sum,_subtract --no-entry -o demo.wasm

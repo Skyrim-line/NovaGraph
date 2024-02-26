@@ -217,3 +217,19 @@ std::vector<VecInt> dfs(igraph_integer_t src) {
     igraph_vector_int_destroy(&dist);
     return result;
 }
+
+
+VecInt randomWalk(igraph_integer_t start, int steps) {
+    igraph_vector_int_t vertices;
+    igraph_vector_int_init(&vertices, 0);
+
+    igraph_random_walk(&globalGraph, NULL, &vertices, NULL, start, IGRAPH_OUT, steps, IGRAPH_RANDOM_WALK_STUCK_RETURN);
+
+    VecInt path;
+    for (int i = 0; i < igraph_vector_int_size(&vertices); i++) {
+        path.push_back(VECTOR(vertices)[i]);
+    }
+
+    igraph_vector_int_destroy(&vertices);
+    return path;
+}

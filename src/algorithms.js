@@ -165,7 +165,7 @@ const dfs = (wasmModule, setColorMap) => {
   const source = prompt("Enter source vertex", "0");
   let newCMap = {}
 
-  const res = wasmModule.dfs(1);
+  const res = wasmModule.dfs(parseInt(source));
   const order = res.get(0) //will get printed
   const dist = res.get(1) // will be rendered (find max and scale it)
 
@@ -185,6 +185,28 @@ const dfs = (wasmModule, setColorMap) => {
   return msg;
 }
 
+const randomWalk = (wasmModule, setColorMap) => {
+  const start = prompt("Enter starting vertex", "0");
+  const steps = prompt("Enter step count", "0");
+  setColorMap({})
+
+  const path = wasmModule.random_walk(parseInt(start), parseInt(steps));
+  let msg = `Random Walk from [${start}] with ${steps} steps:\n`;
+
+  for (let i = 0; i < path.size(); i++) {
+    const nodeId = path.get(i);
+    const linkId = i > 0 && `${path.get(i - 1)}-${nodeId}`
+    msg += i > 0 ? ` -> [${nodeId}]` : `[${nodeId}]`
+
+    setColorMap(map => ({
+      ...map,
+      [nodeId]: (map[nodeId] || 0) + 1,
+      ...(linkId && { [linkId]: (map[linkId] || 0) + 1 })
+    }))
+  }
+  return msg;
+}
+
 export const alg = {
     dijkstra_source_to_target,
     dijkstra_source_to_all,
@@ -192,6 +214,7 @@ export const alg = {
     bf_source_to_target,
     bf_source_to_all,
     bfs,
-    dfs
+    dfs,
+    randomWalk
     // add more here when implemented
 }

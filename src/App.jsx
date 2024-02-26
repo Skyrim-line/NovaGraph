@@ -80,6 +80,10 @@ function App() {
     setText(alg.dfs(wasmModule, setColorMap, nodes.length))
     setRed(true)
   }
+  const doRW = () => {
+    setText(alg.randomWalk(wasmModule, setColorMap))
+    setRed(true)
+  }
 
   return (
     <>
@@ -91,7 +95,7 @@ function App() {
       </CosmographProvider>
 
       <div className="card">
-        <h3>Path Finding Algorithms</h3>
+        <h3>Path Finding & Search Algorithms</h3>
         <button onClick={doAreConnected}>Connection?</button>
         <button onClick={doDijkstraSingle}>Dijkstra &#40;A to B&#41;</button>
         <button onClick={doDijkstraMulti}>Dijkstra &#40;A to all&#41;</button>
@@ -100,6 +104,7 @@ function App() {
         <button onClick={doBFMulti}>Bellman-Ford &#40;A to all&#41;</button>
         <button onClick={doBFS}>BFS</button>
         <button onClick={doDFS}>DFS</button>
+        <button onClick={doRW}>Random Walk</button>
       </div>
       
       <pre>{text}</pre>
