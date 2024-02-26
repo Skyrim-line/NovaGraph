@@ -77,7 +77,8 @@ function App() {
     setRed(true)
   }
   const doDFS = () => {
-    alg.dfs(wasmModule, setColorMap)
+    setText(alg.dfs(wasmModule, setColorMap, nodes.length))
+    setRed(true)
   }
 
   return (

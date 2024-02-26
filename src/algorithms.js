@@ -162,9 +162,27 @@ const bfs = (wasmModule, setColorMap, numNodes) => {
 }
 
 const dfs = (wasmModule, setColorMap) => {
+  const source = prompt("Enter source vertex", "0");
+  let newCMap = {}
+
   const res = wasmModule.dfs(1);
-  // res.get(0) will get printed
-  // res.get(1) will be rendered (find max and scale it)
+  const order = res.get(0) //will get printed
+  const dist = res.get(1) // will be rendered (find max and scale it)
+
+  let msg = `DFS order from [${source}]\n`
+  for (let i = 0; i < order.size(); i++) {
+    msg += `${order.get(i)}`
+    if (i != order.size() - 1) {
+      msg += ' -> '
+    }
+  }
+
+  for (let i = 0; i < dist.size(); i++) {
+    newCMap[i] = dist.get(i)
+  }
+
+  setColorMap(newCMap);
+  return msg;
 }
 
 export const alg = {

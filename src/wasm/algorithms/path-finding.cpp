@@ -188,32 +188,30 @@ std::vector<VecInt> dfs(igraph_integer_t src) {
 
     igraph_dfs(&globalGraph, src, IGRAPH_OUT, false, &order, NULL, NULL, &dist, NULL, NULL, NULL);
 
-    std::vector<std::vector<int>> result;
+    int size = igraph_vector_int_size(&order);
+    int maxDist = igraph_vector_int_max(&dist);
 
-    long int size_a = igraph_vector_int_size(&order);
-    long int size_b = igraph_vector_int_size(&dist);
-    long int min_size = std::min(size_a, size_b);
+    std::vector<VecInt> result;
 
-    // Iterate over the vectors and construct the result
-    for (long int i = 0; i < min_size; ++i) {
-        std::vector<int> temp;
-        temp.push_back(VECTOR(order)[i]);
-        temp.push_back(VECTOR(dist)[i]);
-        result.push_back(temp);
+    VecInt orderVec, distVec;
+    for (long int i = 0; i < size; ++i) {
+        if (VECTOR(order)[i] != -1) {
+            orderVec.push_back(VECTOR(order)[i]);
+        }
+    }
+    for (long int i = 0; i < igraph_vector_int_size(&dist); ++i) {
+        // VECTOR(dist)[i] = distance from src
+        // tmp = scaled distance (for rendering colours)
+        if (VECTOR(dist)[i] < 0) {
+            distVec.push_back(0);
+        } else {
+            double tmp = (double)(maxDist - VECTOR(dist)[i] + 1)/(double)maxDist * size;
+            distVec.push_back(tmp);
+        }
     }
 
-    // Handle the remaining elements of the longer vector, if any
-    for (long int i = min_size; i < size_a; ++i) {
-        std::vector<int> temp;
-        temp.push_back(VECTOR(order)[i]);
-        result.push_back(temp);
-    }
-
-    for (long int i = min_size; i < size_b; ++i) {
-        std::vector<int> temp;
-        temp.push_back(VECTOR(dist)[i]);
-        result.push_back(temp);
-    }
+    result.push_back(orderVec);
+    result.push_back(distVec);
 
     igraph_vector_int_destroy(&order);
     igraph_vector_int_destroy(&dist);
