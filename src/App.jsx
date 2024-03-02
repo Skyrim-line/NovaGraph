@@ -81,7 +81,7 @@ function App() {
     setRed(true)
   }
   const doRW = () => {
-    setText(alg.randomWalk(wasmModule, setColorMap))
+    setText(alg.randomWalk(wasmModule, setColorMap, nodes.length))
     setRed(true)
   }
 

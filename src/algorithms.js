@@ -185,7 +185,7 @@ const dfs = (wasmModule, setColorMap) => {
   return msg;
 }
 
-const randomWalk = (wasmModule, setColorMap) => {
+const randomWalk = (wasmModule, setColorMap, numNodes) => {
   const start = prompt("Enter starting vertex", "0");
   const steps = prompt("Enter step count", "0");
   setColorMap({})
@@ -200,10 +200,11 @@ const randomWalk = (wasmModule, setColorMap) => {
 
     setColorMap(map => ({
       ...map,
-      [nodeId]: (map[nodeId] || 0) + 1,
-      ...(linkId && { [linkId]: (map[linkId] || 0) + 1 })
+      [nodeId]: numNodes/2,
+      ...(linkId && { [linkId]: numNodes })
     }))
   }
+  setColorMap(map => ({ ...map, [start]: numNodes }))
   return msg;
 }
 
