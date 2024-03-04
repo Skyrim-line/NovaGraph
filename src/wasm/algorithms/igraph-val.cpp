@@ -18,3 +18,10 @@ val igraph_vector_int_list_to_val(igraph_vector_int_list_t* v) {
     }
     return vss;
 }
+
+int getFreq(const val& map, std::string key) {
+    if (map[key].isUndefined()) {
+        return 0;
+    }
+    return map[key].as<int>();
+}

@@ -54,7 +54,11 @@ function App() {
   }
 
   const doDijkstraSingle = () => {
-    setText(alg.dijkstra_source_to_target(wasmModule, setColorMap))
+    const source = prompt("Enter source vertex", "0");
+    const target = prompt("Enter target vertex", "0");
+    const response = wasmModule.dijkstra_source_to_target(parseInt(source), parseInt(target));
+    setColorMap(response.colorMap)
+    setText(response.message)
     setRed(false)
   }
   const doDijkstraMulti = () => {
@@ -87,6 +91,9 @@ function App() {
   }
   const doMST = () => {
     alg.mst(wasmModule)
+  }
+  const doSum = () => {
+    const s = wasmModule.sum(1, 2)
   }
 
   return (

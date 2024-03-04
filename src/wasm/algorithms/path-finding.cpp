@@ -1,5 +1,6 @@
 #include "../graph.h"
 #include <iostream>
+#include <string>
 
 // Check connection
 bool vertices_are_connected(igraph_integer_t src, igraph_integer_t tar) {
@@ -18,10 +19,33 @@ val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     // TODO: change final NULL to weights
     igraph_get_shortest_path_dijkstra(&igraphGlobalGraph, &vertices, NULL, src, tar, NULL, IGRAPH_OUT);
 
-    val vs = igraph_vector_int_to_val(&vertices);
+    val result = val::object();
+    val colorMap = val::object();
+    std::string msg =
+        "Dijkstra's Shortest Path from ["
+        + std::to_string(src)
+        + "] to ["
+        + std::to_string(tar)
+        + "]:\n";
+
+    for (int i = 0; i < igraph_vector_int_size(&vertices); ++i) {
+        std::string nodeId = std::to_string(VECTOR(vertices)[i]);
+
+        if (i > 0) {
+            std::string linkId = std::to_string(VECTOR(vertices)[i-1]) + '-' + nodeId;
+            //std::cout << colorMap[nodeId].as<int>() << std::endl;
+            colorMap.set(linkId, getFreq(colorMap, linkId) + 1);
+            msg += " -> ";
+        }
+        colorMap.set(nodeId, getFreq(colorMap, nodeId) + 1);
+        msg += "[" + nodeId + "]";
+    }
+
+    result.set("colorMap", colorMap);
+    result.set("message", msg);
 
     igraph_vector_int_destroy(&vertices);
-    return vs;
+    return result;
 }
 
 val dijkstra_source_to_all(igraph_integer_t src) {

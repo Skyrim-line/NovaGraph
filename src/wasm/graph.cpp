@@ -141,9 +141,11 @@ void cleanupGraph(void) {
     igraph_destroy(&igraphGlobalGraph);
 }
 
-int sum(int a, int b) {
+val sum(int a, int b) {
     std::cout << "Test" << std::endl << a+b << std::endl;
-    return a + b;
+    val obj = val::object();
+    obj.set("sum", a+b);
+    return obj;
 }
 
 EMSCRIPTEN_BINDINGS(graph) {
