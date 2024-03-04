@@ -233,3 +233,35 @@ VecInt randomWalk(igraph_integer_t start, int steps) {
     igraph_vector_int_destroy(&vertices);
     return path;
 }
+
+
+std::vector<VecInt> min_spanning_tree(void) {
+    igraph_t mst;
+
+    // TODO: check for weights
+    igraph_minimum_spanning_tree_unweighted(&globalGraph, &mst);
+
+    // TODO: convert graph to GraphData and return
+    igraph_vector_int_t edges;
+    igraph_integer_t num_edges = igraph_ecount(&mst);
+
+    igraph_vector_int_init(&edges, num_edges * 2);
+    igraph_get_edgelist(&mst, &edges, 0);
+
+    std::vector<VecInt> edges_list(num_edges);
+
+    std::cout << "Edges:" << std::endl;
+    for (int i = 0; i < num_edges; ++i) {
+        VecInt v;
+
+        v.push_back(VECTOR(edges)[2 * i]);
+        v.push_back(VECTOR(edges)[2 * i + 1]);
+        std::cout << VECTOR(edges)[2 * i] << ", " << VECTOR(edges)[2 * i + 1] << std::endl;
+        edges_list[i] = v;
+    }
+
+    igraph_vector_int_destroy(&edges);
+    igraph_destroy(&mst);
+
+    return edges_list;
+}

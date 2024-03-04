@@ -84,6 +84,9 @@ function App() {
     setText(alg.randomWalk(wasmModule, setColorMap, nodes.length))
     setRed(true)
   }
+  const doMST = () => {
+    alg.mst(wasmModule)
+  }
 
   return (
     <>
@@ -105,6 +108,7 @@ function App() {
         <button onClick={doBFS}>BFS</button>
         <button onClick={doDFS}>DFS</button>
         <button onClick={doRW}>Random Walk</button>
+        <button onClick={doMST}>Min Spanning Tree</button>
       </div>
       
       <pre>{text}</pre>

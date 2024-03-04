@@ -208,6 +208,10 @@ const randomWalk = (wasmModule, setColorMap, numNodes) => {
   return msg;
 }
 
+const mst = (wasmModule) => {
+  wasmModule.min_spanning_tree();
+}
+
 export const alg = {
     dijkstra_source_to_target,
     dijkstra_source_to_all,
@@ -216,6 +220,7 @@ export const alg = {
     bf_source_to_all,
     bfs,
     dfs,
-    randomWalk
+    randomWalk,
+    mst
     // add more here when implemented
 }

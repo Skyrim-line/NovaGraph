@@ -101,6 +101,7 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("bfs", &bfs);
   function("dfs", &dfs);
   function("random_walk", &randomWalk);
+  function("min_spanning_tree", &min_spanning_tree);
 }
 
 // emcc demo.cpp -O3 -s WASM=1 -s -sEXPORTED_FUNCTIONS=_sum,_subtract --no-entry -o demo.wasm
