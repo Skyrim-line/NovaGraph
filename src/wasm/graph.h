@@ -6,7 +6,10 @@
 #include <emscripten/bind.h>
 #include <vector>
 
-extern igraph_t globalGraph;
+#define N 11 // number of nodes
+extern int globalGraph[N][N]; // adjacency matrix
+extern igraph_t igraphGlobalGraph; // igraph structure
+
 
 typedef std::vector<int> VecInt;
 
@@ -15,25 +18,29 @@ struct GraphData {
     std::vector<VecInt> edges;
 };
 
-GraphData generateGraph(void);
-void cleanupGraph(void);
 
+// Define a struct to hold the shortest path information
 struct PathData {
-    int* data;
-    size_t size;
+    VecInt path; // the shortest path as a vector of ints
+    double distance; // the distance of the shortest path
+    int colorMap[N][N]; // the color map as a two-dimensional array of ints
 };
 
+using namespace emscripten;
+
+val igraph_vector_int_to_val(igraph_vector_int_t* vec);
+val igraph_vector_int_list_to_val(igraph_vector_int_list_t* v);
 
 bool vertices_are_connected(igraph_integer_t src, igraph_integer_t tar);
-VecInt dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar);
-std::vector<VecInt> dijkstra_source_to_all(igraph_integer_t src);
-std::vector<VecInt> yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_integer_t k);
-VecInt bf_source_to_target(igraph_integer_t src, igraph_integer_t tar);
-std::vector<VecInt> bf_source_to_all(igraph_integer_t src);
-std::vector<VecInt> bfs(igraph_integer_t src);
-std::vector<VecInt> dfs(igraph_integer_t src);
-VecInt randomWalk(igraph_integer_t start, int steps);
-std::vector<VecInt> min_spanning_tree(void);
+val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar);
+val dijkstra_source_to_all(igraph_integer_t src);
+val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_integer_t k);
+val bf_source_to_target(igraph_integer_t src, igraph_integer_t tar);
+val bf_source_to_all(igraph_integer_t src);
+val bfs(igraph_integer_t src);
+val dfs(igraph_integer_t src);
+val randomWalk(igraph_integer_t start, int steps);
+val min_spanning_tree(void);
 
 
 #endif

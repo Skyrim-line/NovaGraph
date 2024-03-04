@@ -16,21 +16,22 @@ function App() {
   useEffect(() => {
     createModule().then(mod => {
       setWasmModule(mod)
-      const graph = mod.generateGraph();
+      mod.initGraph(); // initialize the graph in C++
+      const graph = mod.getGraph(); // get the graph as a JS array
 
       let nodesTmp = []
       let edgesTmp = []
 
-      for (var i = 0; i < graph.nodes.size(); i++) {
-          nodesTmp.push({ id: graph.nodes.get(i) })
-      } 
-
-      for (var i = 0; i < graph.edges.size(); i++) {
-          const pair = graph.edges.get(i);
-          edgesTmp.push({
-            source: pair.get(0),
-            target: pair.get(1)
-          })
+      for (var i = 0; i < graph.length; i++) {
+          nodesTmp.push({ id: i }) // create a node for each index
+          for (var j = 0; j < graph[i].length; j++) {
+              if (graph[i][j] === 1) { // if there is an edge
+                  edgesTmp.push({
+                      source: i,
+                      target: j
+                  })
+              }
+          }
       }
 
       setNodes(nodesTmp)

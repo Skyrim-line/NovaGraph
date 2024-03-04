@@ -4,7 +4,7 @@
 // Check connection
 bool vertices_are_connected(igraph_integer_t src, igraph_integer_t tar) {
     igraph_bool_t res;
-    igraph_are_connected(&globalGraph, src, tar, &res);
+    igraph_are_connected(&igraphGlobalGraph, src, tar, &res);
     std::cout << "Connected status: " << res << std::endl;
     return res;
 }
@@ -12,41 +12,28 @@ bool vertices_are_connected(igraph_integer_t src, igraph_integer_t tar) {
 
 // DIJKSTRA
 
-VecInt dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
-    VecInt vs;
+val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     igraph_vector_int_t vertices;
 
     // TODO: change final NULL to weights
-    igraph_get_shortest_path_dijkstra(&globalGraph, &vertices, NULL, src, tar, NULL, IGRAPH_OUT);
-    
-    for (int i = 0; i < igraph_vector_int_size(&vertices); ++i) {
-        vs.push_back(VECTOR(vertices)[i]);
-    }
+    igraph_get_shortest_path_dijkstra(&igraphGlobalGraph, &vertices, NULL, src, tar, NULL, IGRAPH_OUT);
+
+    val vs = igraph_vector_int_to_val(&vertices);
 
     igraph_vector_int_destroy(&vertices);
-
     return vs;
 }
 
-std::vector<VecInt> dijkstra_source_to_all(igraph_integer_t src) {
-    std::vector<VecInt> res;
+val dijkstra_source_to_all(igraph_integer_t src) {
     igraph_vector_int_list_t paths;
     igraph_vector_int_list_init(&paths, 0);
-
     igraph_vs_t targets = igraph_vss_all(); // list of all vertices
 
-    igraph_get_shortest_paths_dijkstra(&globalGraph, &paths, NULL, src, targets, /* TODO*/ NULL, IGRAPH_OUT, NULL, NULL);
+    igraph_get_shortest_paths_dijkstra(&igraphGlobalGraph, &paths, NULL, src, targets, /* TODO*/ NULL, IGRAPH_OUT, NULL, NULL);
 
-    long numPaths = igraph_vector_int_list_size(&paths);
-
-    for (long i = 0; i < numPaths; ++i) {
-        igraph_vector_int_t path = VECTOR(paths)[i];
-        std::vector<int> pathVector(VECTOR(path), VECTOR(path) + igraph_vector_int_size(&path));
-        res.push_back(pathVector);
-    }
+    val res = igraph_vector_int_list_to_val(&paths);
 
     igraph_vector_int_list_destroy(&paths);
-
     return res;
 }
 
@@ -72,7 +59,7 @@ VecInt astar_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     //igraph_vector_int_t edges;
 
     // TODO: change final NULL to weights
-    igraph_get_shortest_path_astar(&globalGraph, &vertices, NULL, src, tar, NULL, IGRAPH_OUT, my_heuristic, NULL);
+    igraph_get_shortest_path_astar(&igraphGlobalGraph, &vertices, NULL, src, tar, NULL, IGRAPH_OUT, my_heuristic, NULL);
 
     VecInt vs;
     for (int i = 0; i < igraph_vector_int_size(&vertices); ++i) {
@@ -86,93 +73,71 @@ VecInt astar_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
 */
 
 // Yen
-std::vector<VecInt> yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_integer_t k) {
-    std::vector<VecInt> res;
+val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_integer_t k) {
     igraph_vector_int_list_t paths;
     igraph_vector_int_list_init(&paths, 0);
 
-    igraph_get_k_shortest_paths(&globalGraph, NULL, &paths, NULL, k, src, tar, IGRAPH_OUT);
+    igraph_get_k_shortest_paths(&igraphGlobalGraph, NULL, &paths, NULL, k, src, tar, IGRAPH_OUT);
 
-    long numPaths = igraph_vector_int_list_size(&paths);
-
-    for (long i = 0; i < numPaths; ++i) {
-        igraph_vector_int_t path = VECTOR(paths)[i];
-        std::vector<int> pathVector(VECTOR(path), VECTOR(path) + igraph_vector_int_size(&path));
-        res.push_back(pathVector);
-    }
+    val res = igraph_vector_int_list_to_val(&paths);
 
     igraph_vector_int_list_destroy(&paths);
-
     return res;
 }
 
     
 // BELLMAN-FORD
 
-VecInt bf_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
-    VecInt vs;
+val bf_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     igraph_vector_int_t vertices;
 
     // TODO: change final NULL to weights
-    igraph_get_shortest_path_bellman_ford(&globalGraph, &vertices, NULL, src, tar, NULL, IGRAPH_OUT);
+    igraph_get_shortest_path_bellman_ford(&igraphGlobalGraph, &vertices, NULL, src, tar, NULL, IGRAPH_OUT);
 
-    for (int i = 0; i < igraph_vector_int_size(&vertices); ++i) {
-        vs.push_back(VECTOR(vertices)[i]);
-    }
+    val vs = igraph_vector_int_to_val(&vertices);
 
     igraph_vector_int_destroy(&vertices);
-
     return vs;
 }
 
-std::vector<VecInt> bf_source_to_all(igraph_integer_t src) {
-    std::vector<VecInt> res;
+val bf_source_to_all(igraph_integer_t src) {
     igraph_vector_int_list_t paths;
     igraph_vector_int_list_init(&paths, 0);
-
     igraph_vs_t targets = igraph_vss_all(); // list of all vertices
 
-    igraph_get_shortest_paths_bellman_ford(&globalGraph, &paths, NULL, src, targets, /* TODO*/ NULL, IGRAPH_OUT, NULL, NULL);
+    igraph_get_shortest_paths_bellman_ford(&igraphGlobalGraph, &paths, NULL, src, targets, /* TODO*/ NULL, IGRAPH_OUT, NULL, NULL);
 
-    long numPaths = igraph_vector_int_list_size(&paths);
-
-    for (long i = 0; i < numPaths; ++i) {
-        igraph_vector_int_t path = VECTOR(paths)[i];
-        std::vector<int> pathVector(VECTOR(path), VECTOR(path) + igraph_vector_int_size(&path));
-        res.push_back(pathVector);
-    }
+    val res = igraph_vector_int_list_to_val(&paths);
     
     igraph_vector_int_list_destroy(&paths);
-
     return res;
 }
 
 
 // BFS
-std::vector<VecInt> bfs(igraph_integer_t src) {
-    std::vector<VecInt> result;
-    igraph_vector_int_t order;
+val bfs(igraph_integer_t src) {
+    val result = val::array();
+    igraph_vector_int_t order, layers;
     igraph_vector_int_init(&order, 0);
-    igraph_vector_int_t layers;
     igraph_vector_int_init(&layers, 0);
 
-    igraph_bfs_simple(&globalGraph, src, IGRAPH_OUT, &order, &layers, NULL);
+    igraph_bfs_simple(&igraphGlobalGraph, src, IGRAPH_OUT, &order, &layers, NULL);
 
     igraph_integer_t current_layer = 1;
-    VecInt current_layer_vertices;
+    val current_layer_array = val::array();
 
     for (igraph_integer_t i = 0; i < igraph_vector_int_size(&order); ++i) {
         int vertex = VECTOR(order)[i];
         int layer = VECTOR(layers)[current_layer];
     
         if (i == layer) {
-            result.push_back(current_layer_vertices);
-            current_layer_vertices.clear();
+            result.set(current_layer - 1, current_layer_array);
+            current_layer_array = val::array();
             ++current_layer;
         }
-        current_layer_vertices.push_back(vertex);        
+        current_layer_array.set(current_layer_array["length"].as<int>(), vertex);        
     }
-    result.push_back(current_layer_vertices);
+    result.set(current_layer - 1, current_layer_array);
 
     igraph_vector_int_destroy(&order);
     igraph_vector_int_destroy(&layers);
@@ -180,38 +145,41 @@ std::vector<VecInt> bfs(igraph_integer_t src) {
 }
 
 
-std::vector<VecInt> dfs(igraph_integer_t src) {
-    igraph_vector_int_t order;
+val dfs(igraph_integer_t src) {
+    igraph_vector_int_t order, dist;
     igraph_vector_int_init(&order, 0);
-    igraph_vector_int_t dist;
     igraph_vector_int_init(&dist, 0);
 
-    igraph_dfs(&globalGraph, src, IGRAPH_OUT, false, &order, NULL, NULL, &dist, NULL, NULL, NULL);
+    igraph_dfs(&igraphGlobalGraph, src, IGRAPH_OUT, false, &order, NULL, NULL, &dist, NULL, NULL, NULL);
 
     int size = igraph_vector_int_size(&order);
     int maxDist = igraph_vector_int_max(&dist);
 
-    std::vector<VecInt> result;
+    //std::vector<VecInt> result;
+    val result = val::array();
 
-    VecInt orderVec, distVec;
+    //VecInt orderVec, distVec;
+    val orderArr = val::array();
+    val distArr = val::array();
+
     for (long int i = 0; i < size; ++i) {
         if (VECTOR(order)[i] != -1) {
-            orderVec.push_back(VECTOR(order)[i]);
+            orderArr.set(orderArr["length"].as<int>() ,VECTOR(order)[i]);
         }
     }
     for (long int i = 0; i < igraph_vector_int_size(&dist); ++i) {
         // VECTOR(dist)[i] = distance from src
         // tmp = scaled distance (for rendering colours)
         if (VECTOR(dist)[i] < 0) {
-            distVec.push_back(0);
+            distArr.set(i, 0);
         } else {
             double tmp = (double)(maxDist - VECTOR(dist)[i] + 1)/(double)maxDist * size;
-            distVec.push_back(tmp);
+            distArr.set(i, tmp);
         }
     }
 
-    result.push_back(orderVec);
-    result.push_back(distVec);
+    result.set(0, orderArr);
+    result.set(1, distArr);
 
     igraph_vector_int_destroy(&order);
     igraph_vector_int_destroy(&dist);
@@ -219,27 +187,24 @@ std::vector<VecInt> dfs(igraph_integer_t src) {
 }
 
 
-VecInt randomWalk(igraph_integer_t start, int steps) {
+val randomWalk(igraph_integer_t start, int steps) {
     igraph_vector_int_t vertices;
     igraph_vector_int_init(&vertices, 0);
 
-    igraph_random_walk(&globalGraph, NULL, &vertices, NULL, start, IGRAPH_OUT, steps, IGRAPH_RANDOM_WALK_STUCK_RETURN);
+    igraph_random_walk(&igraphGlobalGraph, NULL, &vertices, NULL, start, IGRAPH_OUT, steps, IGRAPH_RANDOM_WALK_STUCK_RETURN);
 
-    VecInt path;
-    for (int i = 0; i < igraph_vector_int_size(&vertices); i++) {
-        path.push_back(VECTOR(vertices)[i]);
-    }
+    val path = igraph_vector_int_to_val(&vertices);
 
     igraph_vector_int_destroy(&vertices);
     return path;
 }
 
 
-std::vector<VecInt> min_spanning_tree(void) {
+val min_spanning_tree(void) {
     igraph_t mst;
 
     // TODO: check for weights
-    igraph_minimum_spanning_tree_unweighted(&globalGraph, &mst);
+    igraph_minimum_spanning_tree_unweighted(&igraphGlobalGraph, &mst);
 
     // TODO: convert graph to GraphData and return
     igraph_vector_int_t edges;
@@ -248,16 +213,20 @@ std::vector<VecInt> min_spanning_tree(void) {
     igraph_vector_int_init(&edges, num_edges * 2);
     igraph_get_edgelist(&mst, &edges, 0);
 
-    std::vector<VecInt> edges_list(num_edges);
+    //std::vector<VecInt> edges_list(num_edges);
+    val edges_list = val::array();
 
     std::cout << "Edges:" << std::endl;
     for (int i = 0; i < num_edges; ++i) {
-        VecInt v;
+        //VecInt v;
+        val v = val::array();
 
-        v.push_back(VECTOR(edges)[2 * i]);
-        v.push_back(VECTOR(edges)[2 * i + 1]);
+        v.set(0, VECTOR(edges)[2 * i]);
+        v.set(1, VECTOR(edges)[2 * i + 1]);
+
         std::cout << VECTOR(edges)[2 * i] << ", " << VECTOR(edges)[2 * i + 1] << std::endl;
-        edges_list[i] = v;
+        //edges_list[i] = v;
+        edges_list.set(i, v);
     }
 
     igraph_vector_int_destroy(&edges);
