@@ -376,7 +376,6 @@ val min_spanning_tree(void) {
     // TODO: check for weights
     igraph_minimum_spanning_tree_unweighted(&igraphGlobalGraph, &mst);
 
-    // TODO: convert graph to GraphData and return
     igraph_vector_int_t edges;
     igraph_integer_t num_edges = igraph_ecount(&mst);
 
