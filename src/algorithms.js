@@ -210,7 +210,8 @@ const randomWalk = (wasmModule, setColorMap, numNodes) => {
 }
 
 const mst = (wasmModule) => {
-  wasmModule.min_spanning_tree();
+  const a = wasmModule.min_spanning_tree();
+  console.log(a)
 }
 
 export const alg = {

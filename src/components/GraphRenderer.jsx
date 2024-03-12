@@ -41,11 +41,11 @@ export function GraphRenderer({ colors, nodes, colorAll }) {
         disableSimulation={false}
         //backgroundColor='#151515'
         nodeSize={20}
-        nodeColor={(node, id) => getColor(colors[id], id)}
-        linkColor={(link, id) => colors[`${link.source}-${link.target}`] > 0 ? '#E4C1FF' : '#fff'}
+        nodeColor={(_node, id) => getColor(colors[id], id)}
+        linkColor={(link) => colors[`${link.source}-${link.target}`] > 0 ? '#E4C1FF' : null}
         nodeGreyoutOpacity={0.1}
-        linkWidth={2}
-        //linkColor='#5F74C2'
+        linkWidth={(link) => colors[`${link.source}-${link.target}`] > 0 ? 3 : 0.1}
+
         linkArrows={false}
         
         //renderHoveredNodeRing={true}

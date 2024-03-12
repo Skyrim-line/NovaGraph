@@ -62,38 +62,64 @@ function App() {
     setRed(false)
   }
   const doDijkstraMulti = () => {
-    setText(alg.dijkstra_source_to_all(wasmModule, setColorMap))
+    const source = prompt("Enter source vertex", "0");
+    const response = wasmModule.dijkstra_source_to_all(parseInt(source));
+    setColorMap(response.colorMap)
+    setText(response.message)
     setRed(true)
   }
   const doYen = () => {
-    setText(alg.yens_shortest_paths_algorithm(wasmModule, setColorMap))
+    const source = prompt("Enter source vertex", "0");
+    const target = prompt("Enter target vertex", "0");
+    const kInput = prompt("Enter k (number of paths)");
+    const k = parseInt(kInput) || 1;
+    const response = wasmModule.yens_algorithm(parseInt(source), parseInt(target), k);
+    setColorMap(response.colorMap)
+    setText(response.message)
     setRed(true)
   }
   const doBFSingle = () => {
-    setText(alg.bf_source_to_target(wasmModule, setColorMap))
+    const source = prompt("Enter source vertex", "0");
+    const target = prompt("Enter target vertex", "0");
+    const response = wasmModule.bellman_ford_source_to_target(parseInt(source), parseInt(target));
+    setColorMap(response.colorMap)
+    setText(response.message)
     setRed(false)
   }
   const doBFMulti = () => {
-    setText(alg.bf_source_to_all(wasmModule, setColorMap))
+    const source = prompt("Enter source vertex", "0");
+    const response = wasmModule.bellman_ford_source_to_all(parseInt(source));
+    setColorMap(response.colorMap)
+    setText(response.message)
     setRed(true)
   }
   const doBFS = () => {
-    setText(alg.bfs(wasmModule, setColorMap, nodes.length))
+    const source = prompt("Enter source vertex", "0");
+    const response = wasmModule.bfs(parseInt(source));
+    setColorMap(response.colorMap)
+    setText(response.message)
     setRed(true)
   }
   const doDFS = () => {
-    setText(alg.dfs(wasmModule, setColorMap, nodes.length))
+    const source = prompt("Enter source vertex", "0");
+    const response = wasmModule.dfs(parseInt(source));
+    setColorMap(response.colorMap)
+    setText(response.message)
     setRed(true)
   }
   const doRW = () => {
-    setText(alg.randomWalk(wasmModule, setColorMap, nodes.length))
+    const start = prompt("Enter starting vertex", "0");
+    const steps = prompt("Enter step count", "0");
+    const response = wasmModule.random_walk(parseInt(start), parseInt(steps));
+    setColorMap(response.colorMap)
+    setText(response.message)
     setRed(true)
   }
   const doMST = () => {
-    alg.mst(wasmModule)
-  }
-  const doSum = () => {
-    const s = wasmModule.sum(1, 2)
+    const response = wasmModule.min_spanning_tree();
+    setColorMap(response.colorMap)
+    setText(response.message)
+    setRed(true)
   }
 
   return (
