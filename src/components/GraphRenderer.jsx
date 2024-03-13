@@ -8,7 +8,13 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 export function GraphRenderer({ colors, nodes, links, colorAll }) {
     const cosmograph = useRef()
-    const scale = chroma.scale(['#FDF7FF', '#6750C6']);
+    const scale = chroma.scale(['#F7EBFF', '#6750C6']);
+    /* Palette: https://mycolor.space/?hex=%236750C6&sub=1 (Spot Palette)
+        - Dark: #6750c6
+        - Default: #9f8fc3
+        - Light: #f7ebff
+        - Contrast (Green): #67baa7
+    */
 
     const zoomToNode = useCallback((node, i, pos, event) => {
         if (node && i != undefined) {
@@ -29,7 +35,7 @@ export function GraphRenderer({ colors, nodes, links, colorAll }) {
         } else if (colorAll) {
             return '#F05480'
         } else {
-            return '#fff'
+            return '#9f8fc3'
         }
     }
 
@@ -44,7 +50,7 @@ export function GraphRenderer({ colors, nodes, links, colorAll }) {
                 //backgroundColor='#151515'
                 nodeSize={20}
                 nodeColor={(_node, id) => getColor(colors[id], id)}
-                linkColor={(link) => colors[`${link.source}-${link.target}`] > 0 ? '#E4C1FF' : null}
+                linkColor={(link) => colors[`${link.source}-${link.target}`] > 0 ? '#67baa7' : null}
                 nodeGreyoutOpacity={0.1}
                 linkWidth={(link) => colors[`${link.source}-${link.target}`] > 0 ? 3 : 0.1}
 

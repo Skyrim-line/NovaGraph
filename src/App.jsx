@@ -70,8 +70,10 @@ function App() {
   const doAreConnected = () => {
     const source = prompt("Enter source vertex", "0");
     const target = prompt("Enter target vertex", "0");
-    let test = wasmModule.vertices_are_connected(2,9)
-    console.log(test)
+    const response = wasmModule.vertices_are_connected(parseInt(source), parseInt(target))
+    setColorMap(response.colorMap)
+    setText(response.message)
+    setRed(false)
   }
 
   const doDijkstraSingle = () => {
@@ -158,14 +160,14 @@ function App() {
             </AccordionSummary>
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
-                <Button onClick={doAreConnected}>Connection Status</Button>
+                <Button onClick={doAreConnected}>Neighbour Status?</Button>
                 <Button onClick={doDijkstraSingle}>Dijkstra &#40;A to B&#41;</Button>
                 <Button onClick={doDijkstraMulti}>Dijkstra &#40;A to all&#41;</Button>
-                <Button onClick={doYen}>Yen's Shortest &#40;A to B&#41;</Button>
+                <Button onClick={doYen}>Yen's Shortest Path</Button>
                 <Button onClick={doBFSingle}>Bellman-Ford &#40;A to B&#41;</Button>
                 <Button onClick={doBFMulti}>Bellman-Ford &#40;A to all&#41;</Button>
-                <Button onClick={doBFS}>BFS</Button>
-                <Button onClick={doDFS}>DFS</Button>
+                <Button onClick={doBFS}>Breadth First Search</Button>
+                <Button onClick={doDFS}>Depth First Search</Button>
                 <Button onClick={doRW}>Random Walk</Button>
                 <Button onClick={doMST}>Min Spanning Tree</Button>
               </ButtonGroup>

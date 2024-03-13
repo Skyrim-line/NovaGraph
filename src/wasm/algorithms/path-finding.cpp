@@ -3,11 +3,26 @@
 #include <string>
 
 // Check connection
-bool vertices_are_connected(igraph_integer_t src, igraph_integer_t tar) {
+val vertices_are_connected(igraph_integer_t src, igraph_integer_t tar) {
+    val result = val::object();
+    val colorMap = val::object();
+    std::string msg = "[" + std::to_string(src) + "] and [" + std::to_string(tar) + "are ";
     igraph_bool_t res;
     igraph_are_connected(&igraphGlobalGraph, src, tar, &res);
-    std::cout << "Connected status: " << res << std::endl;
-    return res;
+    if (res) {
+        msg += "neighbours!";
+        colorMap.set(src, N);
+        colorMap.set(tar, N);
+        std::string linkId = std::to_string(src) + '-' + std::to_string(tar);
+        colorMap.set(linkId, N);
+    } else {
+        msg += "NOT neighbours!";
+        colorMap.set(src, 1);
+        colorMap.set(tar, 1);
+    }
+    result.set("colorMap", colorMap);
+    result.set("message", msg);
+    return result;
 }
 
 
