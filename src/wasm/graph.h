@@ -44,5 +44,7 @@ val dfs(igraph_integer_t src);
 val randomWalk(igraph_integer_t start, int steps);
 val min_spanning_tree(void);
 
+val betweenness_centrality(void);
+
 
 #endif

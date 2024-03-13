@@ -14,6 +14,7 @@ const darkTheme = createTheme({
     primary: {
       main: '#FDF7FF'
     }
+    // secondary (green #67baa7)
   },
 });
 
@@ -75,7 +76,6 @@ function App() {
     setText(response.message)
     setRed(false)
   }
-
   const doDijkstraSingle = () => {
     const source = prompt("Enter source vertex", "0");
     const target = prompt("Enter target vertex", "0");
@@ -145,6 +145,12 @@ function App() {
     setRed(true)
   }
 
+  const doBetweennessCentrality = () => {
+    const response = wasmModule.betweenness_centrality();
+    console.log(response)
+    setText(response.message)
+  }
+
   return (
     <ThemeProvider theme={darkTheme}>
       {/*<CssBaseline /> changes backgroundColor to black */}
@@ -160,6 +166,9 @@ function App() {
             </AccordionSummary>
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
+                {/* Have on hover options for buttons as well (render descriptions)
+                  e.g. onHover={() => renderDescription(<DijkstraDesc />)}
+                */}
                 <Button onClick={doAreConnected}>Neighbour Status?</Button>
                 <Button onClick={doDijkstraSingle}>Dijkstra &#40;A to B&#41;</Button>
                 <Button onClick={doDijkstraMulti}>Dijkstra &#40;A to all&#41;</Button>
@@ -176,10 +185,12 @@ function App() {
 
           <Accordion expanded={expanded === 'panel2'} onChange={handleAccordianChange('panel2')}>
             <AccordionSummary aria-controls="panel2-content" id="panel2-header">
-              <Typography>Accordion 2</Typography>
+              <Typography variant='body2'>Centrality</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              b
+              <ButtonGroup orientation='vertical' variant='text'>
+                <Button onClick={doBetweennessCentrality}>Betweenness Centrality</Button>
+              </ButtonGroup>
             </AccordionDetails>
           </Accordion>
 
