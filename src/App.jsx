@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import createModule from './graph'
 import './App.css'
-import { CosmographProvider } from '@cosmograph/react'
 import { GraphRenderer } from './components/GraphRenderer';
 import { Box, Button, ButtonGroup, Typography } from '@mui/material';
 import { Accordion, AccordionDetails, AccordionSummary } from './components/Accordion';
@@ -150,29 +149,12 @@ function App() {
       <h1>NovaGraph</h1>
       
       <Box sx={{ display: 'flex', gap: 1 }}>
-        <CosmographProvider nodes={nodes} links={edges} id="hicosmos">
-          <GraphRenderer colors={colorMap} nodes={nodes} colorAll={red} />
-          {/*
-          TODO: have some sort of a form/modal here:
-
-          Select source vertex: (info hover icon)
-          <CosmographSearch onSelectResult={event => setState(event.id)} />
-
-          Select target vertex: (info hover icon)
-          <CosmographSearch onSelectResult={event => console.log(event)} />
-
-          Enter some other variable: _______
-
-          [Cancel] [Go]
-        */}
-
-        </CosmographProvider>
-        
+        <GraphRenderer nodes={nodes} links={edges} colors={colorMap} colorAll={red} />
 
         <Box>
           <Accordion expanded={expanded === 'panel1'} onChange={handleAccordianChange('panel1')}>
             <AccordionSummary aria-controls="panel1-content" id="panel1-header">
-              <Typography>Path Finding & Search Algorithms</Typography>
+              <Typography variant='body2'>Path Finding & Search Algorithms</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
