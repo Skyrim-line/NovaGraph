@@ -145,6 +145,10 @@ function App() {
     const response = wasmModule.betweenness_centrality();
     postAlgorithmState(response, false)
   }
+  const doClosenessCentrality = () => {
+    const response = wasmModule.closeness_centrality();
+    postAlgorithmState(response, false)
+  }
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -185,6 +189,7 @@ function App() {
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
                 <Button onClick={doBetweennessCentrality}>Betweenness Centrality</Button>
+                <Button onClick={doClosenessCentrality}>Closeness Centrality</Button>
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>

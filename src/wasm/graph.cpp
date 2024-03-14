@@ -181,6 +181,8 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("min_spanning_tree", &min_spanning_tree);
 
   function("betweenness_centrality", &betweenness_centrality);
+  function("closeness_centrality", &closeness_centrality);
+
 }
 
 // emcc demo.cpp -O3 -s WASM=1 -s -sEXPORTED_FUNCTIONS=_sum,_subtract --no-entry -o demo.wasm
