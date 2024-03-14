@@ -27,6 +27,7 @@ function App() {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [colorMap, setColorMap] = useState({});
+  const [sizeMap, setSizeMap] = useState({});
   const [red, setRed] = useState(false);
   const [text, setText] = useState("");
 
@@ -68,28 +69,37 @@ function App() {
     setExpanded(newExpanded ? panel : false);
   };
 
+  const postAlgorithmState = (response, unreachable) => {
+    if (response.colorMap) {
+      setSizeMap(response.sizeMap ? response.sizeMap : {})
+      setColorMap(response.colorMap)
+    } else if (response.sizeMap) {
+      setSizeMap(response.sizeMap)
+      setColorMap({})
+    } else {
+      setColorMap({})
+      setSizeMap({})
+    }
+    setText(response.message)
+    setRed(unreachable)
+  }
+
   const doAreConnected = () => {
     const source = prompt("Enter source vertex", "0");
     const target = prompt("Enter target vertex", "0");
     const response = wasmModule.vertices_are_connected(parseInt(source), parseInt(target))
-    setColorMap(response.colorMap)
-    setText(response.message)
-    setRed(false)
+    postAlgorithmState(response, false)
   }
   const doDijkstraSingle = () => {
     const source = prompt("Enter source vertex", "0");
     const target = prompt("Enter target vertex", "0");
     const response = wasmModule.dijkstra_source_to_target(parseInt(source), parseInt(target));
-    setColorMap(response.colorMap)
-    setText(response.message)
-    setRed(false)
+    postAlgorithmState(response, false)
   }
   const doDijkstraMulti = () => {
     const source = prompt("Enter source vertex", "0");
     const response = wasmModule.dijkstra_source_to_all(parseInt(source));
-    setColorMap(response.colorMap)
-    setText(response.message)
-    setRed(true)
+    postAlgorithmState(response, true)
   }
   const doYen = () => {
     const source = prompt("Enter source vertex", "0");
@@ -97,72 +107,57 @@ function App() {
     const kInput = prompt("Enter k (number of paths)");
     const k = parseInt(kInput) || 1;
     const response = wasmModule.yens_algorithm(parseInt(source), parseInt(target), k);
-    setColorMap(response.colorMap)
-    setText(response.message)
-    setRed(true)
+    postAlgorithmState(response, true)
   }
   const doBFSingle = () => {
     const source = prompt("Enter source vertex", "0");
     const target = prompt("Enter target vertex", "0");
     const response = wasmModule.bellman_ford_source_to_target(parseInt(source), parseInt(target));
-    setColorMap(response.colorMap)
-    setText(response.message)
-    setRed(false)
+    postAlgorithmState(response, false)
   }
   const doBFMulti = () => {
     const source = prompt("Enter source vertex", "0");
     const response = wasmModule.bellman_ford_source_to_all(parseInt(source));
-    setColorMap(response.colorMap)
-    setText(response.message)
-    setRed(true)
+    postAlgorithmState(response, true)
   }
   const doBFS = () => {
     const source = prompt("Enter source vertex", "0");
     const response = wasmModule.bfs(parseInt(source));
-    setColorMap(response.colorMap)
-    setText(response.message)
-    setRed(true)
+    postAlgorithmState(response, true)
   }
   const doDFS = () => {
     const source = prompt("Enter source vertex", "0");
     const response = wasmModule.dfs(parseInt(source));
-    setColorMap(response.colorMap)
-    setText(response.message)
-    setRed(true)
+    postAlgorithmState(response, true)
   }
   const doRW = () => {
     const start = prompt("Enter starting vertex", "0");
     const steps = prompt("Enter step count", "0");
     const response = wasmModule.random_walk(parseInt(start), parseInt(steps));
-    setColorMap(response.colorMap)
-    setText(response.message)
-    setRed(true)
+    postAlgorithmState(response, true)
   }
   const doMST = () => {
     const response = wasmModule.min_spanning_tree();
-    setColorMap(response.colorMap)
-    setText(response.message)
-    setRed(true)
+    postAlgorithmState(response, true)
   }
 
   const doBetweennessCentrality = () => {
     const response = wasmModule.betweenness_centrality();
-    console.log(response)
-    setText(response.message)
+    postAlgorithmState(response, false)
   }
 
   return (
     <ThemeProvider theme={darkTheme}>
       {/*<CssBaseline /> changes backgroundColor to black */}
-      <h1>NovaGraph</h1>
+      <Typography variant='h3'>NovaGraph</Typography>
       
       <Box sx={{ display: 'flex', gap: 1 }}>
-        <GraphRenderer nodes={nodes} links={edges} colors={colorMap} colorAll={red} />
+        <GraphRenderer nodes={nodes} links={edges} colors={colorMap} sizes={sizeMap} colorAll={red} />
 
         <Box>
           <Accordion expanded={expanded === 'panel1'} onChange={handleAccordianChange('panel1')}>
             <AccordionSummary aria-controls="panel1-content" id="panel1-header">
-              <Typography variant='body2'>Path Finding & Search Algorithms</Typography>
+              <Typography variant='body2' pl='5px'>Path Finding & Search Algorithms</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
@@ -178,14 +173,14 @@ function App() {
                 <Button onClick={doBFS}>Breadth First Search</Button>
                 <Button onClick={doDFS}>Depth First Search</Button>
                 <Button onClick={doRW}>Random Walk</Button>
-                <Button onClick={doMST}>Min Spanning Tree</Button>
+                <Button onClick={doMST}>Minimum Spanning Tree</Button>
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>
 
           <Accordion expanded={expanded === 'panel2'} onChange={handleAccordianChange('panel2')}>
             <AccordionSummary aria-controls="panel2-content" id="panel2-header">
-              <Typography variant='body2'>Centrality</Typography>
+              <Typography variant='body2' pl='5px'>Centrality</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>

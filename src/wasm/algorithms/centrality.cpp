@@ -5,8 +5,8 @@
 #include <iomanip>
 
 // For rendering on the frontend
-#define MIN_SCALE 1
-#define MAX_SCALE 50
+#define MIN_SCALE 5
+#define MAX_SCALE 30
 
 double scaleCentrality(double centrality, double max_centrality) {
     double scaled = MIN_SCALE + (MAX_SCALE - MIN_SCALE) * (centrality / max_centrality);
@@ -24,12 +24,10 @@ val betweenness_centrality(void) {
     val sizeMap = val::object();
     std::string msg = "Betweenness Centrality:\n";
 
-    std::cout << "Vertex\tBetweenness Centrality" << std::endl;
     for (igraph_integer_t v = 0; v < igraph_vcount(&igraphGlobalGraph); ++v) {
         double centrality = VECTOR(betweenness)[v];
         double scaled_centrality = scaleCentrality(centrality, max_centrality);
 
-        std::cout << v << "\t" << scaled_centrality << std::endl;
         sizeMap.set(v, scaled_centrality);
 
         std::stringstream stream;

@@ -6,7 +6,7 @@
 val vertices_are_connected(igraph_integer_t src, igraph_integer_t tar) {
     val result = val::object();
     val colorMap = val::object();
-    std::string msg = "[" + std::to_string(src) + "] and [" + std::to_string(tar) + "are ";
+    std::string msg = "[" + std::to_string(src) + "] and [" + std::to_string(tar) + "] are ";
     igraph_bool_t res;
     igraph_are_connected(&igraphGlobalGraph, src, tar, &res);
     if (res) {

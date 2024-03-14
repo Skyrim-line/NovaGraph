@@ -5,8 +5,9 @@ import { Box, Button, IconButton, Tooltip } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import ReplayIcon from '@mui/icons-material/Replay';
 
-export function GraphRenderer({ colors, nodes, links, colorAll }) {
+export function GraphRenderer({ colors, sizes, nodes, links, colorAll }) {
     const cosmograph = useRef()
     const scale = chroma.scale(['#F7EBFF', '#6750C6']);
     /* Palette: https://mycolor.space/?hex=%236750C6&sub=1 (Spot Palette)
@@ -40,7 +41,7 @@ export function GraphRenderer({ colors, nodes, links, colorAll }) {
     }
 
     return(
-    <Box sx={{ display:'flex', flexDirection: 'column', height: '500px' }}>
+    <Box sx={{ display:'flex', flexDirection: 'column', height: '75vh' }}>
         
         <CosmographProvider nodes={nodes} links={links}>
             <Cosmograph
@@ -48,7 +49,7 @@ export function GraphRenderer({ colors, nodes, links, colorAll }) {
                 //initialZoomLevel={1}
                 disableSimulation={false}
                 //backgroundColor='#151515'
-                nodeSize={20}
+                nodeSize={(_node, id) => sizes[id] ? sizes[id] : 20}
                 nodeColor={(_node, id) => getColor(colors[id], id)}
                 linkColor={(link) => colors[`${link.source}-${link.target}`] > 0 ? '#67baa7' : null}
                 nodeGreyoutOpacity={0.1}
@@ -93,6 +94,11 @@ export function GraphRenderer({ colors, nodes, links, colorAll }) {
             <Tooltip title="Pause Simulation">
                 <IconButton aria-label='pause-simulation' onClick={() => cosmograph.current?.pause()}>
                     <PauseIcon />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Restart Simulation">
+                <IconButton aria-label='restart-simulation' onClick={() => cosmograph.current?.create()}>
+                    <ReplayIcon />
                 </IconButton>
             </Tooltip>
             
