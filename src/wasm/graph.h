@@ -46,6 +46,8 @@ val min_spanning_tree(void);
 
 val betweenness_centrality(void);
 val closeness_centrality(void);
+val degree_centrality(void);
+val eigenvector_centrality(void);
 
 
 #endif

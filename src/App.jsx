@@ -149,6 +149,14 @@ function App() {
     const response = wasmModule.closeness_centrality();
     postAlgorithmState(response, false)
   }
+  const doDegreeCentrality = () => {
+    const response = wasmModule.degree_centrality();
+    postAlgorithmState(response, false)
+  }
+  const doEigenCentrality = () => {
+    const response = wasmModule.eigenvector_centrality();
+    postAlgorithmState(response, false)
+  }
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -190,6 +198,8 @@ function App() {
               <ButtonGroup orientation='vertical' variant='text'>
                 <Button onClick={doBetweennessCentrality}>Betweenness Centrality</Button>
                 <Button onClick={doClosenessCentrality}>Closeness Centrality</Button>
+                <Button onClick={doDegreeCentrality}>Degree Centrality</Button>
+                <Button onClick={doEigenCentrality}>Eigenvector Centrality</Button>
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>

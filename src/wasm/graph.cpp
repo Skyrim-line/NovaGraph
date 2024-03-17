@@ -182,7 +182,8 @@ EMSCRIPTEN_BINDINGS(graph) {
 
   function("betweenness_centrality", &betweenness_centrality);
   function("closeness_centrality", &closeness_centrality);
-
+  function("degree_centrality", &degree_centrality);
+  function("eigenvector_centrality", &eigenvector_centrality);
 }
 
 // emcc demo.cpp -O3 -s WASM=1 -s -sEXPORTED_FUNCTIONS=_sum,_subtract --no-entry -o demo.wasm

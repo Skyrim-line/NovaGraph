@@ -81,3 +81,63 @@ val closeness_centrality(void) {
     igraph_vector_destroy(&closeness);
     return result;
 }
+
+val degree_centrality(void) {
+    igraph_vector_int_t degrees;
+    igraph_vector_int_init(&degrees, 0);
+
+    igraph_degree(&igraphGlobalGraph, &degrees, igraph_vss_all(), IGRAPH_OUT, IGRAPH_NO_LOOPS);
+
+    double max_centrality = igraph_vector_int_max(&degrees);
+    val result = val::object();
+    val sizeMap = val::object();
+    std::string msg = "Degree Centrality:\n";
+
+    for (igraph_integer_t v = 0; v < igraph_vector_int_size(&degrees); ++v) {
+        double centrality = VECTOR(degrees)[v];
+        double scaled_centrality = scaleCentrality(centrality, max_centrality);
+        sizeMap.set(v, scaled_centrality);
+
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(2) << centrality;
+        msg += std::to_string(v) + "\t" + stream.str() + "\n";
+
+    }
+
+    result.set("sizeMap", sizeMap);
+    result.set("message", msg);
+
+    igraph_vector_int_destroy(&degrees);
+    return result;
+}
+
+val eigenvector_centrality(void) {
+    igraph_vector_t evs;
+    igraph_vector_init(&evs, 0);
+    igraph_real_t value;
+
+    igraph_eigenvector_centrality(&igraphGlobalGraph, &evs, &value, IGRAPH_DIRECTED, false, NULL /*todo weights*/, NULL);
+
+    double max_centrality = igraph_vector_max(&evs);
+    val result = val::object();
+    val sizeMap = val::object();
+    std::string msg = "Eigenvector Centrality (scaled such that \"|max| = 1\"):\n";
+    msg+= "(eigenvalue = " + std::to_string(value) + ")\n";
+
+    for (igraph_integer_t v = 0; v < igraph_vector_size(&evs); ++v) {
+        double centrality = VECTOR(evs)[v];
+        double scaled_centrality = scaleCentrality(centrality, max_centrality);
+        sizeMap.set(v, scaled_centrality);
+
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(2) << centrality;
+        msg += std::to_string(v) + "\t" + stream.str() + "\n";
+    }
+    result.set("sizeMap", sizeMap);
+    result.set("message", msg);
+
+    igraph_vector_destroy(&evs);
+    return result;
+}
+
+// remember to do 
