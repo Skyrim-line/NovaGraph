@@ -1,3 +1,6 @@
+#/bin/bash
+
+echo "Running the Emscripten compiler..."
 em++ src/wasm/graph.cpp src/wasm/algorithms/*.cpp -o src/graph.js \
     -s WASM=1 \
     -I./src/wasm -I./src/wasm/igraph/build/include -I./src/wasm/igraph/include \
@@ -8,4 +11,5 @@ em++ src/wasm/graph.cpp src/wasm/algorithms/*.cpp -o src/graph.js \
     -s LINKABLE=1 \
     -lembind --no-entry \
     -Os \
-    ./src/wasm/igraph/build/src/libigraph.a
+    ./src/wasm/igraph/build/src/libigraph.a \
+    && echo "Finished with no errors!"
