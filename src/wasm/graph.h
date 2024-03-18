@@ -20,13 +20,6 @@ struct GraphData {
 };
 
 
-// Define a struct to hold the shortest path information
-struct PathData {
-    VecInt path; // the shortest path as a vector of ints
-    double distance; // the distance of the shortest path
-    int colorMap[N][N]; // the color map as a two-dimensional array of ints
-};
-
 using namespace emscripten;
 
 val igraph_vector_int_to_val(igraph_vector_int_t* vec);

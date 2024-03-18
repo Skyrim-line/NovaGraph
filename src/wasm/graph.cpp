@@ -157,12 +157,6 @@ EMSCRIPTEN_BINDINGS(graph) {
     .field("nodes", &GraphData::nodes)
     .field("edges", &GraphData::edges);
 
-  value_object<PathData>("PathData")
-    .field("path", &PathData::path)
-    .field("distance", &PathData::distance)
-    .field("colorMap", &PathData::colorMap);
-
-
   // Expose the functions
   function("initGraph", &initGraph);
   function("getGraph", &getGraph);
