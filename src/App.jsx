@@ -170,6 +170,11 @@ function App() {
     postAlgorithmState(response, false)
   }
 
+  const doLouvain = () => {
+    const resolution = prompt("Enter resolution", "1.0");
+    const response = wasmModule.louvain(parseFloat(resolution))
+  }
+
   return (
     <ThemeProvider theme={darkTheme}>
       {/*<CssBaseline /> changes backgroundColor to black */}
@@ -215,6 +220,18 @@ function App() {
                 <Button onClick={doStrength}>Node Strength</Button>
                 <Button onClick={doHarmonicCentrality}>Harmonic Centrality</Button>
                 <Button onClick={doPageRank}>Page Rank</Button>
+              </ButtonGroup>
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion expanded={expanded === 'panel3'} onChange={handleAccordianChange('panel3')}>
+            <AccordionSummary aria-controls="panel3-content" id="panel3-header">
+              <Typography variant='body2' pl='5px'>Community Detection</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <ButtonGroup orientation='vertical' variant='text'>
+                <Button onClick={doLouvain}>Louvain Algorithm</Button>
+                
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>
