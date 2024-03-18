@@ -48,6 +48,7 @@ val betweenness_centrality(void);
 val closeness_centrality(void);
 val degree_centrality(void);
 val eigenvector_centrality(void);
+val strength(void);
 
 
 #endif

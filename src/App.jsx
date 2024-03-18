@@ -157,6 +157,10 @@ function App() {
     const response = wasmModule.eigenvector_centrality();
     postAlgorithmState(response, false)
   }
+  const doStrength = () => {
+    const response = wasmModule.strength_centrality();
+    postAlgorithmState(response, false)
+  }
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -200,6 +204,7 @@ function App() {
                 <Button onClick={doClosenessCentrality}>Closeness Centrality</Button>
                 <Button onClick={doDegreeCentrality}>Degree Centrality</Button>
                 <Button onClick={doEigenCentrality}>Eigenvector Centrality</Button>
+                <Button onClick={doStrength}>Node Strength</Button>
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>

@@ -122,7 +122,7 @@ val eigenvector_centrality(void) {
     val result = val::object();
     val sizeMap = val::object();
     std::string msg = "Eigenvector Centrality (scaled such that \"|max| = 1\"):\n";
-    msg+= "(eigenvalue = " + std::to_string(value) + ")\n";
+    msg += "(eigenvalue = " + std::to_string(value) + ")\n";
 
     for (igraph_integer_t v = 0; v < igraph_vector_size(&evs); ++v) {
         double centrality = VECTOR(evs)[v];
@@ -140,4 +140,30 @@ val eigenvector_centrality(void) {
     return result;
 }
 
-// remember to do 
+val strength(void) {
+    igraph_vector_t strengths;
+    igraph_vector_init(&strengths, 0);
+
+    igraph_strength(&igraphGlobalGraph, &strengths, igraph_vss_all(), IGRAPH_OUT, IGRAPH_NO_LOOPS, NULL /*TODO: weights*/);
+
+    double max_centrality = igraph_vector_max(&strengths);
+    val result = val::object();
+    val sizeMap = val::object();
+    std::string msg = "List of node strengths:\n";
+
+    for (igraph_integer_t v = 0; v < igraph_vector_size(&strengths); ++v) {
+        double centrality = VECTOR(strengths)[v];
+        double scaled_centrality = scaleCentrality(centrality, max_centrality);
+        sizeMap.set(v, scaled_centrality);
+
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(2) << centrality;
+        msg += std::to_string(v) + "\t" + stream.str() + "\n";
+    }
+
+    result.set("sizeMap", sizeMap);
+    result.set("message", msg);
+
+    igraph_vector_destroy(&strengths);
+    return result;
+} 
