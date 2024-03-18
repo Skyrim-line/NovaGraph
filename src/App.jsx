@@ -161,6 +161,14 @@ function App() {
     const response = wasmModule.strength_centrality();
     postAlgorithmState(response, false)
   }
+  const doHarmonicCentrality = () => {
+    const response = wasmModule.harmonic_centrality();
+    postAlgorithmState(response, false)
+  }
+  const doPageRank = () => {
+    const response = wasmModule.pagerank(0.85);
+    postAlgorithmState(response, false)
+  }
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -205,6 +213,8 @@ function App() {
                 <Button onClick={doDegreeCentrality}>Degree Centrality</Button>
                 <Button onClick={doEigenCentrality}>Eigenvector Centrality</Button>
                 <Button onClick={doStrength}>Node Strength</Button>
+                <Button onClick={doHarmonicCentrality}>Harmonic Centrality</Button>
+                <Button onClick={doPageRank}>Page Rank</Button>
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>

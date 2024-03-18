@@ -140,6 +140,35 @@ val eigenvector_centrality(void) {
     return result;
 }
 
+val harmonic_centrality(void) {
+    igraph_vector_t scores;
+    igraph_vector_init(&scores, 0);
+
+    igraph_harmonic_centrality(&igraphGlobalGraph, &scores, igraph_vss_all(), IGRAPH_OUT, NULL /*TODO: weights*/, true);
+
+    double max_centrality = igraph_vector_max(&scores);
+    val result = val::object();
+    val sizeMap = val::object();
+    std::string msg = "Harmonic Centrality:\n";
+
+    for (igraph_integer_t v = 0; v < igraph_vcount(&igraphGlobalGraph); ++v) {
+        double centrality = VECTOR(scores)[v];
+        double scaled_centrality = scaleCentrality(isnan(centrality) ? 0 : centrality, max_centrality);
+
+        sizeMap.set(v, scaled_centrality);
+
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(2) << centrality;
+        msg += std::to_string(v) + "\t" + stream.str() + "\n";
+    }
+    result.set("sizeMap", sizeMap);
+    result.set("message", msg);
+
+    igraph_vector_destroy(&scores);
+    return result;
+
+}
+
 val strength(void) {
     igraph_vector_t strengths;
     igraph_vector_init(&strengths, 0);
@@ -167,3 +196,34 @@ val strength(void) {
     igraph_vector_destroy(&strengths);
     return result;
 } 
+
+val pagerank(igraph_real_t damping) {
+    igraph_real_t value;
+    igraph_vector_t vec;
+    igraph_vector_init(&vec, 0);
+
+    std::stringstream stream;
+    stream << std::fixed << std::setprecision(2) << damping;
+
+    igraph_pagerank(&igraphGlobalGraph, IGRAPH_PAGERANK_ALGO_PRPACK, &vec, &value, igraph_vss_all(), IGRAPH_DIRECTED, damping, NULL /*TODO*/, NULL);
+
+    double max_centrality = igraph_vector_max(&vec);
+    val result = val::object();
+    val sizeMap = val::object();
+    std::string msg = "PageRank with damping = " + stream.str() + ":\n";\
+
+    for (igraph_integer_t v = 0; v < igraph_vector_size(&vec); ++v) {
+        double centrality = VECTOR(vec)[v];
+        double scaled_centrality = scaleCentrality(centrality, max_centrality);
+        sizeMap.set(v, scaled_centrality);
+
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(2) << centrality;
+        msg += std::to_string(v) + "\t" + stream.str() + "\n";
+    }
+    result.set("sizeMap", sizeMap);
+    result.set("message", msg);
+    
+    igraph_vector_destroy(&vec);
+    return result;
+}

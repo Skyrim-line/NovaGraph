@@ -179,6 +179,8 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("degree_centrality", &degree_centrality);
   function("eigenvector_centrality", &eigenvector_centrality);
   function("strength_centrality", &strength);
+  function("harmonic_centrality", &harmonic_centrality);
+  function("pagerank", &pagerank);
 }
 
 // emcc demo.cpp -O3 -s WASM=1 -s -sEXPORTED_FUNCTIONS=_sum,_subtract --no-entry -o demo.wasm
