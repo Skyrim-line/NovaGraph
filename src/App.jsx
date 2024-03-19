@@ -174,6 +174,13 @@ function App() {
     const resolution = prompt("Enter resolution", "1.0");
     const response = wasmModule.louvain(parseFloat(resolution))
   }
+  const doLeiden = () => {
+    const resolution = prompt("Enter resolution (Start at 1)", "1.0");
+    const response = wasmModule.leiden(parseFloat(resolution))
+  }
+  const doFastGreedy = () => {
+    const response = wasmModule.fast_greedy();
+  }
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -231,7 +238,8 @@ function App() {
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
                 <Button onClick={doLouvain}>Louvain Algorithm</Button>
-                
+                <Button onClick={doLeiden}>Leiden Algorithm</Button>
+                <Button onClick={doFastGreedy}>Fast-Greedy Algorithm</Button>
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>

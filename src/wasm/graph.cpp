@@ -183,6 +183,8 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("pagerank", &pagerank);
 
   function("louvain", &louvain);
+  function("leiden", &leiden);
+  function("fast_greedy", &fast_greedy);
 }
 
 // emcc demo.cpp -O3 -s WASM=1 -s -sEXPORTED_FUNCTIONS=_sum,_subtract --no-entry -o demo.wasm
