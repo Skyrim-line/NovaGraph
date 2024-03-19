@@ -49,6 +49,7 @@ val betweenness_centrality(void) {
     }
     result.set("sizeMap", sizeMap);
     result.set("message", msg);
+    result.set("mode", MODE_SIZE_SCALAR);
 
     igraph_vector_destroy(&betweenness);
     return result;
@@ -77,6 +78,7 @@ val closeness_centrality(void) {
     }
     result.set("sizeMap", sizeMap);
     result.set("message", msg);
+    result.set("mode", MODE_SIZE_SCALAR);
 
     igraph_vector_destroy(&closeness);
     return result;
@@ -106,6 +108,7 @@ val degree_centrality(void) {
 
     result.set("sizeMap", sizeMap);
     result.set("message", msg);
+    result.set("mode", MODE_SIZE_SCALAR);
 
     igraph_vector_int_destroy(&degrees);
     return result;
@@ -135,6 +138,7 @@ val eigenvector_centrality(void) {
     }
     result.set("sizeMap", sizeMap);
     result.set("message", msg);
+    result.set("mode", MODE_SIZE_SCALAR);
 
     igraph_vector_destroy(&evs);
     return result;
@@ -163,6 +167,7 @@ val harmonic_centrality(void) {
     }
     result.set("sizeMap", sizeMap);
     result.set("message", msg);
+    result.set("mode", MODE_SIZE_SCALAR);
 
     igraph_vector_destroy(&scores);
     return result;
@@ -192,6 +197,7 @@ val strength(void) {
 
     result.set("sizeMap", sizeMap);
     result.set("message", msg);
+    result.set("mode", MODE_SIZE_SCALAR);
 
     igraph_vector_destroy(&strengths);
     return result;
@@ -223,6 +229,7 @@ val pagerank(igraph_real_t damping) {
     }
     result.set("sizeMap", sizeMap);
     result.set("message", msg);
+    result.set("mode", MODE_SIZE_SCALAR);
     
     igraph_vector_destroy(&vec);
     return result;

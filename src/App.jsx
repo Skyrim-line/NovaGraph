@@ -70,6 +70,7 @@ function App() {
   };
 
   const postAlgorithmState = (response, unreachable) => {
+    console.log(`Mode: ${response.mode}`)
     if (response.colorMap) {
       setSizeMap(response.sizeMap ? response.sizeMap : {})
       setColorMap(response.colorMap)

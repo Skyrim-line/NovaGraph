@@ -19,6 +19,10 @@ struct GraphData {
     std::vector<VecInt> edges;
 };
 
+#define MODE_TWO_TONED      1   // Dark for important, light for less important
+#define MODE_MULTI_SHADE    2   // Multiple purple shades with error
+#define MODE_SIZE_SCALAR    3   // All purple but with different sizes
+#define MODE_RAINBOW        4   // Multiple colors in various groups
 
 using namespace emscripten;
 

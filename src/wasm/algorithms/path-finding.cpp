@@ -22,6 +22,7 @@ val vertices_are_connected(igraph_integer_t src, igraph_integer_t tar) {
     }
     result.set("colorMap", colorMap);
     result.set("message", msg);
+    result.set("mode", MODE_TWO_TONED);
     return result;
 }
 
@@ -59,6 +60,7 @@ val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     colorMap.set(tar, N);
     result.set("colorMap", colorMap);
     result.set("message", msg);
+    result.set("mode", MODE_TWO_TONED);
 
     igraph_vector_int_destroy(&vertices);
     return result;
@@ -104,6 +106,7 @@ val dijkstra_source_to_all(igraph_integer_t src) {
     colorMap.set(src, N);
     result.set("colorMap", colorMap);
     result.set("message", msg);
+    result.set("mode", MODE_MULTI_SHADE);
 
     igraph_vector_int_list_destroy(&paths);
     return result;
@@ -158,6 +161,7 @@ val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_inte
     colorMap.set(tar, N);
     result.set("colorMap", colorMap);
     result.set("message", msg);
+    result.set("mode", MODE_MULTI_SHADE);
 
     igraph_vector_int_list_destroy(&paths);
     return result;
@@ -194,6 +198,7 @@ val bf_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     colorMap.set(tar, N);
     result.set("colorMap", colorMap);
     result.set("message", msg);
+    result.set("mode", MODE_MULTI_SHADE);
 
     igraph_vector_int_destroy(&vertices);
     return result;
@@ -238,6 +243,7 @@ val bf_source_to_all(igraph_integer_t src) {
     colorMap.set(src, N);
     result.set("colorMap", colorMap);
     result.set("message", msg);
+    result.set("mode", MODE_MULTI_SHADE);
 
     igraph_vector_int_list_destroy(&paths);
     return result;
@@ -287,6 +293,7 @@ val bfs(igraph_integer_t src) {
     }
     result.set("colorMap", colorMap);
     result.set("message", msg);
+    result.set("mode", MODE_MULTI_SHADE);
 
     igraph_vector_int_destroy(&order);
     igraph_vector_int_destroy(&layers);
@@ -332,6 +339,7 @@ val dfs(igraph_integer_t src) {
 
     result.set("colorMap", colorMap);
     result.set("message", msg);
+    result.set("mode", MODE_MULTI_SHADE);
 
     igraph_vector_int_destroy(&order);
     igraph_vector_int_destroy(&dist);
@@ -379,6 +387,7 @@ val randomWalk(igraph_integer_t start, int steps) {
     }
     result.set("colorMap", colorMap);
     result.set("message", msg);
+    result.set("mode", MODE_MULTI_SHADE);
 
     igraph_vector_int_destroy(&vertices);
     return result;
@@ -418,6 +427,7 @@ val min_spanning_tree(void) {
     }
     result.set("colorMap", colorMap);
     result.set("message", msg);
+    result.set("mode", MODE_MULTI_SHADE); // TODO: test with larger disconnection?
 
     igraph_vector_int_destroy(&edges);
     igraph_destroy(&mst);
