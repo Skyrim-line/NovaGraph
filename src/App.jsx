@@ -179,10 +179,12 @@ function App() {
   }
   const doLeiden = () => {
     const resolution = prompt("Enter resolution (Start at 1)", "1.0");
-    const response = wasmModule.leiden(parseFloat(resolution))
+    const response = wasmModule.leiden(parseFloat(resolution));
+    postAlgorithmState(response)
   }
   const doFastGreedy = () => {
     const response = wasmModule.fast_greedy();
+    postAlgorithmState(response);
   }
 
   return (

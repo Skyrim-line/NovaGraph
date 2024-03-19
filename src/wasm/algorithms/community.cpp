@@ -37,7 +37,7 @@ val louvain(igraph_real_t resolution) {
     return result;
 }
 
-void leiden(igraph_real_t resolution) {
+val leiden(igraph_real_t resolution) {
     igraph_integer_t n_iterations = 10; // TODO: Might need to modify this value in future?
     igraph_vector_int_t membership;
     igraph_vector_int_init(&membership, 0);
@@ -46,22 +46,29 @@ void leiden(igraph_real_t resolution) {
 
     igraph_community_leiden(&igraphGlobalGraph, NULL /*todo*/, NULL, resolution, 0.01, false, n_iterations, &membership, &nb_clusters, &quality);
 
-    // Print the community membership for each vertex
-    std::cout << "Vertex ID\tCommunity ID\n";
-    for (long int i = 0; i < igraph_vector_int_size(&membership); ++i) {
-        std::cout << i << "\t\t" << VECTOR(membership)[i] << "\n";
+    val result = val::object();
+    val colorMap = val::object();
+    std::string msg = "Leiden Community Detection Algorithm\n";
+
+    msg += "Number of communities: " + std::to_string(nb_clusters) + "\n";
+    msg += "Partition quality: " + std::to_string(quality) + "\n";
+
+    msg += "Vertex ID\tCommunity ID\n";
+    for (igraph_integer_t v = 0; v < igraph_vector_int_size(&membership); ++v) {
+        igraph_integer_t community = VECTOR(membership)[v];
+        colorMap.set(v, community);
+        msg += std::to_string(v) + "\t\t" + std::to_string(community) + "\n";
     }
 
-    // TODO: color scale (colourful theme?)
-
-    // other prints
-    std::cout << "Number of communities: " << nb_clusters << std::endl;
-    std::cout << "Partition quality: " << quality << std::endl;
+    result.set("colorMap", colorMap);
+    result.set("message", msg);
+    result.set("mode", MODE_RAINBOW);
 
     igraph_vector_int_destroy(&membership);
+    return result;
 }
 
-void fast_greedy(void) {
+val fast_greedy(void) {
     igraph_vector_int_t membership;
     igraph_vector_t modularity;
     igraph_vector_int_init(&membership, 0);
@@ -69,16 +76,25 @@ void fast_greedy(void) {
 
     igraph_community_fastgreedy(&igraphGlobalGraph, NULL /*todo: weights*/, NULL, &modularity, &membership);
 
-    // Print the community membership for each vertex
-    std::cout << "Vertex ID\tCommunity ID\n";
-    for (long int i = 0; i < igraph_vector_int_size(&membership); ++i) {
-        std::cout << i << "\t\t" << VECTOR(membership)[i] << "\n";
+    val result = val::object();
+    val colorMap = val::object();
+    std::string msg = "Community Detection Greedy Algorithm\n";
+
+    msg += "Modularity: " + std::to_string(igraph_vector_max(&modularity)) + "\n";
+    msg += "Number of communities: " + std::to_string(igraph_vector_int_max(&membership) + 1) + "\n";
+
+    msg += "Vertex ID\tCommunity ID\n";
+    for (igraph_integer_t v = 0; v < igraph_vector_int_size(&membership); ++v) {
+        igraph_integer_t community = VECTOR(membership)[v];
+        colorMap.set(v, community);
+        msg += std::to_string(v) + "\t\t" + std::to_string(community) + "\n";
     }
     
-    std::cout << "Modularity: " << igraph_vector_max(&modularity) << std::endl;
-    std::cout << "Number of communities: " << igraph_vector_int_max(&membership) + 1 << std::endl;
+    result.set("colorMap", colorMap);
+    result.set("message", msg);
+    result.set("mode", MODE_RAINBOW);
 
     igraph_vector_int_destroy(&membership);
     igraph_vector_destroy(&modularity);
-
+    return result;
 }
