@@ -174,7 +174,8 @@ function App() {
 
   const doLouvain = () => {
     const resolution = prompt("Enter resolution", "1.0");
-    const response = wasmModule.louvain(parseFloat(resolution))
+    const response = wasmModule.louvain(parseFloat(resolution));
+    postAlgorithmState(response)
   }
   const doLeiden = () => {
     const resolution = prompt("Enter resolution (Start at 1)", "1.0");

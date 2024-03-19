@@ -3,7 +3,7 @@
 #include <string>
 
 
-void louvain(igraph_real_t resolution) {
+val louvain(igraph_real_t resolution) {
     igraph_vector_int_t membership;
     igraph_vector_t modularity;
     igraph_vector_int_init(&membership, 0);
@@ -11,23 +11,30 @@ void louvain(igraph_real_t resolution) {
 
     igraph_community_multilevel(&igraphGlobalGraph, NULL /*todo*/, resolution, &membership, NULL, &modularity);
 
-    // Print the community membership
-    std::cout << "Vertex ID\tCommunity ID\n";
-    for (long int i = 0; i < igraph_vector_int_size(&membership); ++i) {
-        std::cout << i << "\t\t" << VECTOR(membership)[i] << "\n";
+    igraph_real_t modularity_metric;
+    igraph_modularity(&igraphGlobalGraph, &membership, NULL /*todo*/, resolution, IGRAPH_UNDIRECTED, &modularity_metric);
+
+    val result = val::object();
+    val colorMap = val::object();
+    std::string msg = "Louvain Community Detection Algorithm\n";
+
+    msg += "Modularity: " + std::to_string(modularity_metric) + "\n";
+    msg += "Number of communities: " + std::to_string(igraph_vector_int_max(&membership) + 1) + "\n";
+
+    msg += "Vertex ID\tCommunity ID\n";
+    for (igraph_integer_t v = 0; v < igraph_vector_int_size(&membership); ++v) {
+        igraph_integer_t community = VECTOR(membership)[v];
+        colorMap.set(v, community);
+        msg += std::to_string(v) + "\t\t" + std::to_string(community) + "\n";
     }
 
-    // TODO: color scale (colourful theme?)
-
-    // Modularity
-    igraph_real_t modularity_value;
-    igraph_modularity(&igraphGlobalGraph, &membership, NULL /*todo*/, resolution, IGRAPH_UNDIRECTED, &modularity_value);
-    std::cout << "Modularity: " << modularity_value << std::endl;
-    std::cout << "Number of communities: " << igraph_vector_int_max(&membership) + 1 << std::endl;
+    result.set("colorMap", colorMap);
+    result.set("message", msg);
+    result.set("mode", MODE_RAINBOW);
 
     igraph_vector_int_destroy(&membership);
     igraph_vector_destroy(&modularity);
-
+    return result;
 }
 
 void leiden(igraph_real_t resolution) {

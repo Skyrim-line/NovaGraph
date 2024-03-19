@@ -41,14 +41,17 @@ export function GraphRenderer({ colors, sizes, nodes, links, mode }) {
 
     // colorspace with 6B0072
     const getColor = (freq, id) => {
-        if (mode == 2 && freq > 0) {
+        if (mode == 4) {
+            const hue = freq * 137.508; // use golden angle approximation
+            return `hsl(${hue + 50},100%,75%)`;
+        } else if (mode == 2 && freq > 0) {
             return scale(freq / nodes.length).hex()
         } else if (freq > 0) {
-            return scale(1).hex()
+            return scale(1).hex() // DARK (mode 1 but freq)
         } else if (mode == 2) {
-            return '#F05480'
+            return '#F05480' // RED (mode 2 but freq=0)
         } else {
-            return '#9f8fc3'
+            return '#9f8fc3' // NEUTRAL (mode 3/4)
         }
     }
 

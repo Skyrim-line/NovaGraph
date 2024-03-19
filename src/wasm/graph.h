@@ -49,7 +49,7 @@ val harmonic_centrality(void);
 val strength(void);
 val pagerank(igraph_real_t damping);
 
-void louvain(igraph_real_t resolution);
+val louvain(igraph_real_t resolution);
 void leiden(igraph_real_t resolution);
 void fast_greedy(void);
 
