@@ -28,7 +28,7 @@ function App() {
   const [edges, setEdges] = useState([]);
   const [colorMap, setColorMap] = useState({});
   const [sizeMap, setSizeMap] = useState({});
-  const [red, setRed] = useState(false);
+  const [renderMode, setRenderMode] = useState(1);
   const [text, setText] = useState("");
 
   useEffect(() => {
@@ -69,7 +69,7 @@ function App() {
     setExpanded(newExpanded ? panel : false);
   };
 
-  const postAlgorithmState = (response, unreachable) => {
+  const postAlgorithmState = response => {
     console.log(`Mode: ${response.mode}`)
     if (response.colorMap) {
       setSizeMap(response.sizeMap ? response.sizeMap : {})
@@ -82,25 +82,26 @@ function App() {
       setSizeMap({})
     }
     setText(response.message)
-    setRed(unreachable)
+    setRenderMode(response.mode)
   }
 
   const doAreConnected = () => {
     const source = prompt("Enter source vertex", "0");
     const target = prompt("Enter target vertex", "0");
     const response = wasmModule.vertices_are_connected(parseInt(source), parseInt(target))
-    postAlgorithmState(response, false)
+    postAlgorithmState(response)
   }
   const doDijkstraSingle = () => {
     const source = prompt("Enter source vertex", "0");
     const target = prompt("Enter target vertex", "0");
     const response = wasmModule.dijkstra_source_to_target(parseInt(source), parseInt(target));
-    postAlgorithmState(response, false)
+    console.log(response)
+    postAlgorithmState(response)
   }
   const doDijkstraMulti = () => {
     const source = prompt("Enter source vertex", "0");
     const response = wasmModule.dijkstra_source_to_all(parseInt(source));
-    postAlgorithmState(response, true)
+    postAlgorithmState(response)
   }
   const doYen = () => {
     const source = prompt("Enter source vertex", "0");
@@ -108,67 +109,67 @@ function App() {
     const kInput = prompt("Enter k (number of paths)");
     const k = parseInt(kInput) || 1;
     const response = wasmModule.yens_algorithm(parseInt(source), parseInt(target), k);
-    postAlgorithmState(response, true)
+    postAlgorithmState(response)
   }
   const doBFSingle = () => {
     const source = prompt("Enter source vertex", "0");
     const target = prompt("Enter target vertex", "0");
     const response = wasmModule.bellman_ford_source_to_target(parseInt(source), parseInt(target));
-    postAlgorithmState(response, false)
+    postAlgorithmState(response)
   }
   const doBFMulti = () => {
     const source = prompt("Enter source vertex", "0");
     const response = wasmModule.bellman_ford_source_to_all(parseInt(source));
-    postAlgorithmState(response, true)
+    postAlgorithmState(response)
   }
   const doBFS = () => {
     const source = prompt("Enter source vertex", "0");
     const response = wasmModule.bfs(parseInt(source));
-    postAlgorithmState(response, true)
+    postAlgorithmState(response)
   }
   const doDFS = () => {
     const source = prompt("Enter source vertex", "0");
     const response = wasmModule.dfs(parseInt(source));
-    postAlgorithmState(response, true)
+    postAlgorithmState(response)
   }
   const doRW = () => {
     const start = prompt("Enter starting vertex", "0");
     const steps = prompt("Enter step count", "0");
     const response = wasmModule.random_walk(parseInt(start), parseInt(steps));
-    postAlgorithmState(response, true)
+    postAlgorithmState(response)
   }
   const doMST = () => {
     const response = wasmModule.min_spanning_tree();
-    postAlgorithmState(response, true)
+    postAlgorithmState(response)
   }
 
   const doBetweennessCentrality = () => {
     const response = wasmModule.betweenness_centrality();
-    postAlgorithmState(response, false)
+    postAlgorithmState(response)
   }
   const doClosenessCentrality = () => {
     const response = wasmModule.closeness_centrality();
-    postAlgorithmState(response, false)
+    postAlgorithmState(response)
   }
   const doDegreeCentrality = () => {
     const response = wasmModule.degree_centrality();
-    postAlgorithmState(response, false)
+    postAlgorithmState(response)
   }
   const doEigenCentrality = () => {
     const response = wasmModule.eigenvector_centrality();
-    postAlgorithmState(response, false)
+    postAlgorithmState(response)
   }
   const doStrength = () => {
     const response = wasmModule.strength_centrality();
-    postAlgorithmState(response, false)
+    postAlgorithmState(response)
   }
   const doHarmonicCentrality = () => {
     const response = wasmModule.harmonic_centrality();
-    postAlgorithmState(response, false)
+    postAlgorithmState(response)
   }
   const doPageRank = () => {
     const response = wasmModule.pagerank(0.85);
-    postAlgorithmState(response, false)
+    postAlgorithmState(response)
   }
 
   const doLouvain = () => {
@@ -189,7 +190,7 @@ function App() {
       <Typography variant='h3'>NovaGraph</Typography>
       
       <Box sx={{ display: 'flex', gap: 1 }}>
-        <GraphRenderer nodes={nodes} links={edges} colors={colorMap} sizes={sizeMap} colorAll={red} />
+        <GraphRenderer nodes={nodes} links={edges} colors={colorMap} sizes={sizeMap} mode={renderMode} />
 
         <Box>
           <Accordion expanded={expanded === 'panel1'} onChange={handleAccordianChange('panel1')}>

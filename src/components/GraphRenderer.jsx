@@ -6,8 +6,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
+import { Mode } from '../renderModes';
 
-export function GraphRenderer({ colors, sizes, nodes, links, colorAll }) {
+export function GraphRenderer({ colors, sizes, nodes, links, mode }) {
     const cosmograph = useRef()
     const scale = chroma.scale(['#F7EBFF', '#6750C6']);
     /* Palette: https://mycolor.space/?hex=%236750C6&sub=1 (Spot Palette)
@@ -16,6 +17,17 @@ export function GraphRenderer({ colors, sizes, nodes, links, colorAll }) {
         - Light: #f7ebff
         - Contrast (Green): #67baa7
     */
+
+    useEffect(() => {
+        console.log(`Mode: ${mode}`)
+        console.log(`MODE ${Mode.MULTI_SHADE}`)
+        switch(mode) {
+            case Mode.MULTI_SHADE:
+                console.log("multi shade"); break
+            case Mode.TWO_TONED:
+                console.log("two tond"); break
+        }
+    }, [colors, sizes])
 
     const zoomToNode = useCallback((node, i, pos, event) => {
         if (node && i != undefined) {
@@ -29,11 +41,11 @@ export function GraphRenderer({ colors, sizes, nodes, links, colorAll }) {
 
     // colorspace with 6B0072
     const getColor = (freq, id) => {
-        if (colorAll && freq > 0) {
+        if (mode == 2 && freq > 0) {
             return scale(freq / nodes.length).hex()
         } else if (freq > 0) {
             return scale(1).hex()
-        } else if (colorAll) {
+        } else if (mode == 2) {
             return '#F05480'
         } else {
             return '#9f8fc3'
