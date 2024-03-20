@@ -2,6 +2,10 @@
 #include <iostream>
 #include <string>
 
+/* Community Algorithms future change:
+    - instead of a table where each vertex is a row,
+    - have a table where each community is a row and vertices are shown in an array
+*/ 
 
 val louvain(igraph_real_t resolution) {
     igraph_vector_int_t membership;
