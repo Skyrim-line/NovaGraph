@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react'
 import createModule from './graph'
 import './App.css'
 import { GraphRenderer } from './components/GraphRenderer';
-import { Box, Button, ButtonGroup, Typography } from '@mui/material';
+import { Box, Button, ButtonGroup, Menu, MenuItem, Typography } from '@mui/material';
+import UploadIcon from '@mui/icons-material/Upload';
 import { Accordion, AccordionDetails, AccordionSummary } from './components/Accordion';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import ImportMenu from './components/imports/ImportMenu';
 
 const darkTheme = createTheme({
   palette: {
@@ -30,6 +32,8 @@ function App() {
   const [sizeMap, setSizeMap] = useState({});
   const [renderMode, setRenderMode] = useState(1);
   const [text, setText] = useState("");
+
+  const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
     createModule().then(mod => {
@@ -187,10 +191,28 @@ function App() {
     postAlgorithmState(response);
   }
 
+
   return (
     <ThemeProvider theme={darkTheme}>
       {/*<CssBaseline /> changes backgroundColor to black */}
-      <Typography variant='h3'>NovaGraph</Typography>
+      <Typography variant='h3'>Novagraph</Typography>
+
+      <Box sx={{ display: 'flex' }}>
+        <Button
+          aria-controls='import-menu'
+          aria-haspopup='true'
+          onClick={event => setAnchorEl(event.currentTarget)}
+          startIcon={<UploadIcon />}
+        >
+          Import Graph
+        </Button>
+        <ImportMenu
+          id='import-menu'
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+        />
+      </Box>
+      
       
       <Box sx={{ display: 'flex', gap: 1 }}>
         <GraphRenderer nodes={nodes} links={edges} colors={colorMap} sizes={sizeMap} mode={renderMode} />
@@ -246,6 +268,12 @@ function App() {
                 <Button onClick={doLeiden}>Leiden Algorithm</Button>
                 <Button onClick={doFastGreedy}>Fast-Greedy Algorithm</Button>
               </ButtonGroup>
+              <p>Clustering Coefficient / Transitivity</p>
+              <p>K-Core Decomposition</p>
+              <p>Label Propagation</p>
+              <p>Triangle Count</p>
+              <p>Strongly Connected Components</p>
+              <p>Weakly Connected Components</p>
             </AccordionDetails>
           </Accordion>
 
