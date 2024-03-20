@@ -209,6 +209,7 @@ function App() {
           aria-haspopup='true'
           onClick={event => setAnchorEl(event.currentTarget)}
           startIcon={<UploadIcon />}
+          color='secondary'
         >
           Import Graph
         </Button>
