@@ -1,7 +1,7 @@
 #/bin/bash
 
 echo "Running the Emscripten compiler..."
-em++ src/wasm/graph.cpp src/wasm/algorithms/*.cpp -o src/graph.js \
+em++ src/wasm/graph.cpp src/wasm/algorithms/*.cpp src/wasm/generator.cpp -o src/graph.js \
     -s WASM=1 \
     -I./src/wasm -I./src/wasm/igraph/build/include -I./src/wasm/igraph/include \
     -s EXPORT_ES6=1 \
@@ -9,6 +9,9 @@ em++ src/wasm/graph.cpp src/wasm/algorithms/*.cpp -o src/graph.js \
     -s ENVIRONMENT='web' \
     -s EXPORT_NAME='createModule' \
     -s LINKABLE=1 \
+    -s FORCE_FILESYSTEM=1 \
+    -s WASMFS=1 \
+    -s EXPORTED_RUNTIME_METHODS=['FS'] \
     -lembind --no-entry \
     -Os \
     ./src/wasm/igraph/build/src/libigraph.a \

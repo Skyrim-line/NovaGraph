@@ -152,6 +152,7 @@ EMSCRIPTEN_BINDINGS(graph) {
   // Register the vector type
   register_vector<int>("vector<int>");
   register_vector<VecInt>("VectorInt");
+  register_vector<uint8_t>("VectorUint8");
 
   value_object<GraphData>("Graph")
     .field("nodes", &GraphData::nodes)
@@ -161,6 +162,8 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("initGraph", &initGraph);
   function("getGraph", &getGraph);
   function("sum", &sum);
+
+  function("generate_graph_from_csv", &graph_from_csv);
 
   function("vertices_are_connected", &vertices_are_connected);
   function("dijkstra_source_to_target", &dijkstra_source_to_target);

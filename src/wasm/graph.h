@@ -26,6 +26,8 @@ struct GraphData {
 
 using namespace emscripten;
 
+void graph_from_csv(std::string filename);
+
 val igraph_vector_int_to_val(igraph_vector_int_t* vec);
 val igraph_vector_int_list_to_val(igraph_vector_int_list_t* v);
 int getFreq(const val& map, std::string key);

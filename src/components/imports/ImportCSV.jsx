@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogContent, DialogTitle, Divider, FormControlLa
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import React, { useState } from "react";
 
-const ImportCSV = ({ open, onClose }) => {
+const ImportCSV = ({ open, onClose, module }) => {
   const [tableView, setTableView] = useState(false);
   const [nodesFile, setNodesFile] = useState(null);
   const [edgesFile, setEdgesFile] = useState(null);
@@ -16,6 +16,18 @@ const ImportCSV = ({ open, onClose }) => {
       alert('Please upload a .csv file');
     }
   };
+
+  const handleSubmit = async () => {
+    if (nodesFile) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const data = new Uint8Array(e.target.result);
+        module.FS.writeFile("nodes.csv", data);
+        module.generate_graph_from_csv("nodes.csv");
+      }
+      reader.readAsArrayBuffer(nodesFile);
+    }
+  }
 
   return(
   <Dialog open={open} onClose={onClose} fullWidth>
@@ -166,6 +178,7 @@ const ImportCSV = ({ open, onClose }) => {
                 variant="contained"
                 color="secondary"
                 disabled={!nodesFile || !edgesFile}
+                onClick={handleSubmit}
               >
                 Create Graph!
               </Button>

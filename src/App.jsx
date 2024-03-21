@@ -217,6 +217,7 @@ function App() {
           id='import-menu'
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
+          module={wasmModule}
         />
       </Box>
       
