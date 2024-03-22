@@ -26,7 +26,7 @@ struct GraphData {
 
 using namespace emscripten;
 
-void graph_from_csv(std::string filename);
+void graph_from_csv(const std::string& nodesFilename, const std::string& edgesFilename, bool directed);
 
 val igraph_vector_int_to_val(igraph_vector_int_t* vec);
 val igraph_vector_int_list_to_val(igraph_vector_int_list_t* v);

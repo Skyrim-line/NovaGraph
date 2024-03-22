@@ -18,14 +18,28 @@ const ImportCSV = ({ open, onClose, module }) => {
   };
 
   const handleSubmit = async () => {
-    if (nodesFile) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        const data = new Uint8Array(e.target.result);
-        module.FS.writeFile("nodes.csv", data);
-        module.generate_graph_from_csv("nodes.csv");
+    if (nodesFile && edgesFile) {
+      const reader1 = new FileReader();
+      const reader2 = new FileReader();
+      const nodesFilename = "nodes.csv"
+      const edgesFilename = "edges.csv"
+
+      reader1.onload = e => {
+        const nodesData = new Uint8Array(e.target.result);
+
+        reader2.onload = e => {
+          const edgesData = new Uint8Array(e.target.result);
+          
+          module.FS.writeFile(nodesFilename, nodesData);
+          module.FS.writeFile(edgesFilename, edgesData);
+          module.generate_graph_from_csv(nodesFilename, edgesFilename, directed);
+          // remove the files (since writeFile appends)
+          module.FS.unlink(nodesFilename);
+          module.FS.unlink(edgesFilename);
+        }
+        reader2.readAsArrayBuffer(edgesFile);
       }
-      reader.readAsArrayBuffer(nodesFile);
+      reader1.readAsArrayBuffer(nodesFile);
     }
   }
 
