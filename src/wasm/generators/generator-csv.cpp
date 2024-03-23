@@ -1,7 +1,5 @@
-#include "graph.h"
-#include <iostream>
-#include <fstream>
-#include <sstream>
+#include "generator.h"
+#include <algorithm>
 #include <unordered_set>
 
 inline void ltrim(std::string& s) {
