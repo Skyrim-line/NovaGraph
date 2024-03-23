@@ -1,6 +1,7 @@
 #include "graph.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <unordered_set>
 
 inline void ltrim(std::string& s) {
@@ -28,26 +29,29 @@ std::unordered_map<std::string, int> process_nodes_csv(const std::string& filena
     std::string line, name;
     int id = 0;
 
-    std::cout << "line1" << std::endl;
-
-
     // check file
     if (!file.is_open()) throw std::runtime_error("Could not open file " + filename);
 
     // header check
     if (!std::getline(file, line)) throw std::runtime_error("Could not read the Nodes CSV file");
-    // TODO: match "Nodes" ??
-    if (trim(line) != "nodes") throw std::runtime_error("Incorrect header in nodes file");
+    std::string header = trim(line);
+    if (header != "nodes" && header != "Nodes") throw std::runtime_error("Incorrect header in nodes file");
 
-    // read nodes file
-    /*
+    // read the nodes
     while (std::getline(file, line)) {
-        trim(line);
-        std::istringstream 
+        std::istringstream fileStream(trim(line));
+        if (fileStream >> name) {
+            // insert into the set and if it doesn't exist, the second elem of the pair returns true
+            if (nodeSet.insert(name).second) {
+                nodes[name] = id++;
+            }
+        }
     }
-    */
-    std::cout << "Success! The line came up as " << line << std::endl;
 
+    std::cout << "Nodes list: " << std::endl;
+    for (const auto& [key1, value1] : nodes) {
+        std::cout << key1 << " " << value1 << std::endl;
+    }
 
     return nodes;
 }
