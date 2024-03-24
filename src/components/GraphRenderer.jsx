@@ -18,6 +18,9 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
         - Contrast (Green): #67baa7
     */
 
+        
+    const [selectedNode, setSelectedNode] = useState(null);
+
     useEffect(() => {
         console.log(`Mode: ${mode}`)
         console.log(`MODE ${Mode.MULTI_SHADE}`)
@@ -30,18 +33,19 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     }, [colors, sizes])
 
     useEffect(() => {
-        // restart the graph
         console.log('Restarting graph...')
         cosmograph.current?.create();
     }, [nodes, links, directed])
 
-    const zoomToNode = useCallback((node, i, pos, event) => {
-        if (node && i != undefined) {
+    const zoomToNode = useCallback((node, i) => {
+        if (node && i != undefined && node != selectedNode) {
             cosmograph.current?.selectNode(node);
             cosmograph.current?.zoomToNode(node);
+            setSelectedNode(node);
         } else {
             cosmograph.current?.unselectNodes();
             cosmograph.current?.fitView(1000);
+            setSelectedNode(null);
         }
     })
 
@@ -61,6 +65,26 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
         }
     }
 
+    const getLinkColor = link => {
+        if (colors[`${link.source}-${link.target}`] > 0) {
+            return '#67baa7'
+        } else if (colors[`${link.target}-${link.source}`] > 0) {
+            return '#67baa7'
+        } else {
+            return null
+        }
+    }
+
+    const getLinkWidth = link => {
+        if (colors[`${link.source}-${link.target}`] > 0) {
+            return 3
+        } else if (colors[`${link.target}-${link.source}`] > 0) {
+            return 3
+        } else {
+            return 0.1
+        }
+    }
+
     return(
     <Box sx={{ display:'flex', flexDirection: 'column', height: '75vh' }}>
         
@@ -72,12 +96,12 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 //backgroundColor='#151515'
                 nodeSize={(_node, id) => sizes[id] ? sizes[id] : 20}
                 nodeColor={(_node, id) => getColor(colors[id], id)}
-                linkColor={(link) => colors[`${link.source}-${link.target}`] > 0 ? '#67baa7' : null}
+                linkColor={link => getLinkColor(link)}
                 nodeGreyoutOpacity={0.1}
-                linkWidth={(link) => colors[`${link.source}-${link.target}`] > 0 ? 3 : 0.1}
+                linkWidth={link => getLinkWidth(link)}
 
                 nodeLabelAccessor={(node) => node.name ? node.name : node.id}
-                linkArrows={false}
+                linkArrows={directed}
                 
                 //renderHoveredNodeRing={true}
                 //hoveredNodeRingColor='#4B5BBF'

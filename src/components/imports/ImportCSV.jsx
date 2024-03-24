@@ -24,6 +24,9 @@ const ImportCSV = ({ open, onClose, module, updateGraph }) => {
       const nodesFilename = "nodes.csv"
       const edgesFilename = "edges.csv"
 
+      module.FS.unlink(nodesFilename);
+      module.FS.unlink(edgesFilename);
+
       reader1.onload = e => {
         const nodesData = new Uint8Array(e.target.result);
 
@@ -38,8 +41,6 @@ const ImportCSV = ({ open, onClose, module, updateGraph }) => {
           // TODO: if error, render error message
 
           // remove the files (since writeFile appends)
-          module.FS.unlink(nodesFilename);
-          module.FS.unlink(edgesFilename);
         }
         reader2.readAsArrayBuffer(edgesFile);
       }
