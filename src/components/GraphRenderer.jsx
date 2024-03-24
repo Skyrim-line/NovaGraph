@@ -6,6 +6,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
+import LabelIcon from '@mui/icons-material/Label';
+import LabelOffIcon from '@mui/icons-material/LabelOff';
 import { Mode } from '../renderModes';
 
 export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
@@ -20,6 +22,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
 
         
     const [selectedNode, setSelectedNode] = useState(null);
+    const [dynamicLabels, setDynamicLabels] = useState(true);
 
     useEffect(() => {
         console.log(`Mode: ${mode}`)
@@ -35,6 +38,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     useEffect(() => {
         console.log('Restarting graph...')
         cosmograph.current?.create();
+        cosmograph.current?.fitView();
     }, [nodes, links, directed])
 
     const zoomToNode = useCallback((node, i) => {
@@ -50,16 +54,16 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     })
 
     // colorspace with 6B0072
-    const getColor = (freq, id) => {
+    const getColor = value => {
         if (mode == 4) {
-            const hue = freq * 137.508; // use golden angle approximation
+            const hue = value * 137.508; // use golden angle approximation
             return `hsl(${hue + 50},100%,75%)`;
-        } else if (mode == 2 && freq > 0) {
-            return scale(freq / nodes.length).hex()
-        } else if (freq > 0) {
-            return scale(1).hex() // DARK (mode 1 but freq)
+        } else if (mode == 2 && value > 0) {
+            return scale(value / nodes.length).hex()
+        } else if (value > 0) {
+            return scale(1).hex() // DARK (mode 1 but value)
         } else if (mode == 2) {
-            return '#F05480' // RED (mode 2 but freq=0)
+            return '#F05480' // RED (mode 2 but value=0)
         } else {
             return '#9f8fc3' // NEUTRAL (mode 3/4)
         }
@@ -95,13 +99,14 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 disableSimulation={false}
                 //backgroundColor='#151515'
                 nodeSize={(_node, id) => sizes[id] ? sizes[id] : 20}
-                nodeColor={(_node, id) => getColor(colors[id], id)}
+                nodeColor={(_node, id) => getColor(colors[id])}
                 linkColor={link => getLinkColor(link)}
                 nodeGreyoutOpacity={0.1}
                 linkWidth={link => getLinkWidth(link)}
 
                 nodeLabelAccessor={(node) => node.name ? node.name : node.id}
                 linkArrows={directed}
+                showDynamicLabels={dynamicLabels}
                 
                 //renderHoveredNodeRing={true}
                 //hoveredNodeRingColor='#4B5BBF'
@@ -151,6 +156,22 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
             
 
             <Box flexGrow={1} />
+
+            {
+                dynamicLabels ?
+                <Tooltip title="Hide Labels">
+                    <IconButton aria-label='hide-labels' onClick={() => setDynamicLabels(false)}>
+                        <LabelIcon />
+                    </IconButton>
+                </Tooltip>
+                :
+                <Tooltip title="Show Labels">
+                    <IconButton aria-label='show-labels' onClick={() => setDynamicLabels(true)}>
+                        <LabelOffIcon />
+                    </IconButton>
+                </Tooltip>
+            
+            }
             
             <Tooltip title="Graph Options">
                 <IconButton aria-label='graph-options'>
