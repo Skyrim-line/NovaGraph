@@ -8,17 +8,8 @@
 #include <string>
 
 #define N 11 // number of nodes
-extern int globalGraph[N][N];           // adjacency matrix
 extern igraph_t igraphGlobalGraph;      // igraph structure
 extern igraph_vector_t globalWeights;   // edge weights
-
-
-typedef std::vector<int> VecInt;
-
-struct GraphData {
-    VecInt nodes;
-    std::vector<VecInt> edges;
-};
 
 #define MODE_TWO_TONED      1   // Dark for important, light for less important
 #define MODE_MULTI_SHADE    2   // Multiple purple shades with error
@@ -26,6 +17,9 @@ struct GraphData {
 #define MODE_RAINBOW        4   // Multiple colors in various groups
 
 using namespace emscripten;
+
+val initGraph(void);
+void cleanupGraph(void);
 
 val igraph_vector_int_to_val(igraph_vector_int_t* vec);
 val igraph_vector_int_list_to_val(igraph_vector_int_list_t* v);

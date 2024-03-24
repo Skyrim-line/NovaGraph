@@ -45,28 +45,12 @@ function App() {
   useEffect(() => {
     createModule().then(mod => {
       setWasmModule(mod)
-      mod.initGraph(); // initialize the graph in C++
-      const graph = mod.getGraph(); // get the graph as a JS array
-
-      let nodesTmp = []
-      let edgesTmp = []
-
-      for (var i = 0; i < graph.length; i++) {
-          nodesTmp.push({ id: i }) // create a node for each index
-          for (var j = 0; j < graph[i].length; j++) {
-              if (graph[i][j] === 1) { // if there is an edge
-                  edgesTmp.push({
-                      source: i,
-                      target: j
-                  })
-              }
-          }
-      }
-
-      setNodes(nodesTmp)
-      setEdges(edgesTmp)
+      const graph = mod.initGraph(); // initialize the graph in C++
+      setNodes(graph.nodes)
+      setEdges(graph.edges)
 
       window.onunload = () => {
+        console.log("Cleanup")
         mod.cleanupGraph()
       }
     })

@@ -5,168 +5,58 @@
 
 using namespace emscripten;
 
-int globalGraph[N][N];
 igraph_t igraphGlobalGraph;
 igraph_vector_t globalWeights;
 
-/*
-GraphData generateGraph(void) {
-    igraph_empty(&globalGraph, 0, IGRAPH_UNDIRECTED);
 
-    // manipulate
-    igraph_add_vertices(&globalGraph, 11, 0);
-    igraph_add_edge(&globalGraph, 0, 1);
-    igraph_add_edge(&globalGraph, 0, 2);
-    igraph_add_edge(&globalGraph, 0, 9);
-    igraph_add_edge(&globalGraph, 2, 5);
-    igraph_add_edge(&globalGraph, 2, 7);
-    igraph_add_edge(&globalGraph, 3, 1);
-    igraph_add_edge(&globalGraph, 3, 4);
-    igraph_add_edge(&globalGraph, 4, 5);
-    igraph_add_edge(&globalGraph, 6, 1);
-    igraph_add_edge(&globalGraph, 8, 1);
-
-    // Get the number of vertices and edges
-    igraph_integer_t num_vertices = igraph_vcount(&globalGraph);
-    igraph_integer_t num_edges = igraph_ecount(&globalGraph);
-
-    // Get the list of nodes
-    igraph_vs_t vertices;
-    igraph_vs_all(&vertices);
-    igraph_vector_int_t nodes;
-    igraph_vector_int_init(&nodes, num_vertices);
-    igraph_vs_as_vector(&globalGraph, vertices, &nodes); // convert to iterator
-    igraph_vs_destroy(&vertices);
-
-
-    // Get the list of edges
-    igraph_vector_int_t edges;
-    igraph_vector_int_init(&edges, num_edges * 2);
-    igraph_get_edgelist(&globalGraph, &edges, 0);
-
-    // Convert igraph vectors to C++ vectors
-    VecInt nodes_list(num_vertices);
-    std::vector<VecInt> edges_list(num_edges);
-
-    for (int i = 0; i < num_vertices; ++i) {
-        nodes_list[i] = VECTOR(nodes)[i];
-    }
-
-    for (int i = 0; i < num_edges; ++i) {
-        VecInt v;
-
-        v.push_back(VECTOR(edges)[2 * i]);
-        v.push_back(VECTOR(edges)[2 * i + 1]);
-        edges_list[i] = v;
-    }
-
-    // Free igraph vectors and destroy the graph
-    igraph_vector_int_destroy(&nodes);
-    igraph_vector_int_destroy(&edges);
-    //igraph_destroy(&globalGraph);
-
-    GraphData gr;
-    gr.edges = edges_list;
-    gr.nodes = nodes_list;
-
-    return gr;
-}
-*/
-
-// Initialize the graph with some edges
-void initGraph(void) {
+// The first graph to be rendered on the screen
+val initGraph(void) {
     igraph_set_attribute_table(&igraph_cattribute_table);
 
-    // Create an empty graph with 11 vertices
-    igraph_empty(&igraphGlobalGraph, 11, IGRAPH_UNDIRECTED);
+    igraph_empty(&igraphGlobalGraph, 10, IGRAPH_UNDIRECTED);
 
-    // Create a vector of integers to store the edge list
-    igraph_vector_int_t edges;
-    igraph_vector_int_init(&edges, 20); // 20 elements for 10 edges
+    // Use European cities as nodes
+    SETVAS(&igraphGlobalGraph, "name", 0, "London");
+    SETVAS(&igraphGlobalGraph, "name", 1, "Paris");
+    SETVAS(&igraphGlobalGraph, "name", 2, "Berlin");
+    SETVAS(&igraphGlobalGraph, "name", 3, "Rome");
+    SETVAS(&igraphGlobalGraph, "name", 4, "Madrid");
+    SETVAS(&igraphGlobalGraph, "name", 5, "Athens");
+    SETVAS(&igraphGlobalGraph, "name", 6, "Amsterdam");
+    SETVAS(&igraphGlobalGraph, "name", 7, "Brussels");
+    SETVAS(&igraphGlobalGraph, "name", 8, "Lisbon");
+    SETVAS(&igraphGlobalGraph, "name", 9, "Prague");
 
-    // Add the edges to the vector
-    igraph_vector_int_set(&edges, 0, 0); // first edge: (0, 1)
-    igraph_vector_int_set(&edges, 1, 1);
-    igraph_vector_int_set(&edges, 2, 0); // second edge: (0, 2)
-    igraph_vector_int_set(&edges, 3, 2);
-    igraph_vector_int_set(&edges, 4, 0); // third edge: (0, 9)
-    igraph_vector_int_set(&edges, 5, 9);
-    igraph_vector_int_set(&edges, 6, 2); // fourth edge: (2, 5)
-    igraph_vector_int_set(&edges, 7, 5);
-    igraph_vector_int_set(&edges, 8, 2); // fifth edge: (2, 7)
-    igraph_vector_int_set(&edges, 9, 7);
-    igraph_vector_int_set(&edges, 10, 3); // sixth edge: (3, 1)
-    igraph_vector_int_set(&edges, 11, 1);
-    igraph_vector_int_set(&edges, 12, 3); // seventh edge: (3, 4)
-    igraph_vector_int_set(&edges, 13, 4);
-    igraph_vector_int_set(&edges, 14, 4); // eighth edge: (4, 5)
-    igraph_vector_int_set(&edges, 15, 5);
-    igraph_vector_int_set(&edges, 16, 6); // ninth edge: (6, 1)
-    igraph_vector_int_set(&edges, 17, 1);
-    igraph_vector_int_set(&edges, 18, 8); // tenth edge: (8, 1)
-    igraph_vector_int_set(&edges, 19, 1);
+    // Create some edges to connect these cities in a network
+    igraph_add_edge(&igraphGlobalGraph, 0, 1);
+    igraph_add_edge(&igraphGlobalGraph, 0, 6);
+    igraph_add_edge(&igraphGlobalGraph, 1, 7);
+    igraph_add_edge(&igraphGlobalGraph, 1, 4);
+    igraph_add_edge(&igraphGlobalGraph, 1, 3);
+    igraph_add_edge(&igraphGlobalGraph, 1, 2);
+    igraph_add_edge(&igraphGlobalGraph, 2, 6);
+    igraph_add_edge(&igraphGlobalGraph, 2, 9);
+    igraph_add_edge(&igraphGlobalGraph, 4, 8);
+    igraph_add_edge(&igraphGlobalGraph, 5, 9);
+    igraph_add_edge(&igraphGlobalGraph, 6, 7);
 
-    // Add the edges to the graph using the vector
-    igraph_add_edges(&igraphGlobalGraph, &edges, NULL);
-
-    // Destroy the vector
-    igraph_vector_int_destroy(&edges);
-
-    // Create the adjacency matrix from the graph
-    igraph_matrix_t mat;
-    igraph_matrix_init(&mat, N, N);
-    igraph_get_adjacency(&igraphGlobalGraph, &mat, IGRAPH_GET_ADJACENCY_BOTH, NULL, IGRAPH_LOOPS);
-
-    // Copy the matrix elements to the globalGraph array
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            globalGraph[i][j] = igraph_matrix_get(&mat, i, j);
-        }
-    }
-
-    // Destroy the matrix
-    igraph_matrix_destroy(&mat);
+    val result = val::object();
+    result.set("nodes", graph_nodes());
+    result.set("edges", graph_edges());
+    return result;
 }
-
-val getGraph(void) {
-    val graph = val::array();
-    for (int i = 0; i < N; i++) {
-        val row = val::array();
-        for (int j = 0; j < N; j++) {
-            row.set(j, globalGraph[i][j]);
-        }
-        graph.set(i, row);
-    }
-    return graph;
-}
-
 
 void cleanupGraph(void) {
     igraph_destroy(&igraphGlobalGraph);
     igraph_vector_destroy(&globalWeights);
 }
 
-val sum(int a, int b) {
-    std::cout << "Test" << std::endl << a+b << std::endl;
-    val obj = val::object();
-    obj.set("sum", a+b);
-    return obj;
-}
 
 EMSCRIPTEN_BINDINGS(graph) {
-  // Register the vector type
-  register_vector<int>("vector<int>");
-  register_vector<VecInt>("VectorInt");
   register_vector<uint8_t>("VectorUint8");
-
-  value_object<GraphData>("Graph")
-    .field("nodes", &GraphData::nodes)
-    .field("edges", &GraphData::edges);
 
   // Expose the functions
   function("initGraph", &initGraph);
-  function("getGraph", &getGraph);
-  function("sum", &sum);
 
   function("generate_graph_from_csv", &graph_from_csv);
 
