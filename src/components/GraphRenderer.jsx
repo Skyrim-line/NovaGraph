@@ -8,7 +8,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { Mode } from '../renderModes';
 
-export function GraphRenderer({ colors, sizes, nodes, links, mode }) {
+export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     const cosmograph = useRef()
     const scale = chroma.scale(['#F7EBFF', '#6750C6']);
     /* Palette: https://mycolor.space/?hex=%236750C6&sub=1 (Spot Palette)
@@ -28,6 +28,12 @@ export function GraphRenderer({ colors, sizes, nodes, links, mode }) {
                 console.log("two tond"); break
         }
     }, [colors, sizes])
+
+    useEffect(() => {
+        // restart the graph
+        console.log('Restarting graph...')
+        cosmograph.current?.create();
+    }, [nodes, links, directed])
 
     const zoomToNode = useCallback((node, i, pos, event) => {
         if (node && i != undefined) {
@@ -70,7 +76,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, mode }) {
                 nodeGreyoutOpacity={0.1}
                 linkWidth={(link) => colors[`${link.source}-${link.target}`] > 0 ? 3 : 0.1}
 
-                //TODO: nodeLabelAccessor={(node) => node.name}
+                nodeLabelAccessor={(node) => node.name ? node.name : node.id}
                 linkArrows={false}
                 
                 //renderHoveredNodeRing={true}

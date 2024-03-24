@@ -133,16 +133,22 @@ void process_edges_csv(const std::string &edgesFilename, std::unordered_map<std:
     igraph_create(&igraphGlobalGraph, &edges, nodeMap.size(), directed);   
 
     // add node names as attributes
-        std::cout << "reading node names..." << std::endl;
+    std::cout << "reading node names..." << std::endl;
 
     for (auto &pair : nodeMap) {
+        std::cout << pair.first << ": " << pair.second << std::endl;
         SETVAS(&igraphGlobalGraph, "name", pair.second, pair.first.c_str());
     }
 
     // store weights in global variable
     igraph_vector_destroy(&globalWeights);
     if (weighted) {
-        igraph_vector_init_copy(&weights, &globalWeights);
+        std::cout << "test1" << std::endl;
+
+        igraph_vector_init_copy(&globalWeights, &weights);
+
+                std::cout << "test2" << std::endl;
+
     }
 
     igraph_vector_int_destroy(&edges);
@@ -154,6 +160,8 @@ val graph_from_csv(const std::string& nodesFilename, const std::string& edgesFil
     try {
         std::unordered_map<std::string, int> nodeMap = process_nodes_csv(nodesFilename);
         process_edges_csv(edgesFilename, nodeMap, directed);
+            std::cout << "test" << std::endl;
+
         result.set("nodes", graph_nodes());
         result.set("edges", graph_edges());
     } catch(const std::exception& e) {

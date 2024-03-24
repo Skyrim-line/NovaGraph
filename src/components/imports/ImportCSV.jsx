@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogContent, DialogTitle, Divider, FormControlLa
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import React, { useState } from "react";
 
-const ImportCSV = ({ open, onClose, module }) => {
+const ImportCSV = ({ open, onClose, module, updateGraph }) => {
   const [tableView, setTableView] = useState(false);
   const [nodesFile, setNodesFile] = useState(null);
   const [edgesFile, setEdgesFile] = useState(null);
@@ -34,8 +34,9 @@ const ImportCSV = ({ open, onClose, module }) => {
           module.FS.writeFile(edgesFilename, edgesData);
 
           const response = module.generate_graph_from_csv(nodesFilename, edgesFilename, directed);
-          console.log(response.nodes);
-          console.log(response.edges);
+          if (response && response.nodes) updateGraph(response.nodes, response.edges, directed);
+          // TODO: if error, render error message
+
           // remove the files (since writeFile appends)
           module.FS.unlink(nodesFilename);
           module.FS.unlink(edgesFilename);

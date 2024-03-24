@@ -7,7 +7,7 @@ import AutoModeIcon from '@mui/icons-material/AutoMode';
 import React, { useState } from "react";
 import ImportCSV from "./ImportCSV";
 
-const ImportMenu = ({ anchorEl, setAnchorEl, module }) => {
+const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
     const [openDialog, setOpenDialog] = useState({
         csv: false,
         json: false,
@@ -15,15 +15,23 @@ const ImportMenu = ({ anchorEl, setAnchorEl, module }) => {
         gml: false,
         auto: false
     });
+    const [active, setActive] = useState('');
 
     const handleOpenDialog = (type) => {
         setOpenDialog({ ...openDialog, [type]: true });
+        setActive(type)
         setAnchorEl(null)
     };
     
     const handleCloseDialog = (type) => {
         setOpenDialog({ ...openDialog, [type]: false });
+        setActive('')
     };
+
+    const handleGraphUpdate = (nodes, edges, directed) => {
+        updateGraph(nodes, edges, directed);
+        handleCloseDialog(active);
+    }
 
     return(<>
         
@@ -65,7 +73,12 @@ const ImportMenu = ({ anchorEl, setAnchorEl, module }) => {
                 </MenuList>
             </Box>
         </Menu>
-        <ImportCSV open={openDialog.csv} onClose={() => handleCloseDialog('csv')} module={module} />
+        <ImportCSV
+            open={openDialog.csv}
+            onClose={() => handleCloseDialog('csv')}
+            module={module}
+            updateGraph={handleGraphUpdate}
+        />
         {/* Include more import components when completed */}
     </>)
 }

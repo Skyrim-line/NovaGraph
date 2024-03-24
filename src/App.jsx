@@ -34,6 +34,7 @@ function App() {
 
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
+  const [directed, setDirected] = useState(false);
   const [colorMap, setColorMap] = useState({});
   const [sizeMap, setSizeMap] = useState({});
   const [renderMode, setRenderMode] = useState(1);
@@ -74,6 +75,14 @@ function App() {
   useEffect(() => {
     console.log(colorMap)
   }, [colorMap])
+
+  const updateGraph = (nodes, edges, directed) => {
+    setColorMap({});
+    setSizeMap({});
+    setNodes(nodes);
+    setEdges(edges);
+    setDirected(directed);
+  }
 
   const handleAccordianChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -218,12 +227,20 @@ function App() {
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
           module={wasmModule}
+          updateGraph={updateGraph}
         />
       </Box>
       
       
       <Box sx={{ display: 'flex', gap: 1 }}>
-        <GraphRenderer nodes={nodes} links={edges} colors={colorMap} sizes={sizeMap} mode={renderMode} />
+        <GraphRenderer
+          nodes={nodes}
+          links={edges}
+          directed={directed}
+          colors={colorMap}
+          sizes={sizeMap}
+          mode={renderMode}
+        />
 
         <Box>
           <Accordion expanded={expanded === 'panel1'} onChange={handleAccordianChange('panel1')}>
