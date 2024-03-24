@@ -32,7 +32,10 @@ const ImportCSV = ({ open, onClose, module }) => {
           
           module.FS.writeFile(nodesFilename, nodesData);
           module.FS.writeFile(edgesFilename, edgesData);
-          module.generate_graph_from_csv(nodesFilename, edgesFilename, directed);
+
+          const response = module.generate_graph_from_csv(nodesFilename, edgesFilename, directed);
+          console.log(response.nodes);
+          console.log(response.edges);
           // remove the files (since writeFile appends)
           module.FS.unlink(nodesFilename);
           module.FS.unlink(edgesFilename);

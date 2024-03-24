@@ -70,6 +70,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, mode }) {
                 nodeGreyoutOpacity={0.1}
                 linkWidth={(link) => colors[`${link.source}-${link.target}`] > 0 ? 3 : 0.1}
 
+                //TODO: nodeLabelAccessor={(node) => node.name}
                 linkArrows={false}
                 
                 //renderHoveredNodeRing={true}

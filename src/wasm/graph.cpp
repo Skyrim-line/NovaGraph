@@ -1,4 +1,5 @@
 #include "graph.h"
+#include "generators/generator.h"
 #include <iostream>
 #include <emscripten/bind.h>
 
@@ -6,6 +7,7 @@ using namespace emscripten;
 
 int globalGraph[N][N];
 igraph_t igraphGlobalGraph;
+igraph_vector_t globalWeights;
 
 /*
 GraphData generateGraph(void) {
@@ -73,6 +75,8 @@ GraphData generateGraph(void) {
 
 // Initialize the graph with some edges
 void initGraph(void) {
+    igraph_set_attribute_table(&igraph_cattribute_table);
+
     // Create an empty graph with 11 vertices
     igraph_empty(&igraphGlobalGraph, 11, IGRAPH_UNDIRECTED);
 
@@ -139,6 +143,7 @@ val getGraph(void) {
 
 void cleanupGraph(void) {
     igraph_destroy(&igraphGlobalGraph);
+    igraph_vector_destroy(&globalWeights);
 }
 
 val sum(int a, int b) {
