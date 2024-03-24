@@ -1,4 +1,4 @@
-import { Cosmograph, CosmographProvider } from '@cosmograph/react'
+import { Cosmograph, CosmographProvider, CosmographSearch } from '@cosmograph/react'
 import React, { useRef, useCallback, useEffect, useState, useLayoutEffect } from 'react';
 import chroma from "chroma-js";
 import { Box, Button, IconButton, Tooltip } from '@mui/material';
@@ -93,6 +93,11 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     <Box sx={{ display:'flex', flexDirection: 'column', height: '75vh' }}>
         
         <CosmographProvider nodes={nodes} links={links}>
+            <CosmographSearch
+                onSelectResult={n => cosmograph.current?.selectNode(n)}
+                accessors={[{ label: 'Name', accessor: n => n.name }]}
+            />
+            
             <Cosmograph
                 ref={cosmograph}
                 //initialZoomLevel={1}
