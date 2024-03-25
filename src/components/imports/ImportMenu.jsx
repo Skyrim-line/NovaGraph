@@ -6,6 +6,7 @@ import DataArrayIcon from '@mui/icons-material/DataArray';
 import AutoModeIcon from '@mui/icons-material/AutoMode';
 import React, { useState } from "react";
 import ImportCSV from "./ImportCSV";
+import ImportJSON from "./ImportJSON";
 
 const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
     const [openDialog, setOpenDialog] = useState({
@@ -76,6 +77,12 @@ const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
         <ImportCSV
             open={openDialog.csv}
             onClose={() => handleCloseDialog('csv')}
+            module={module}
+            updateGraph={handleGraphUpdate}
+        />
+        <ImportJSON
+            open={openDialog.json}
+            onClose={() => handleCloseDialog('json')}
             module={module}
             updateGraph={handleGraphUpdate}
         />

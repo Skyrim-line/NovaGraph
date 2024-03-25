@@ -20,5 +20,6 @@ using namespace emscripten;
 val graph_nodes(void);
 val graph_edges(void);
 val graph_from_csv(const std::string& nodesFilename, const std::string& edgesFilename, bool directed);
+val graph_from_json(const std::string& filename);
 
 #endif

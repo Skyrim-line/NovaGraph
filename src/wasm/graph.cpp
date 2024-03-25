@@ -59,6 +59,7 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("initGraph", &initGraph);
 
   function("generate_graph_from_csv", &graph_from_csv);
+  function("generate_graph_from_json", &graph_from_json);
 
   function("vertices_are_connected", &vertices_are_connected);
   function("dijkstra_source_to_target", &dijkstra_source_to_target);

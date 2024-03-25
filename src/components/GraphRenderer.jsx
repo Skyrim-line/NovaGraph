@@ -50,7 +50,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     })
 
     
-    const getColor = (value, id, n) => {
+    const getColor = value => {
         switch(mode) {
             case Mode.COLOR_IMPORTANT:
                 return value > 0 ? scale(1).hex() : (value < 0 ? error : neutral);
@@ -102,7 +102,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 disableSimulation={false}
                 //backgroundColor='#151515'
                 nodeSize={(_node, id) => sizes[id] ? sizes[id] : 20}
-                nodeColor={(_node, id) => getColor(colors[id], id, _node)}
+                nodeColor={(_node, id) => getColor(colors[id])}
                 linkColor={link => getLinkColor(link)}
                 nodeGreyoutOpacity={0.1}
                 linkWidth={link => getLinkWidth(link)}
