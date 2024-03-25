@@ -45,6 +45,7 @@ function App() {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [hoveredAlgorithm, setHoveredAlgorithm] = useState(null);
+  const [activeAlgorithm, setActiveAlgorithm] = useState(null); // TODO: implement for conditional rendering
 
   useEffect(() => {
     createModule().then(mod => {
@@ -92,57 +93,60 @@ function App() {
     setRenderMode(response.mode)
   }
 
+  const toId = name => {
+    const node = nodes.find(node => node.name === name)
+    return node ? node.id : null
+  }
+
   const doAreConnected = () => {
-    const source = prompt("Enter source vertex", "0");
-    const target = prompt("Enter target vertex", "0");
-    const response = wasmModule.vertices_are_connected(parseInt(source), parseInt(target))
+    const source = prompt("Enter source vertex");
+    const target = prompt("Enter target vertex");
+    const response = wasmModule.vertices_are_connected(toId(source), toId(target))
     postAlgorithmState(response)
   }
   const doDijkstraSingle = () => {
-    const source = prompt("Enter source vertex", "0");
-    const target = prompt("Enter target vertex", "0");
-    const response = wasmModule.dijkstra_source_to_target(parseInt(source), parseInt(target));
-    console.log(response)
+    const source = prompt("Enter source vertex");
+    const target = prompt("Enter target vertex");
+    const response = wasmModule.dijkstra_source_to_target(toId(source), toId(target));
     postAlgorithmState(response)
   }
   const doDijkstraMulti = () => {
-    const source = prompt("Enter source vertex", "0");
-    const response = wasmModule.dijkstra_source_to_all(parseInt(source));
+    const source = prompt("Enter source vertex");
+    const response = wasmModule.dijkstra_source_to_all(toId(source));
     postAlgorithmState(response)
   }
   const doYen = () => {
-    const source = prompt("Enter source vertex", "0");
-    const target = prompt("Enter target vertex", "0");
-    const kInput = prompt("Enter k (number of paths)");
-    const k = parseInt(kInput) || 1;
-    const response = wasmModule.yens_algorithm(parseInt(source), parseInt(target), k);
+    const source = prompt("Enter source vertex");
+    const target = prompt("Enter target vertex");
+    const k = prompt("Enter k (number of paths)", "1");
+    const response = wasmModule.yens_algorithm(toId(source), toId(target), parseInt(k));
     postAlgorithmState(response)
   }
   const doBFSingle = () => {
-    const source = prompt("Enter source vertex", "0");
-    const target = prompt("Enter target vertex", "0");
-    const response = wasmModule.bellman_ford_source_to_target(parseInt(source), parseInt(target));
+    const source = prompt("Enter source vertex");
+    const target = prompt("Enter target vertex");
+    const response = wasmModule.bellman_ford_source_to_target(toId(source), toId(target));
     postAlgorithmState(response)
   }
   const doBFMulti = () => {
-    const source = prompt("Enter source vertex", "0");
-    const response = wasmModule.bellman_ford_source_to_all(parseInt(source));
+    const source = prompt("Enter source vertex");
+    const response = wasmModule.bellman_ford_source_to_all(toId(source));
     postAlgorithmState(response)
   }
   const doBFS = () => {
-    const source = prompt("Enter source vertex", "0");
-    const response = wasmModule.bfs(parseInt(source));
+    const source = prompt("Enter source vertex");
+    const response = wasmModule.bfs(toId(source));
     postAlgorithmState(response)
   }
   const doDFS = () => {
-    const source = prompt("Enter source vertex", "0");
-    const response = wasmModule.dfs(parseInt(source));
+    const source = prompt("Enter source vertex");
+    const response = wasmModule.dfs(toId(source));
     postAlgorithmState(response)
   }
   const doRW = () => {
-    const start = prompt("Enter starting vertex", "0");
-    const steps = prompt("Enter step count", "0");
-    const response = wasmModule.random_walk(parseInt(start), parseInt(steps));
+    const start = prompt("Enter starting vertex");
+    const steps = prompt("Enter step count", "1");
+    const response = wasmModule.random_walk(toId(start), parseInt(steps));
     postAlgorithmState(response)
   }
   const doMST = () => {
