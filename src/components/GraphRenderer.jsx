@@ -6,6 +6,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
+import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
 import LabelIcon from '@mui/icons-material/Label';
 import LabelOffIcon from '@mui/icons-material/LabelOff';
 import { Mode } from '../renderModes';
@@ -41,15 +42,19 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
         cosmograph.current?.fitView();
     }, [nodes, links, directed])
 
+    const zoomOut = () => {
+        cosmograph.current?.unselectNodes();
+        cosmograph.current?.fitView(500);
+        setSelectedNode(null);
+    }
+
     const zoomToNode = useCallback((node, i) => {
         if (node && i != undefined && node != selectedNode) {
             cosmograph.current?.selectNode(node);
             cosmograph.current?.zoomToNode(node);
             setSelectedNode(node);
         } else {
-            cosmograph.current?.unselectNodes();
-            cosmograph.current?.fitView(1000);
-            setSelectedNode(null);
+            zoomOut();
         }
     })
 
@@ -157,6 +162,11 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                     <ReplayIcon />
                 </IconButton>
             </Tooltip>
+            <Tooltip title="Fit All">
+                <IconButton aria-label='fit-view' onClick={zoomOut}>
+                    <ZoomOutMapIcon />
+                </IconButton>
+            </Tooltip>
             
             
 
@@ -164,13 +174,13 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
 
             {
                 dynamicLabels ?
-                <Tooltip title="Hide Labels">
+                <Tooltip title="Hide Dynamic Labels">
                     <IconButton aria-label='hide-labels' onClick={() => setDynamicLabels(false)}>
                         <LabelIcon />
                     </IconButton>
                 </Tooltip>
                 :
-                <Tooltip title="Show Labels">
+                <Tooltip title="Show Dynamic Labels">
                     <IconButton aria-label='show-labels' onClick={() => setDynamicLabels(true)}>
                         <LabelOffIcon />
                     </IconButton>
