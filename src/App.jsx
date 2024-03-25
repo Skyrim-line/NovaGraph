@@ -10,6 +10,8 @@ import { Accordion, AccordionDetails, AccordionSummary } from './components/Acco
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import ImportMenu from './components/imports/ImportMenu';
+import { Algorithm } from './algorithms';
+import AlgorithmExplanation from './components/AlgorithmExplanation';
 
 const darkTheme = createTheme({
   palette: {
@@ -42,6 +44,7 @@ function App() {
   const [text, setText] = useState("");
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [hoveredAlgorithm, setHoveredAlgorithm] = useState(null);
 
   useEffect(() => {
     createModule().then(mod => {
@@ -237,26 +240,53 @@ function App() {
           />
         </Box>
 
-        <Box flexShrink={0}>
+        <Box width={{ xs: '15rem', sm: '20rem' }}>
           <Accordion expanded={expanded === 'panel1'} onChange={handleAccordianChange('panel1')}>
             <AccordionSummary aria-controls="panel1-content" id="panel1-header">
               <Typography variant='body2' pl='5px'>Path Finding & Search</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
-                {/* Have on hover options for buttons as well (render descriptions)
-                  e.g. onHover={() => renderDescription(<DijkstraDesc />)}
-                */}
-                <Button size='small' onClick={doAreConnected}>Neighbour Status?</Button>
-                <Button size='small' onClick={doDijkstraSingle}>Dijkstra &#40;A to B&#41;</Button>
-                <Button size='small' onClick={doDijkstraMulti}>Dijkstra &#40;A to all&#41;</Button>
-                <Button size='small' onClick={doYen}>Yen's Shortest Path</Button>
-                <Button size='small' onClick={doBFSingle}>Bellman-Ford &#40;A to B&#41;</Button>
-                <Button size='small' onClick={doBFMulti}>Bellman-Ford &#40;A to all&#41;</Button>
-                <Button size='small' onClick={doBFS}>Breadth First Search</Button>
-                <Button size='small' onClick={doDFS}>Depth First Search</Button>
-                <Button size='small' onClick={doRW}>Random Walk</Button>
-                <Button size='small' onClick={doMST}>Minimum Spanning Tree</Button>
+                <Button size='small' onClick={doAreConnected}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.NEIGHBOR_JOINING)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Neighbour Status?</Button>
+                <Button size='small' onClick={doDijkstraSingle}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.DIJKSTRA_A_TO_B)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Dijkstra &#40;A to B&#41;</Button>
+                <Button size='small' onClick={doDijkstraMulti}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.DIJKSTRA_ALL)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Dijkstra &#40;A to all&#41;</Button>
+                <Button size='small' onClick={doYen}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.YEN)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Yen's Shortest Path</Button>
+                <Button size='small' onClick={doBFSingle}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.BELLMAN_FORD_A_TO_B)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Bellman-Ford &#40;A to B&#41;</Button>
+                <Button size='small' onClick={doBFMulti}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.BELLMAN_FORD_ALL)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Bellman-Ford &#40;A to all&#41;</Button>
+                <Button size='small' onClick={doBFS}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.BFS)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Breadth First Search</Button>
+                <Button size='small' onClick={doDFS}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.DFS)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Depth First Search</Button>
+                <Button size='small' onClick={doRW}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.RANDOM_WALK)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Random Walk</Button>
+                <Button size='small' onClick={doMST}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.MINIMAL_SPANNING_TREE)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Minimum Spanning Tree</Button>
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>
@@ -267,13 +297,34 @@ function App() {
             </AccordionSummary>
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
-                <Button size='small' onClick={doBetweennessCentrality}>Betweenness Centrality</Button>
-                <Button size='small' onClick={doClosenessCentrality}>Closeness Centrality</Button>
-                <Button size='small' onClick={doDegreeCentrality}>Degree Centrality</Button>
-                <Button size='small' onClick={doEigenCentrality}>Eigenvector Centrality</Button>
-                <Button size='small' onClick={doStrength}>Node Strength</Button>
-                <Button size='small' onClick={doHarmonicCentrality}>Harmonic Centrality</Button>
-                <Button size='small' onClick={doPageRank}>Page Rank</Button>
+                <Button size='small' onClick={doBetweennessCentrality}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.BETWEENNESS_CENTRALITY)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Betweenness Centrality</Button>
+                <Button size='small' onClick={doClosenessCentrality}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.CLOSENESS_CENTRALITY)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Closeness Centrality</Button>
+                <Button size='small' onClick={doDegreeCentrality}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.DEGREE_CENTRALITY)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Degree Centrality</Button>
+                <Button size='small' onClick={doEigenCentrality}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.EIGENVECTOR_CENTRALITY)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Eigenvector Centrality</Button>
+                <Button size='small' onClick={doStrength}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.STRENGTH_CENTRALITY)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Node Strength</Button>
+                <Button size='small' onClick={doHarmonicCentrality}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.HARMONIC_CENTRALITY)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Harmonic Centrality</Button>
+                <Button size='small' onClick={doPageRank}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.PAGERANK)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Page Rank</Button>
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>
@@ -284,9 +335,18 @@ function App() {
             </AccordionSummary>
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
-                <Button size='small' onClick={doLouvain}>Louvain Algorithm</Button>
-                <Button size='small' onClick={doLeiden}>Leiden Algorithm</Button>
-                <Button size='small' onClick={doFastGreedy}>Fast-Greedy Algorithm</Button>
+                <Button size='small' onClick={doLouvain}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.LOUVAIN)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Louvain Algorithm</Button>
+                <Button size='small' onClick={doLeiden}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.LEIDEN)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Leiden Algorithm</Button>
+                <Button size='small' onClick={doFastGreedy}
+                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.FAST_GREEDY)}
+                  onMouseLeave={() => setHoveredAlgorithm(null)}
+                >Fast-Greedy Algorithm</Button>
               </ButtonGroup>
               {/*
                 <p>Clustering Coefficient / Transitivity</p>
@@ -310,7 +370,7 @@ function App() {
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>
-
+          <AlgorithmExplanation algorithm={hoveredAlgorithm} />
         </Box>
 
       </Box>
