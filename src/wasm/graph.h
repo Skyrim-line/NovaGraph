@@ -6,15 +6,17 @@
 #include <emscripten/bind.h>
 #include <vector>
 #include <string>
+#include <unordered_map>
 
-#define N 11 // number of nodes
+//#define N 11 // number of nodes
 extern igraph_t igraphGlobalGraph;      // igraph structure
 extern igraph_vector_t globalWeights;   // edge weights
 
-#define MODE_TWO_TONED      1   // Dark for important, light for less important
-#define MODE_MULTI_SHADE    2   // Multiple purple shades with error
-#define MODE_SIZE_SCALAR    3   // All purple but with different sizes
-#define MODE_RAINBOW        4   // Multiple colors in various groups
+#define MODE_COLOR_IMPORTANT        1   // Dark for important, light for less important
+#define MODE_COLOR_SHADE_DEFAULT    2   // Multiple purple shades
+#define MODE_COLOR_SHADE_ERROR      3   // Multiple purple shades with error for missing entries
+#define MODE_SIZE_SCALAR            4   // No color change but size is scaled
+#define MODE_RAINBOW                5   // Multiple colors in various groups
 
 using namespace emscripten;
 
@@ -24,6 +26,8 @@ void cleanupGraph(void);
 val igraph_vector_int_to_val(igraph_vector_int_t* vec);
 val igraph_vector_int_list_to_val(igraph_vector_int_list_t* v);
 int getFreq(const val& map, std::string key);
+void frequenciesToColorMap(std::unordered_map<int, int> fm, val &colorMap);
+
 
 val vertices_are_connected(igraph_integer_t src, igraph_integer_t tar);
 val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar);

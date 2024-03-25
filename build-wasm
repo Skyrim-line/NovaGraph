@@ -1,7 +1,7 @@
-#/bin/bash
+#!/bin/bash
 
 echo "Running the Emscripten compiler..."
-em++ src/wasm/graph.cpp src/wasm/algorithms/*.cpp src/wasm/generators/*.cpp -o src/graph.js \
+em++ src/wasm/*.cpp src/wasm/algorithms/*.cpp src/wasm/generators/*.cpp -o src/graph.js \
     -s WASM=1 \
     -I./src/wasm -I./src/wasm/igraph/build/include -I./src/wasm/igraph/include \
     -s EXPORT_ES6=1 \

@@ -1,11 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Algorithm } from '../algorithms';
 import { Box, Paper } from '@mui/material';
 
 function AlgorithmExplanation({ algorithm }) {
-    useEffect(() => {
-        console.log(algorithm)
-    }, [algorithm])
     const hoverText = {
         [Algorithm.DIJKSTRA_A_TO_B]: 'Dijkstra\'s algorithm from node A to node B',
         [Algorithm.DIJKSTRA_ALL]: 'Dijkstra\'s algorithm from node A to all other nodes',

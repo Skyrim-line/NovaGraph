@@ -14,6 +14,8 @@ import { Mode } from '../renderModes';
 export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     const cosmograph = useRef()
     const scale = chroma.scale(['#F7EBFF', '#6750C6']);
+    const error = '#F05480'
+    const neutral = '#9f8fc3'
     /* Palette: https://mycolor.space/?hex=%236750C6&sub=1 (Spot Palette)
         - Dark: #6750c6
         - Default: #9f8fc3
@@ -24,17 +26,6 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
         
     const [selectedNode, setSelectedNode] = useState(null);
     const [dynamicLabels, setDynamicLabels] = useState(true);
-
-    useEffect(() => {
-        console.log(`Mode: ${mode}`)
-        console.log(`MODE ${Mode.MULTI_SHADE}`)
-        switch(mode) {
-            case Mode.MULTI_SHADE:
-                console.log("multi shade"); break
-            case Mode.TWO_TONED:
-                console.log("two tond"); break
-        }
-    }, [colors, sizes])
 
     useEffect(() => {
         console.log('Restarting graph...')
@@ -58,19 +49,21 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
         }
     })
 
-    // colorspace with 6B0072
-    const getColor = value => {
-        if (mode == 4) {
-            const hue = value * 137.508; // use golden angle approximation
-            return `hsl(${hue + 50},100%,75%)`;
-        } else if (mode == 2 && value > 0) {
-            return scale(value / nodes.length).hex()
-        } else if (value > 0) {
-            return scale(1).hex() // DARK (mode 1 but value)
-        } else if (mode == 2) {
-            return '#F05480' // RED (mode 2 but value=0)
-        } else {
-            return '#9f8fc3' // NEUTRAL (mode 3/4)
+    
+    const getColor = (value, id, n) => {
+        switch(mode) {
+            case Mode.COLOR_IMPORTANT:
+                return value > 0 ? scale(1).hex() : (value < 0 ? error : neutral);
+            case Mode.COLOR_SHADE_DEFAULT:
+                return value ? scale(value).hex() : neutral;
+            case Mode.COLOR_SHADE_ERROR:
+                return value ? scale(value).hex() : error;
+            case Mode.SIZE_SCALAR:
+                return neutral;
+            case Mode.RAINBOW:
+                return `hsl(${(value * 137.508) + 50},100%,75%)`;
+            default:
+                return neutral
         }
     }
 
@@ -109,7 +102,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 disableSimulation={false}
                 //backgroundColor='#151515'
                 nodeSize={(_node, id) => sizes[id] ? sizes[id] : 20}
-                nodeColor={(_node, id) => getColor(colors[id])}
+                nodeColor={(_node, id) => getColor(colors[id], id, _node)}
                 linkColor={link => getLinkColor(link)}
                 nodeGreyoutOpacity={0.1}
                 linkWidth={link => getLinkWidth(link)}
