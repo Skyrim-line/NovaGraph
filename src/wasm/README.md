@@ -11,3 +11,10 @@ cd igraph/build
 emcmake cmake ..
 cmake --build .
 ```
+
+## RapidJSON
+Make sure the RapidJSON git repository is cloned.
+```bash
+git clone https://github.com/Tencent/rapidjson.git
+```
+This doesn't need CMake to use since its a header only library
