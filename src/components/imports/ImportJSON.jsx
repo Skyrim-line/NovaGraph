@@ -23,7 +23,7 @@ const ImportJSON = ({ open, onClose, module, updateGraph }) => {
         const data = new Uint8Array(e.target.result);
         module.FS.writeFile(filename, data);
         const response = module.generate_graph_from_json(filename);
-        if (response && response.nodes) updateGraph(response.nodes, response.edges, data.directed);
+        if (response && response.nodes) updateGraph(response.nodes, response.edges, response.directed);
       }
       reader.readAsArrayBuffer(file);
     }
