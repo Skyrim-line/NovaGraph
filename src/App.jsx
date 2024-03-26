@@ -71,6 +71,7 @@ function App() {
     setNodes(nodes);
     setEdges(edges);
     setDirected(directed);
+    setRenderMode(1);
   }
 
   const handleAccordianChange = (panel) => (event, newExpanded) => {
