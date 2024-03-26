@@ -1,0 +1,11 @@
+{
+    "nodes": ["Elizabeth", "Charles", "Camilla", "William", "Andrew", "Harry"],
+    "edges": [
+      {"source": "Elizabeth", "target": "Charles", "weight": 1},
+      {"source": "Charles", "target": "Camilla", "weight": 2},
+      {"source": "Charles", "target": "William", "weight": 3},
+      {"source": "Charles", "target": "Harry", "weight": 4},
+      {"source": "Elizabeth", "target": "Andrew", "weight": 5}
+    ],
+    "directed": false
+}
