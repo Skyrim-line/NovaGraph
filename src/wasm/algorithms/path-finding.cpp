@@ -98,11 +98,12 @@ val dijkstra_source_to_all(igraph_integer_t src) {
                 colorMap.set(linkId, 1);
                 msg += " -> ";
             }
-            fm[nodeId]++;
+            if (nodeId != src) fm[nodeId]++;
             msg += "[" + std::to_string(nodeId) + "]";
         }
     }
     frequenciesToColorMap(fm, colorMap);
+    colorMap.set(src, 1);
     result.set("colorMap", colorMap);
     result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_ERROR);
@@ -190,7 +191,7 @@ val bf_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
             colorMap.set(linkId, 1);
             msg += " -> ";
         }
-        colorMap.set(nodeId, 0);
+        colorMap.set(nodeId, 0.5);
         msg += "[" + nodeId + "]";
     }
     colorMap.set(src, 1);
@@ -236,11 +237,12 @@ val bf_source_to_all(igraph_integer_t src) {
                 colorMap.set(linkId, getFreq(colorMap, linkId) + 1);
                 msg += " -> ";
             }
-            fm[nodeId]++;
+            if (nodeId != src) fm[nodeId]++;
             msg += "[" + std::to_string(nodeId) + "]";
         }
     }
     frequenciesToColorMap(fm, colorMap);
+    colorMap.set(src, 1);
     result.set("colorMap", colorMap);
     result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_ERROR);
