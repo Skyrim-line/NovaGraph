@@ -52,7 +52,7 @@ val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
             colorMap.set(linkId, 1);
             msg += " -> ";
         }
-        colorMap.set(nodeId, 0);
+        colorMap.set(nodeId, 0.5);
         msg += "[" + nodeId + "]";
     }
     colorMap.set(src, 1);
@@ -151,7 +151,7 @@ val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_inte
                 colorMap.set(linkId, 1);
                 msg += " -> ";
             }
-            colorMap.set(nodeId, 0);
+            colorMap.set(nodeId, 0.5);
             msg += "[" + nodeId + "]";
         }
     }

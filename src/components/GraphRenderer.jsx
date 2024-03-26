@@ -55,9 +55,9 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
             case Mode.COLOR_IMPORTANT:
                 return value > 0 ? scale(1).hex() : (value < 0 ? error : neutral);
             case Mode.COLOR_SHADE_DEFAULT:
-                return value ? scale(value).hex() : neutral;
+                return isNaN(value) ? scale(0).hex() : scale(value).hex();
             case Mode.COLOR_SHADE_ERROR:
-                return value ? scale(value).hex() : error;
+                return isNaN(value) ? error : scale(value).hex();
             case Mode.SIZE_SCALAR:
                 return neutral;
             case Mode.RAINBOW:
