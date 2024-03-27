@@ -18,34 +18,32 @@ const ImportCSV = ({ open, onClose, module, updateGraph }) => {
   };
 
   const handleSubmit = async () => {
-    if (nodesFile && edgesFile) {
-      const reader1 = new FileReader();
-      const reader2 = new FileReader();
-      const nodesFilename = "nodes.csv"
-      const edgesFilename = "edges.csv"
+    if (!nodesFile || !edgesFile) return;
 
-      module.FS.unlink(nodesFilename);
-      module.FS.unlink(edgesFilename);
+    const reader1 = new FileReader();
+    const reader2 = new FileReader();
+    const nodesFilename = "nodes.csv"
+    const edgesFilename = "edges.csv"
+    module.FS.unlink(nodesFilename);
+    module.FS.unlink(edgesFilename);
 
-      reader1.onload = e => {
-        const nodesData = new Uint8Array(e.target.result);
+    reader1.onload = e => {
+      const nodesData = new Uint8Array(e.target.result);
 
-        reader2.onload = e => {
-          const edgesData = new Uint8Array(e.target.result);
-          
-          module.FS.writeFile(nodesFilename, nodesData);
-          module.FS.writeFile(edgesFilename, edgesData);
+      reader2.onload = e => {
+        const edgesData = new Uint8Array(e.target.result);
+        
+        module.FS.writeFile(nodesFilename, nodesData);
+        module.FS.writeFile(edgesFilename, edgesData);
 
-          const response = module.generate_graph_from_csv(nodesFilename, edgesFilename, directed);
-          if (response && response.nodes) updateGraph(response.nodes, response.edges, directed);
-          // TODO: if error, render error message
-
-          // remove the files (since writeFile appends)
-        }
-        reader2.readAsArrayBuffer(edgesFile);
+        const response = module.generate_graph_from_csv(nodesFilename, edgesFilename, directed);
+        if (response && response.nodes) updateGraph(response.nodes, response.edges, directed);
+        setNodesFile(null);
+        setEdgesFile(null);
       }
-      reader1.readAsArrayBuffer(nodesFile);
+      reader2.readAsArrayBuffer(edgesFile);
     }
+    reader1.readAsArrayBuffer(nodesFile);
   }
 
   return(

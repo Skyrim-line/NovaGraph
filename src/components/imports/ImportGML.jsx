@@ -15,19 +15,20 @@ const ImportGML = ({ open, onClose, module, updateGraph }) => {
   };
 
   const handleSubmit = async () => {
-    if (file) {
-      const reader = new FileReader();
-      const filename = "graph.gml";
-      module.FS.unlink(filename);
-      reader.onload = e => {
-        const data = new Uint8Array(e.target.result);
-        module.FS.writeFile(filename, data);
-        const response = module.generate_graph_from_gml(filename);
-        module.test();
-        if (response && response.nodes) updateGraph(response.nodes, response.edges, response.directed);
-      }
-      reader.readAsArrayBuffer(file);
+    if (!file) return;
+
+    const reader = new FileReader();
+    const filename = "graph.gml";
+    module.FS.unlink(filename);
+
+    reader.onload = e => {
+      const data = new Uint8Array(e.target.result);
+      module.FS.writeFile(filename, data);
+      const response = module.generate_graph_from_gml(filename);
+      if (response && response.nodes) updateGraph(response.nodes, response.edges, response.directed);
+      setFile(null);
     }
+    reader.readAsArrayBuffer(file);
   }
 
   return (
