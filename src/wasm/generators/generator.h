@@ -20,7 +20,7 @@ bool process_json(const std::string& filename);
 
 
 using namespace emscripten;
-std::string check_attribute(void);
+
 val graph_nodes(void);
 val graph_edges(void);
 val graph_from_csv(const std::string& nodesFilename, const std::string& edgesFilename, bool directed);

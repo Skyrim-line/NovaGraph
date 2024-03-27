@@ -23,6 +23,7 @@ const ImportGML = ({ open, onClose, module, updateGraph }) => {
         const data = new Uint8Array(e.target.result);
         module.FS.writeFile(filename, data);
         const response = module.generate_graph_from_gml(filename);
+        module.test();
         if (response && response.nodes) updateGraph(response.nodes, response.edges, response.directed);
       }
       reader.readAsArrayBuffer(file);

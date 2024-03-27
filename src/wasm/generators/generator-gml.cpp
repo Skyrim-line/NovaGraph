@@ -9,7 +9,7 @@ val graph_from_gml(const std::string& filename) {
     fclose(file);
 
     igraph_destroy(&igraphGlobalGraph);
-    igraphGlobalGraph = graph;
+    igraph_init_copy(&igraphGlobalGraph, &graph);
 
     val result = val::object();
     result.set("nodes", graph_nodes());
