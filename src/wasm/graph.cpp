@@ -51,12 +51,25 @@ void cleanupGraph(void) {
     igraph_vector_destroy(&globalWeights);
 }
 
+void test() {
+    // test an exception
+    throw std::runtime_error("This is a test exception");
+    std::cout << "This is a test" << std::endl;
+}
+
+val what_to_stderr(intptr_t ptr) {
+    auto error = reinterpret_cast<std::runtime_error*>(ptr);
+    return val(error->what());
+}
+
 
 EMSCRIPTEN_BINDINGS(graph) {
   register_vector<uint8_t>("VectorUint8");
 
   // Expose the functions
   function("initGraph", &initGraph);
+  function("test", &test);
+  function("what_to_stderr", &what_to_stderr);
 
   function("generate_graph_from_csv", &graph_from_csv);
   function("generate_graph_from_json", &graph_from_json);

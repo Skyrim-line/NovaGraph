@@ -2,13 +2,12 @@ import { useState, useEffect } from 'react'
 import createModule from './graph'
 import './App.css'
 import { GraphRenderer } from './components/GraphRenderer';
-import { Box, Button, ButtonGroup, Menu, MenuItem, Typography } from '@mui/material';
+import { Alert, Box, Button, ButtonGroup, Collapse, Menu, MenuItem, Snackbar, Typography } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { Accordion, AccordionDetails, AccordionSummary } from './components/Accordion';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import ImportMenu from './components/imports/ImportMenu';
 import { Algorithm } from './algorithms';
 import AlgorithmExplanation from './components/AlgorithmExplanation';
@@ -46,6 +45,7 @@ function App() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [hoveredAlgorithm, setHoveredAlgorithm] = useState(null);
   const [activeAlgorithm, setActiveAlgorithm] = useState(null); // TODO: implement for conditional rendering
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     createModule().then(mod => {
@@ -53,6 +53,13 @@ function App() {
       const graph = mod.initGraph(); // initialize the graph in C++
       setNodes(graph.nodes)
       setEdges(graph.edges)
+
+      window.onerror = (message, source, lineno, colno, error) => {
+        if (typeof error != 'number') return;
+        const pointer = error;
+        const error_message = mod.what_to_stderr(pointer);
+        setError(error_message);
+      }
 
       window.onunload = () => {
         console.log("Cleanup")
@@ -201,8 +208,16 @@ function App() {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      {/*<CssBaseline /> changes backgroundColor to black */}
-      <Typography variant='h3'>Novagraph</Typography>     
+
+      <Snackbar
+        open={error !== null}
+        autoHideDuration={6000}
+        onClose={() => setError(null)}
+      >
+        <Alert severity="error" variant='filled' onClose={() => setError(null)}>{error}</Alert>
+      </Snackbar>
+
+      <Typography variant='h3'>Novagraph</Typography>
       
       <Box sx={{ display: 'flex', gap: 1 }}>
         <Box>
@@ -216,6 +231,7 @@ function App() {
             >
               Import Graph
             </Button>
+            <Button onClick={() => wasmModule.test()}>Test Exception</Button>
             <Button
               aria-controls='export-menu'
               aria-haspopup='true'
