@@ -3,26 +3,20 @@
 val graph_from_gml(const std::string& filename) {
     igraph_t graph;
     FILE *file = fopen(filename.c_str(), "r");
-    if (file == NULL) {
-        throw std::runtime_error("File not found: " + filename);
-    }
+    if (file == NULL) throw std::runtime_error("File not found: " + filename);
 
-    if (igraph_read_graph_gml(&graph, file) == IGRAPH_SUCCESS) {
-        igraph_destroy(&igraphGlobalGraph);
-        igraphGlobalGraph = graph;
-    }
+    igraph_read_graph_gml(&graph, file);
     fclose(file);
 
-    printf("The graph is %s.\n", igraph_is_directed(&graph) ? "directed" : "undirected");
+    igraph_destroy(&igraphGlobalGraph);
+    igraphGlobalGraph = graph;
 
-    /* Output as edge list */
-    printf("\n-----------------\n");
-    igraph_write_graph_edgelist(&graph, stdout);
+    val result = val::object();
+    result.set("nodes", graph_nodes());
+    result.set("edges", graph_edges());
+    result.set("directed", igraph_is_directed(&graph));
 
-    // Output as GML
-    printf("\n-----------------\n");
-    igraph_write_graph_gml(&graph, stdout, IGRAPH_WRITE_GML_DEFAULT_SW, 0, "");
-
+    igraph_vector_destroy(&globalWeights);
     igraph_destroy(&graph);
-    return val::null();
+    return result;
 }

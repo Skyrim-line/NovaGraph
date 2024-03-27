@@ -7,6 +7,7 @@ import AutoModeIcon from '@mui/icons-material/AutoMode';
 import React, { useState } from "react";
 import ImportCSV from "./ImportCSV";
 import ImportJSON from "./ImportJSON";
+import ImportGML from "./ImportGML";
 
 const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
     const [openDialog, setOpenDialog] = useState({
@@ -30,6 +31,8 @@ const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
     };
 
     const handleGraphUpdate = (nodes, edges, directed) => {
+        console.log(nodes)
+        console.log(edges)
         updateGraph(nodes, edges, directed);
         handleCloseDialog(active);
     }
@@ -83,6 +86,12 @@ const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
         <ImportJSON
             open={openDialog.json}
             onClose={() => handleCloseDialog('json')}
+            module={module}
+            updateGraph={handleGraphUpdate}
+        />
+        <ImportGML
+            open={openDialog.gml}
+            onClose={() => handleCloseDialog('gml')}
             module={module}
             updateGraph={handleGraphUpdate}
         />
