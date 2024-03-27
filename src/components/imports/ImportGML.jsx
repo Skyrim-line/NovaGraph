@@ -34,7 +34,7 @@ const ImportGML = ({ open, onClose, module, updateGraph }) => {
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>
-        <Typography>Import GML File</Typography>
+        <Typography>Import Graph Modelling Language (GML) File</Typography>
       </DialogTitle>
       <Divider  />
       <DialogContent>
@@ -43,21 +43,30 @@ const ImportGML = ({ open, onClose, module, updateGraph }) => {
         </Typography>
         <Box pt={1}>
           <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>
-{`{
-  "nodes": ["Elizabeth", "Charles", "Camilla", "William", "Andrew", "Harry"],
-  "edges": [
-    {"source": "Elizabeth", "target": "Charles", "weight": 1},
-    {"source": "Charles", "target": "Camilla", "weight": 2},
-    {"source": "Charles", "target": "William", "weight": 3},
-    {"source": "Charles", "target": "Harry", "weight": 4},
-    {"source": "Elizabeth", "target": "Andrew", "weight": 5}
-  ],
-  "directed": false
-}`}
+{`graph
+[
+  directed 0
+  node
+  [
+    id 0
+    label "Romeo"
+  ]
+  node
+  [
+    id 1
+    label "Juliet"
+  ]
+  edge
+  [
+    source 0
+    target 1
+  ]
+]`}
+
           </pre>
-          <Box sx={{ textAlign: 'center' }}><i>graph.json</i></Box>
+          <Box sx={{ textAlign: 'center' }}><i>graph.gml</i></Box>
         </Box>
-        <Box p={2} sx={{ textAlign: 'center' }}>
+        <Box pt={2} sx={{ textAlign: 'center' }}>
           <input
             accept=".gml"
             style={{ display: "none" }}
@@ -78,9 +87,6 @@ const ImportGML = ({ open, onClose, module, updateGraph }) => {
           </label>
           {file && <Typography color='limegreen'>{file.name}</Typography>}
         </Box>
-        <Typography variant="body2">
-          You can also use "vertices" instead of "nodes" and "links" instead of "edges".
-        </Typography>
         <Box p={2} sx={{ textAlign: 'center' }}>
           <Button
             variant="contained"
@@ -92,8 +98,8 @@ const ImportGML = ({ open, onClose, module, updateGraph }) => {
           </Button>
           </Box>
         <Typography variant="caption">
-          Note: The "weight" field in <i>"edges"</i> is OPTIONAL!
-          Novagraph assumes the presence of "weight" signifies a <i>weighted</i> graph.
+          Note: Top level attributes are ignored but GML files from most applications 
+          (e.g. Cytoscape, Gephi, NetworkX) can still be imported without any issues.
         </Typography>
       </DialogContent>
     </Dialog>
