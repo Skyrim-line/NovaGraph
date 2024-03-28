@@ -30,10 +30,10 @@ val vertices_are_connected(igraph_integer_t src, igraph_integer_t tar) {
 // DIJKSTRA
 
 val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
-    igraph_vector_int_t vertices;
+    IGraphVectorInt vertices;
 
     // TODO: change final NULL to weights
-    igraph_get_shortest_path_dijkstra(&igraphGlobalGraph, &vertices, NULL, src, tar, NULL, IGRAPH_OUT);
+    igraph_get_shortest_path_dijkstra(&igraphGlobalGraph, vertices.vec(), NULL, src, tar, NULL, IGRAPH_OUT);
 
     val result = val::object();
     val colorMap = val::object();
@@ -44,11 +44,11 @@ val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
         + std::to_string(tar)
         + "]:\n";
 
-    for (int i = 0; i < igraph_vector_int_size(&vertices); ++i) {
-        std::string nodeId = std::to_string(VECTOR(vertices)[i]);
+    for (int i = 0; i < vertices.size(); ++i) {
+        std::string nodeId = std::to_string(vertices.at(i));
 
         if (i > 0) {
-            std::string linkId = std::to_string(VECTOR(vertices)[i-1]) + '-' + nodeId;
+            std::string linkId = std::to_string(vertices.at(i-1)) + '-' + nodeId;
             colorMap.set(linkId, 1);
             msg += " -> ";
         }
@@ -62,16 +62,13 @@ val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_DEFAULT);
 
-    igraph_vector_int_destroy(&vertices);
     return result;
 }
 
 val dijkstra_source_to_all(igraph_integer_t src) {
-    igraph_vector_int_list_t paths;
-    igraph_vector_int_list_init(&paths, 0);
-    igraph_vs_t targets = igraph_vss_all(); // list of all vertices
+    IGraphVectorIntList paths;
 
-    igraph_get_shortest_paths_dijkstra(&igraphGlobalGraph, &paths, NULL, src, targets, /* TODO*/ NULL, IGRAPH_OUT, NULL, NULL);
+    igraph_get_shortest_paths_dijkstra(&igraphGlobalGraph, paths.vec(), NULL, src, igraph_vss_all(), /* TODO*/ NULL, IGRAPH_OUT, NULL, NULL);
 
     val result = val::object();
     val colorMap = val::object();
@@ -81,8 +78,8 @@ val dijkstra_source_to_all(igraph_integer_t src) {
         + "] to all:";
 
     std::unordered_map<int, int> fm;
-    for (long i = 0; i < igraph_vector_int_list_size(&paths); ++i) {
-        igraph_vector_int_t p = VECTOR(paths)[i];
+    for (long i = 0; i < paths.size(); ++i) {
+        igraph_vector_int_t p = paths.at(i);
         int pLength = igraph_vector_int_size(&p);
         igraph_integer_t dest = VECTOR(p)[pLength - 1];
 
@@ -108,7 +105,6 @@ val dijkstra_source_to_all(igraph_integer_t src) {
     result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_ERROR);
 
-    igraph_vector_int_list_destroy(&paths);
     return result;
 }
 
@@ -118,11 +114,10 @@ val dijkstra_source_to_all(igraph_integer_t src) {
 
 // Yen
 val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_integer_t k) {
-    igraph_vector_int_list_t paths;
-    igraph_vector_int_list_init(&paths, 0);
+    IGraphVectorIntList paths;
 
-    igraph_get_k_shortest_paths(&igraphGlobalGraph, NULL, &paths, NULL, k, src, tar, IGRAPH_OUT);
-    int pathsLength = igraph_vector_int_list_size(&paths);
+    igraph_get_k_shortest_paths(&igraphGlobalGraph, NULL, paths.vec(), NULL, k, src, tar, IGRAPH_OUT);
+    int pathsLength = paths.size();
 
     val result = val::object();
     val colorMap = val::object();
@@ -141,7 +136,7 @@ val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_inte
         "to [" + std::to_string(tar) + "] using Yen's algorithm";
 
     for (long i = 0; i < pathsLength; ++i) {
-        igraph_vector_int_t p = VECTOR(paths)[i];
+        igraph_vector_int_t p = paths.at(i);
         msg += "\nPath " + std::to_string(i+1) + ": ";
 
         for (long j = 0; j < igraph_vector_int_size(&p); ++j) {
@@ -163,7 +158,6 @@ val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_inte
     result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_DEFAULT);
 
-    igraph_vector_int_list_destroy(&paths);
     return result;
 }
 
@@ -171,10 +165,10 @@ val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_inte
 // BELLMAN-FORD
 
 val bf_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
-    igraph_vector_int_t vertices;
+    IGraphVectorInt vertices;
 
     // TODO: change final NULL to weights
-    igraph_get_shortest_path_bellman_ford(&igraphGlobalGraph, &vertices, NULL, src, tar, NULL, IGRAPH_OUT);
+    igraph_get_shortest_path_bellman_ford(&igraphGlobalGraph, vertices.vec(), NULL, src, tar, NULL, IGRAPH_OUT);
 
     val result = val::object();
     val colorMap = val::object();
@@ -183,11 +177,11 @@ val bf_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
         std::to_string(src) + "] to [" +
         std::to_string(tar) + "]:\n";
     
-    for (int i = 0; i < igraph_vector_int_size(&vertices); ++i) {
-        std::string nodeId = std::to_string(VECTOR(vertices)[i]);
+    for (int i = 0; i < vertices.size(); ++i) {
+        std::string nodeId = std::to_string(vertices.at(i));
 
         if (i > 0) {
-            std::string linkId = std::to_string(VECTOR(vertices)[i-1]) + '-' + nodeId;
+            std::string linkId = std::to_string(vertices.at(i-1)) + '-' + nodeId;
             colorMap.set(linkId, 1);
             msg += " -> ";
         }
@@ -201,16 +195,13 @@ val bf_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_DEFAULT);
 
-    igraph_vector_int_destroy(&vertices);
     return result;
 }
 
 val bf_source_to_all(igraph_integer_t src) {
-    igraph_vector_int_list_t paths;
-    igraph_vector_int_list_init(&paths, 0);
-    igraph_vs_t targets = igraph_vss_all(); // list of all vertices
+    IGraphVectorIntList paths;
 
-    igraph_get_shortest_paths_bellman_ford(&igraphGlobalGraph, &paths, NULL, src, targets, /* TODO*/ NULL, IGRAPH_OUT, NULL, NULL);
+    igraph_get_shortest_paths_bellman_ford(&igraphGlobalGraph, paths.vec(), NULL, src, igraph_vss_all(), /* TODO*/ NULL, IGRAPH_OUT, NULL, NULL);
 
     val result = val::object();
     val colorMap = val::object();
@@ -220,8 +211,8 @@ val bf_source_to_all(igraph_integer_t src) {
         + "] to all:";
 
     std::unordered_map<int, int> fm;
-    for (long i = 0; i < igraph_vector_int_list_size(&paths); ++i) {
-        igraph_vector_int_t p = VECTOR(paths)[i];
+    for (long i = 0; i < paths.size(); ++i) {
+        igraph_vector_int_t p = paths.at(i);
         int pLength = igraph_vector_int_size(&p);
         igraph_integer_t dest = VECTOR(p)[pLength - 1];
 
@@ -247,19 +238,16 @@ val bf_source_to_all(igraph_integer_t src) {
     result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_ERROR);
 
-    igraph_vector_int_list_destroy(&paths);
     return result;
 }
 
 
 // BFS
 val bfs(igraph_integer_t src) {
-    igraph_vector_int_t order, layers;
+    IGraphVectorInt order, layers;
     int N, nodes_remaining, orderLength;
-    igraph_vector_int_init(&order, 0);
-    igraph_vector_int_init(&layers, 0);
 
-    igraph_bfs_simple(&igraphGlobalGraph, src, IGRAPH_OUT, &order, &layers, NULL);
+    igraph_bfs_simple(&igraphGlobalGraph, src, IGRAPH_OUT, order.vec(), layers.vec(), NULL);
 
     val result = val::object();
     val colorMap = val::object();
@@ -268,7 +256,7 @@ val bfs(igraph_integer_t src) {
     N = igraph_vcount(&igraphGlobalGraph);
     nodes_remaining = N;
     bool new_iteration = true;
-    orderLength = igraph_vector_int_size(&order);
+    orderLength = order.size();
     igraph_integer_t current_layer = 1;
 
     std::unordered_map<int, int> fm;
@@ -278,13 +266,11 @@ val bfs(igraph_integer_t src) {
             new_iteration = false;
         }
 
-        int nodeId = VECTOR(order)[i];
-        msg += nodeId;
+        int nodeId = order.at(i);
+        msg += std::to_string(nodeId);
         fm[nodeId] = nodes_remaining;
 
-        int layer = VECTOR(layers)[current_layer];
-        std::cout << "Current layer: " << layer << "; i: " << i << "Node: " << nodeId << std::endl;
-    
+        int layer = layers.at(current_layer);    
         if (i + 1 == layer || i + 1 == orderLength) {
             msg += "]\n";
             nodes_remaining = N - i - 1;
@@ -294,26 +280,22 @@ val bfs(igraph_integer_t src) {
             msg += ", ";
         }
     }
+
     frequenciesToColorMap(fm, colorMap);
     result.set("colorMap", colorMap);
     result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_ERROR);
-
-    igraph_vector_int_destroy(&order);
-    igraph_vector_int_destroy(&layers);
     return result;
 }
 
 
 val dfs(igraph_integer_t src) {
-    igraph_vector_int_t order, dist;
-    igraph_vector_int_init(&order, 0);
-    igraph_vector_int_init(&dist, 0);
+    IGraphVectorInt order, dist;
 
-    igraph_dfs(&igraphGlobalGraph, src, IGRAPH_OUT, false, &order, NULL, NULL, &dist, NULL, NULL, NULL);
+    igraph_dfs(&igraphGlobalGraph, src, IGRAPH_OUT, false, order.vec(), NULL, NULL, dist.vec(), NULL, NULL, NULL);
 
-    int orderLength = igraph_vector_int_size(&order);
-    int maxDist = igraph_vector_int_max(&dist);
+    int orderLength = order.size();
+    int maxDist = dist.max();
 
     val result = val::object();
     val colorMap = val::object();
@@ -321,8 +303,8 @@ val dfs(igraph_integer_t src) {
     std::string msg = "DFS order from [" + std::to_string(src) + "]\n";
 
     for (long int i = 0; i < orderLength; ++i) {
-        std::string nodeId = std::to_string(VECTOR(order)[i]);
-        if (VECTOR(order)[i] == -1) continue;
+        std::string nodeId = std::to_string(order.at(i));
+        if (order.at(i) == -1) continue;
 
         msg += nodeId;
         if (i < orderLength - 1) msg += " -> ";
@@ -331,31 +313,26 @@ val dfs(igraph_integer_t src) {
 
     // get scaled distance for colour map
     std::unordered_map<int, int> fm;
-    for (long int i = 0; i < igraph_vector_int_size(&dist); ++i) {
-        int distance_from_src = VECTOR(dist)[i];
+    for (long int i = 0; i < dist.size(); ++i) {
+        int distance_from_src = dist.at(i);
 
         if (distance_from_src >= 0) {
-            //double tmp = (double)(maxDist - VECTOR(dist)[i] + 1)/(double)maxDist * orderLength;
-            //colorMap.set(i, tmp);
             fm[i] = maxDist - distance_from_src + 1;
         }
     }
+
     frequenciesToColorMap(fm, colorMap);
     result.set("colorMap", colorMap);
     result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_ERROR);
-
-    igraph_vector_int_destroy(&order);
-    igraph_vector_int_destroy(&dist);
     return result;
 }
 
 
 val randomWalk(igraph_integer_t start, int steps) {
-    igraph_vector_int_t vertices;
-    igraph_vector_int_init(&vertices, 0);
+    IGraphVectorInt vertices;
 
-    igraph_random_walk(&igraphGlobalGraph, NULL, &vertices, NULL, start, IGRAPH_OUT, steps, IGRAPH_RANDOM_WALK_STUCK_RETURN);
+    igraph_random_walk(&igraphGlobalGraph, NULL, vertices.vec(), NULL, start, IGRAPH_OUT, steps, IGRAPH_RANDOM_WALK_STUCK_RETURN);
 
     val result = val::object();
     val colorMap = val::object();
@@ -365,25 +342,24 @@ val randomWalk(igraph_integer_t start, int steps) {
         std::to_string(steps) + " steps:\n";
 
     std::unordered_map<int, int> fm;
-    for (int i = 0; i < igraph_vector_int_size(&vertices); ++i) {
-        int node = VECTOR(vertices)[i];
+    for (int i = 0; i < vertices.size(); ++i) {
+        int node = vertices.at(i);
         fm[node]++;
 
         std::string nodeId = std::to_string(node);
 
         if (i > 0) {
-            std::string linkId = std::to_string(VECTOR(vertices)[i-1]) + '-' + nodeId;
+            std::string linkId = std::to_string(vertices.at(i-1)) + '-' + nodeId;
             colorMap.set(linkId, 1);
             msg += " -> ";
         }
         msg += "[" + nodeId + "]";
     }
+
     frequenciesToColorMap(fm, colorMap);
     result.set("colorMap", colorMap);
     result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_ERROR);
-
-    igraph_vector_int_destroy(&vertices);
     return result;
 }
 
@@ -394,21 +370,18 @@ val min_spanning_tree(void) {
     // TODO: check for weights
     igraph_minimum_spanning_tree_unweighted(&igraphGlobalGraph, &mst);
 
-    igraph_vector_int_t edges;
-    igraph_integer_t num_edges = igraph_ecount(&mst);
-
-    igraph_vector_int_init(&edges, num_edges * 2);
-    igraph_get_edgelist(&mst, &edges, 0);
+    IGraphVectorInt edges;
+    igraph_get_edgelist(&mst, edges.vec(), 0);
 
     val result = val::object();
     val colorMap = val::object();
     std::string msg = "";
     //val exported = val::array(); (or return entire tree as json?)
 
-    for (int i = 0; i < num_edges; ++i) {
+    for (int i = 0; i < igraph_ecount(&mst); ++i) {
         //val link = val::object();
-        int n1 = VECTOR(edges)[2 * i];
-        int n2 = VECTOR(edges)[2 * i + 1];
+        int n1 = edges.at(2 * i);
+        int n2 = edges.at(2 * i + 1);
         std::string linkId = std::to_string(n1) + '-' + std::to_string(n2);
         
         colorMap.set(n1, 1);
@@ -423,7 +396,6 @@ val min_spanning_tree(void) {
     result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_ERROR); // TODO: test with larger disconnection?
 
-    igraph_vector_int_destroy(&edges);
     igraph_destroy(&mst);
     return result;
 }

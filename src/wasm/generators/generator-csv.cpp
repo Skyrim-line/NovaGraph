@@ -41,7 +41,7 @@ NodeMap process_nodes_csv(const std::string& filename) {
     if (!file.is_open()) throw std::runtime_error("Could not open file " + filename);
 
     // header check
-    if (!std::getline(file, line)) throw std::runtime_error("Could not read the Nodes CSV file");
+    if (!std::getline(file, line)) throw std::runtime_error("Could not read the Nodes CSV header");
     std::string header = trim(line);
     if (header != "nodes" && header != "Nodes") throw std::runtime_error("Incorrect header in nodes file");
 
@@ -69,8 +69,8 @@ NodeMap process_nodes_csv(const std::string& filename) {
 void process_edges_csv(const std::string &edgesFilename, std::unordered_map<std::string, int> &nodeMap, bool directed) {
     std::ifstream file(edgesFilename);
     std::string line, src, tar, weight;
-    igraph_vector_int_t edges;
-    igraph_vector_t weights;
+    IGraphVectorInt edges;
+    IGraphVector weights;
     bool weighted = false;
 
     // check if file is open
@@ -87,13 +87,12 @@ void process_edges_csv(const std::string &edgesFilename, std::unordered_map<std:
         } else if (tokens.size() >= 3 && tokens[2] == "weight") {
             weighted = true;
         }        
+    } else {
+        throw std::runtime_error("Could not read the Edges CSV headers");
     }
 
-    igraph_vector_int_init(&edges, 0);
-    igraph_vector_init(&weights, 0);
-
     // read the edges
-        std::cout << "reading edges..." << std::endl;
+    std::cout << "reading edges..." << std::endl;
 
     while (std::getline(file, line)) {
         std::vector<std::string> tokens = split(trim(line), ',');
@@ -101,27 +100,22 @@ void process_edges_csv(const std::string &edgesFilename, std::unordered_map<std:
         src = tokens[0];
         tar = tokens[1];
         if (nodeMap.find(src) == nodeMap.end() || nodeMap.find(tar) == nodeMap.end()) {
-            std::cout << "Invalid node in edge: " + src + " -> " + tar << std::endl;
-            igraph_vector_int_destroy(&edges);
-            igraph_vector_destroy(&weights);
             throw std::runtime_error("Invalid node in edge: " + src + " -> " + tar);
         }
 
         // add edge to igraph vector using the node id
-        igraph_vector_int_push_back(&edges, nodeMap[src]);
-        igraph_vector_int_push_back(&edges, nodeMap[tar]);
+        edges.push_back(nodeMap[src]);
+        edges.push_back(nodeMap[tar]);
 
         if (weighted) {
             if (tokens.size() < 3) {
-                igraph_vector_push_back(&weights, 1); // default weight
+                weights.push_back(1); // default weight
             } else {
                 weight = tokens[2];
                 try {
-                    igraph_vector_push_back(&weights, std::stod(weight));
+                    weights.push_back(std::stod(weight));
                 } catch (const std::exception& e) {
-                    igraph_vector_int_destroy(&edges);
-                    igraph_vector_destroy(&weights);
-                    throw std::runtime_error("Invalid weight in edge: " + src + " -> " + tar);
+                    throw std::runtime_error("Invalid weight in edge: " + std::to_string(nodeMap[src]) + " -> " + std::to_string(nodeMap[tar]));
                 }
             }
         }
@@ -129,43 +123,25 @@ void process_edges_csv(const std::string &edgesFilename, std::unordered_map<std:
 
     // remove existing graph and create new
     igraph_destroy(&igraphGlobalGraph);
-    igraph_create(&igraphGlobalGraph, &edges, nodeMap.size(), directed);   
+    igraph_create(&igraphGlobalGraph, edges.vec(), nodeMap.size(), directed);   
 
     // add node names as attributes
     std::cout << "reading node names..." << std::endl;
 
     for (auto &pair : nodeMap) {
-        std::cout << pair.first << ": " << pair.second << std::endl;
         SETVAS(&igraphGlobalGraph, "name", pair.second, pair.first.c_str());
     }
 
     // store weights in global variable
     igraph_vector_destroy(&globalWeights);
-    if (weighted) {
-        std::cout << "test1" << std::endl;
-
-        igraph_vector_init_copy(&globalWeights, &weights);
-
-                std::cout << "test2" << std::endl;
-
-    }
-
-    igraph_vector_int_destroy(&edges);
-    igraph_vector_destroy(&weights);
+    if (weighted) igraph_vector_init_copy(&globalWeights, weights.vec());
 }
 
 val graph_from_csv(const std::string& nodesFilename, const std::string& edgesFilename, bool directed) {
     val result = val::object();
-    try {
-        std::unordered_map<std::string, int> nodeMap = process_nodes_csv(nodesFilename);
-        process_edges_csv(edgesFilename, nodeMap, directed);
-            std::cout << "test" << std::endl;
-
-        result.set("nodes", graph_nodes());
-        result.set("edges", graph_edges());
-    } catch(const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        result.set("error", e.what());
-    }
+    std::unordered_map<std::string, int> nodeMap = process_nodes_csv(nodesFilename);
+    process_edges_csv(edgesFilename, nodeMap, directed);
+    result.set("nodes", graph_nodes());
+    result.set("edges", graph_edges());
     return result;
 }

@@ -4,8 +4,8 @@
 
 bool process_json(const std::string& filename) {
     NodeMap nodeMap;
-    igraph_vector_int_t igraph_edges;
-    igraph_vector_t igraph_weights;
+    IGraphVectorInt igraph_edges;
+    IGraphVector igraph_weights;
     std::unordered_set<std::string> nodeSet;
 
     std::ifstream file(filename);
@@ -41,43 +41,34 @@ bool process_json(const std::string& filename) {
 
     if (nodeMap.empty()) throw std::runtime_error("No nodes found in the file");
 
-    igraph_vector_int_init(&igraph_edges, 0);
-    igraph_vector_init(&igraph_weights, 0);
-
     for (const auto& edge : edges.GetArray()) {
         if (edge.IsObject() && edge.HasMember("source") && edge.HasMember("target")) {
             std::string src = edge["source"].GetString();
             std::string tar = edge["target"].GetString();
             if (nodeMap.find(src) == nodeMap.end() || nodeMap.find(tar) == nodeMap.end()) {
-                igraph_vector_int_destroy(&igraph_edges);
-                igraph_vector_destroy(&igraph_weights);
                 throw std::runtime_error("Invalid source or target in edge");
             }
-            
-            igraph_vector_int_push_back(&igraph_edges, nodeMap[src]);
-            igraph_vector_int_push_back(&igraph_edges, nodeMap[tar]);
+
+            igraph_edges.push_back(nodeMap[src]);
+            igraph_edges.push_back(nodeMap[tar]);
 
             if (edge.HasMember("weight")) {
                 if (edge["weight"].IsNumber()) {
-                    igraph_vector_push_back(&igraph_weights, edge["weight"].GetDouble());
+                    igraph_weights.push_back(edge["weight"].GetDouble());
                 } else {
-                    igraph_vector_int_destroy(&igraph_edges);
-                    igraph_vector_destroy(&igraph_weights);
                     throw std::runtime_error("Invalid weight in edge");
                 }
             } else {
-                igraph_vector_push_back(&igraph_weights, 1);
+                igraph_weights.push_back(1);
             }
         } else {
-            igraph_vector_int_destroy(&igraph_edges);
-            igraph_vector_destroy(&igraph_weights);
             throw std::runtime_error("Missing source or target in edge");
         }
     }
 
     // remove existing graph and create a new one
     igraph_destroy(&igraphGlobalGraph);
-    igraph_create(&igraphGlobalGraph, &igraph_edges, nodeMap.size(), directed.GetBool());
+    igraph_create(&igraphGlobalGraph, igraph_edges.vec(), nodeMap.size(), directed.GetBool());
 
     // add node names as attributes
     for (auto &pair : nodeMap) {
@@ -86,23 +77,16 @@ bool process_json(const std::string& filename) {
 
     // store weights in global variable
     igraph_vector_destroy(&globalWeights);
-    igraph_vector_init_copy(&globalWeights, &igraph_weights);
+    igraph_vector_init_copy(&globalWeights, igraph_weights.vec());
 
-    igraph_vector_int_destroy(&igraph_edges);
-    igraph_vector_destroy(&igraph_weights);
     return directed.GetBool();
 }
 
 val graph_from_json(const std::string& filename) {
     val result = val::object();
-    try {
-        bool directed = process_json(filename);
-        result.set("nodes", graph_nodes());
-        result.set("edges", graph_edges());
-        result.set("directed", directed);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        result.set("error", e.what());
-    }
+    bool directed = process_json(filename);
+    result.set("nodes", graph_nodes());
+    result.set("edges", graph_edges());
+    result.set("directed", directed);
     return result;
 }

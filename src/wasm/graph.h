@@ -1,7 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include "igraph/include/igraph.h"
+#include "igraph_wrappers.h"
 #include <emscripten/val.h>
 #include <emscripten/bind.h>
 #include <vector>
