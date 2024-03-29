@@ -74,6 +74,7 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("generate_graph_from_csv", &graph_from_csv);
   function("generate_graph_from_json", &graph_from_json);
   function("generate_graph_from_gml", &graph_from_gml);
+  function("generate_graph_from_gexf", &graph_from_gexf);
 
   function("vertices_are_connected", &vertices_are_connected);
   function("dijkstra_source_to_target", &dijkstra_source_to_target);

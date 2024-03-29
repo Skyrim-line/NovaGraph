@@ -8,12 +8,13 @@ import React, { useState } from "react";
 import ImportCSV from "./ImportCSV";
 import ImportJSON from "./ImportJSON";
 import ImportGML from "./ImportGML";
+import ImportGEXF from "./ImportGEXF";
 
 const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
     const [openDialog, setOpenDialog] = useState({
         csv: false,
         json: false,
-        graphml: false,
+        gexf: false,
         gml: false,
         auto: false
     });
@@ -58,9 +59,9 @@ const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
                         <ListItemText>Import JSON</ListItemText>
                     </MenuItem>
 
-                    <MenuItem onClick={() => handleOpenDialog('graphml')}>
+                    <MenuItem onClick={() => handleOpenDialog('gexf')}>
                         <ListItemIcon><CodeIcon /></ListItemIcon>
-                        <ListItemText>Import GraphML</ListItemText>
+                        <ListItemText>Import GEXF</ListItemText>
                     </MenuItem>
 
                     <MenuItem onClick={() => handleOpenDialog('gml')}>
@@ -92,6 +93,12 @@ const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
         <ImportGML
             open={openDialog.gml}
             onClose={() => handleCloseDialog('gml')}
+            module={module}
+            updateGraph={handleGraphUpdate}
+        />
+        <ImportGEXF
+            open={openDialog.gexf}
+            onClose={() => handleCloseDialog('gexf')}
             module={module}
             updateGraph={handleGraphUpdate}
         />
