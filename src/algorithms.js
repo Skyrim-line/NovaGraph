@@ -3,7 +3,7 @@ export const Algorithm = {
     DIJKSTRA_ALL: 2,
     YEN: 3,
     BELLMAN_FORD_A_TO_B: 4,
-    BELLMAN_FORD_ALL: 4,
+    BELLMAN_FORD_ALL: 5,
     BFS: 6,
     DFS: 7,
     RANDOM_WALK: 8,
