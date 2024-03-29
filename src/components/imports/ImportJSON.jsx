@@ -1,5 +1,7 @@
 import { Box, Button, Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import React, { useState } from 'react';
 
 const ImportJSON = ({ open, onClose, module, updateGraph }) => {
@@ -42,7 +44,8 @@ const ImportJSON = ({ open, onClose, module, updateGraph }) => {
           Select a JSON file from your computer in the format shown in this example:
         </Typography>
         <Box pt={1}>
-          <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>
+          <Box fontSize="12px">
+            <SyntaxHighlighter language="json" style={dracula}>
 {`{
   "nodes": ["Elizabeth", "Charles", "Camilla", "William", "Andrew", "Harry"],
   "edges": [
@@ -54,7 +57,8 @@ const ImportJSON = ({ open, onClose, module, updateGraph }) => {
   ],
   "directed": false
 }`}
-          </pre>
+            </SyntaxHighlighter>
+          </Box>
           <Box sx={{ textAlign: 'center' }}><i>graph.json</i></Box>
         </Box>
         <Box p={2} sx={{ textAlign: 'center' }}>

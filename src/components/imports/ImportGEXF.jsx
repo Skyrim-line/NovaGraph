@@ -1,5 +1,7 @@
 import { Box, Button, Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import React, { useState } from 'react';
 
 const ImportGEXF = ({ open, onClose, module, updateGraph }) => {
@@ -42,11 +44,13 @@ const ImportGEXF = ({ open, onClose, module, updateGraph }) => {
         <Typography>
           Select a GEXF file from your computer in the format shown in this example:
         </Typography>
-        <Box pt={1}>
-          <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>
-{`TODO`}
+        <Box pt={1} fontSize="12px">
+          <SyntaxHighlighter style={dracula} language="xml">
+{`<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://gexf.net/1.2" version="1.2">
+TODO`}
 
-          </pre>
+          </SyntaxHighlighter>
           <Box sx={{ textAlign: 'center' }}><i>graph.gexf</i></Box>
         </Box>
         <Box pt={2} sx={{ textAlign: 'center' }}>

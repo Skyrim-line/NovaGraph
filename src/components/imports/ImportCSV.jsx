@@ -1,5 +1,7 @@
 import { Box, Button, Dialog, DialogContent, DialogTitle, Divider, FormControlLabel, Switch, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import React, { useState } from "react";
 
 const ImportCSV = ({ open, onClose, module, updateGraph }) => {
@@ -58,7 +60,7 @@ const ImportCSV = ({ open, onClose, module, updateGraph }) => {
             in the format shown in this example:
         </Typography>
           
-        <Box pt={2} sx={{ display: 'flex' }}>
+        <Box pt={2} sx={{ display: 'flex' }} gap={2}>
           <Box sx={{ flex: "1 1 0", width: 0 }}>
             {tableView ? (
               <TableContainer>
@@ -83,9 +85,9 @@ const ImportCSV = ({ open, onClose, module, updateGraph }) => {
                 </Table>
               </TableContainer>
             ) : (
-              <pre>
+              <SyntaxHighlighter style={dracula} language="text">
                 {["node", "John", "Michael", "Sarah", "Tina"].join('\n')}
-              </pre>
+              </SyntaxHighlighter>
             )}
             <Box pt={2} sx={{ textAlign: 'center' }}><i>nodes.csv</i></Box>
           </Box>
@@ -120,7 +122,7 @@ const ImportCSV = ({ open, onClose, module, updateGraph }) => {
                 </Table>
               </TableContainer>
             ) : (
-              <pre>
+              <SyntaxHighlighter style={dracula} language="csv">
                 {[
                   "source,target,weight",
                   "John,Michael,1",
@@ -128,7 +130,7 @@ const ImportCSV = ({ open, onClose, module, updateGraph }) => {
                   "Sarah,Tina,2",
                   "Sarah,Michael,2"
                 ].join('\n')}
-              </pre>
+              </SyntaxHighlighter>
             )}
             <Box pt={2} sx={{ textAlign: 'center' }}><i>edges.csv</i></Box>
           </Box>
