@@ -1,7 +1,7 @@
 import { Cosmograph, CosmographProvider, CosmographSearch } from '@cosmograph/react'
 import React, { useRef, useCallback, useEffect, useState, useLayoutEffect } from 'react';
 import chroma from "chroma-js";
-import { Box, Button, IconButton, Tooltip } from '@mui/material';
+import { Box, Button, Divider, Drawer, IconButton, Slider, Tooltip, Typography } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -16,6 +16,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     const scale = chroma.scale(['#F7EBFF', '#6750C6']);
     const error = '#F05480'
     const neutral = '#9f8fc3'
+    const contrast_green = '#67baa7'
     /* Palette: https://mycolor.space/?hex=%236750C6&sub=1 (Spot Palette)
         - Dark: #6750c6
         - Default: #9f8fc3
@@ -23,9 +24,13 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
         - Contrast (Green): #67baa7
     */
 
-        
     const [selectedNode, setSelectedNode] = useState(null);
     const [dynamicLabels, setDynamicLabels] = useState(true);
+    const [optionsDrawer, setOptionsDrawer] = useState(false);
+
+    const [repulsion, setRepulsion] = useState(2);
+    const [gravity, setGravity] = useState(0);
+    const [nodeSizeScale, setNodeSizeScale] = useState(1);
 
     useEffect(() => {
         console.log('Restarting graph...')
@@ -69,9 +74,9 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
 
     const getLinkColor = link => {
         if (colors[`${link.source}-${link.target}`] > 0) {
-            return '#67baa7'
+            return contrast_green
         } else if (colors[`${link.target}-${link.source}`] > 0) {
-            return '#67baa7'
+            return contrast_green
         } else {
             return null
         }
@@ -111,15 +116,17 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 linkArrows={directed}
                 showDynamicLabels={dynamicLabels}
                 
-                //renderHoveredNodeRing={true}
-                //hoveredNodeRingColor='#4B5BBF'
+                renderHoveredNodeRing={true}
+                hoveredNodeRingColor={contrast_green}
+
                 linkGreyoutOpacity={0}
-                //simulationLinkDistance={20}
-                //simulationLinkSpring={1.5}
-                simulationRepulsion={2}
-                //simulationGravity={1}
                 simulationLinkSpring={0.01}
                 simulationDecay={100000}
+
+                nodeSizeScale={nodeSizeScale}
+                simulationRepulsion={repulsion}
+                simulationGravity={gravity}
+
                 onClick={zoomToNode}
             />
 
@@ -182,10 +189,70 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
             }
             
             <Tooltip title="Graph Options">
-                <IconButton aria-label='graph-options'>
+                <IconButton aria-label='graph-options' onClick={() => setOptionsDrawer(true)}>
                     <SettingsIcon />
                 </IconButton>
             </Tooltip>
+
+            <Drawer
+                anchor='right'
+                open={optionsDrawer}
+                onClose={() => setOptionsDrawer(false)}
+                slotProps={{ backdrop: {sx: { backgroundColor: 'transparent' }} }}
+                elevation={0}
+            >
+                <Box width={{ xs: '10rem', sm: '15rem'}} p={3}>
+                    <Typography variant='h5' align='center' pb={2}>Graph Options</Typography>
+                    <Divider />
+
+                    {/* Title and slider for graph repulsion (default 2 but slider should range from 0-3) */}
+                    <Box pt={3} sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                        <Box>
+                            <Typography variant='h6' align='center'>Repulsion</Typography>
+                            <Slider
+                                defaultValue={repulsion}
+                                color='info'
+                                min={0}
+                                max={2}
+                                step={0.05}
+                                valueLabelDisplay='auto'
+                                onChange={(_, value) => setRepulsion(value)}
+                            />
+                            <Typography variant='body2'>Affects how quickly nodes repel from each other (default: 2)</Typography>
+                        </Box>
+                        <Box>
+                            <Typography variant='h6' align='center'>Gravity Strength</Typography>
+                            <Slider
+                                defaultValue={gravity}
+                                color='info'
+                                min={0}
+                                max={0.5}
+                                step={0.1}
+                                valueLabelDisplay='auto'
+                                onChange={(_, value) => setGravity(value)}
+                            />
+                            <Typography variant='body2'>
+                                Modifies the gravitational strength of the center of the graph (default: 0)
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Typography variant='h6' align='center'>Node Scalar Size</Typography>
+                            <Slider
+                                defaultValue={nodeSizeScale}
+                                color='info'
+                                min={0}
+                                max={2}
+                                step={0.25}
+                                valueLabelDisplay='auto'
+                                onChange={(_, value) => setNodeSizeScale(value)}
+                            />
+                            <Typography variant='body2'>Modify node sizes (default: 1)</Typography>
+                        </Box>
+
+                    </Box>
+                    
+                </Box>
+            </Drawer>
         </Box>
         
     </Box>
