@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import createModule from './graph'
 import './App.css'
+import logo from './assets/logo.png'
 import { GraphRenderer } from './components/GraphRenderer';
-import { Alert, Box, Button, ButtonGroup, Collapse, Menu, MenuItem, Snackbar, Typography } from '@mui/material';
+import { Alert, Box, Button, ButtonGroup, Collapse, Divider, IconButton, Menu, MenuItem, Snackbar, Tooltip, Typography } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Accordion, AccordionDetails, AccordionSummary } from './components/Accordion';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -217,38 +219,21 @@ function App() {
         <Alert severity="error" variant='filled' onClose={() => setError(null)}>{error}</Alert>
       </Snackbar>
 
-      <Typography variant='h3'>Novagraph</Typography>
-      
       <Box sx={{ display: 'flex', gap: 1 }}>
         <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button
-              aria-controls='import-menu'
-              aria-haspopup='true'
-              onClick={event => setAnchorEl(event.currentTarget)}
-              startIcon={<UploadIcon />}
-              color='secondary'
-            >
-              Import Graph
-            </Button>
-            <Button onClick={() => wasmModule.test()}>Test Exception</Button>
-            <Button
-              aria-controls='export-menu'
-              aria-haspopup='true'
-              startIcon={<FileDownloadIcon />}
-              color='secondary'
-              disabled
-            >
-              Export Graph
-            </Button>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <img src={logo} alt='logo' width={60} style={{ paddingBottom: 10, paddingLeft: 10 }} />
+            <Typography
+              style={{
+                fontFamily: '"ITC Eras Book", sans-serif',
+                fontSize: 40
+              }}>ova</Typography>
+            <Typography mb='0.2rem'
+            style={{
+              fontFamily: '"ITC Eras Demi", sans-serif',
+              fontSize: 40
+            }}>graph</Typography>
 
-            <ImportMenu
-              id='import-menu'
-              anchorEl={anchorEl}
-              setAnchorEl={setAnchorEl}
-              module={wasmModule}
-              updateGraph={updateGraph}
-            />
           </Box>
           <GraphRenderer
             nodes={nodes}
@@ -258,9 +243,52 @@ function App() {
             sizes={sizeMap}
             mode={renderMode}
           />
+          <Typography variant='h4'>Output</Typography>
+          <Divider />
+          <pre>{text}</pre>
         </Box>
 
         <Box width={{ xs: '15rem', sm: '20rem' }}>
+          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }} p={1}>
+            <Tooltip title='Import Graph'>
+              <Button
+                aria-controls='import-menu'
+                aria-haspopup='true'
+                onClick={event => setAnchorEl(event.currentTarget)}
+                startIcon={<UploadIcon />}
+                variant='text'
+                color='secondary'
+                size='small'
+              >
+                Import
+              </Button>
+            </Tooltip>
+            <Tooltip title='Export Graph'>
+              <Button
+                aria-controls='export-menu'
+                aria-haspopup='true'
+                startIcon={<FileDownloadIcon />}
+                variant='text'
+                color='secondary'
+                size='small'
+                disabled
+              >
+                Export
+              </Button>
+            </Tooltip>
+            <Tooltip title='Help'>
+              <IconButton color='info' disabled>
+                <HelpOutlineIcon />
+              </IconButton>
+            </Tooltip>
+            <ImportMenu
+              id='import-menu'
+              anchorEl={anchorEl}
+              setAnchorEl={setAnchorEl}
+              module={wasmModule}
+              updateGraph={updateGraph}
+            />
+          </Box>
           <Accordion expanded={expanded === 'panel1'} onChange={handleAccordianChange('panel1')}>
             <AccordionSummary aria-controls="panel1-content" id="panel1-header">
               <Typography variant='body2' pl='5px'>Path Finding & Search</Typography>
@@ -394,10 +422,6 @@ function App() {
         </Box>
 
       </Box>
-      
-      <h2>Output</h2>
-      <hr />
-      <pre>{text}</pre>
     </ThemeProvider>
   )
 }
