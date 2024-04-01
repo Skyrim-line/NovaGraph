@@ -254,24 +254,22 @@ function App() {
                 Import
               </Button>
             </Tooltip>
-            <Tooltip title='Export Graph'>
-              <Button
-                aria-controls='export-menu'
-                aria-haspopup='true'
-                startIcon={<FileDownloadIcon />}
-                variant='text'
-                color='secondary'
-                size='small'
-                disabled
-              >
-                Export
-              </Button>
-            </Tooltip>
-            <Tooltip title='Help'>
-              <IconButton color='info' disabled>
-                <HelpOutlineIcon />
-              </IconButton>
-            </Tooltip>
+            {/*<Tooltip title='Export Graph'>*/}
+            <Button
+              aria-controls='export-menu'
+              aria-haspopup='true'
+              startIcon={<FileDownloadIcon />}
+              variant='text'
+              color='secondary'
+              size='small'
+              disabled
+            >
+              Export
+            </Button>
+            {/*<Tooltip title='Help'>*/}
+            <IconButton color='info' disabled>
+              <HelpOutlineIcon />
+            </IconButton>
             <ImportMenu
               id='import-menu'
               anchorEl={anchorEl}
