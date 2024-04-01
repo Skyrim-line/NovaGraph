@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import createModule from './graph'
 import './App.css'
-import logo from './assets/logo.png'
 import { GraphRenderer } from './components/GraphRenderer';
 import { Alert, Box, Button, ButtonGroup, Collapse, Divider, IconButton, Menu, MenuItem, Snackbar, Tooltip, Typography } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
@@ -223,7 +222,7 @@ function App() {
       <Box sx={{ display: 'flex', gap: 1 }}>
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <img src={logo} alt='logo' width={60} style={{ paddingBottom: 10, paddingLeft: 10 }} />
+            <img src="./logo.png" alt='logo' width={60} style={{ paddingBottom: 10, paddingLeft: 10 }} />
             <ErasMedium fontSize={40}>ova</ErasMedium>
             <ErasBold fontSize={40} mb={0.2}>graph</ErasBold>
           </Box>
