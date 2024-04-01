@@ -13,6 +13,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ImportMenu from './components/imports/ImportMenu';
 import { Algorithm } from './algorithms';
 import AlgorithmExplanation from './components/AlgorithmExplanation';
+import { ErasBold, ErasMedium } from './components/Eras';
 
 const darkTheme = createTheme({
   palette: {
@@ -223,17 +224,8 @@ function App() {
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <img src={logo} alt='logo' width={60} style={{ paddingBottom: 10, paddingLeft: 10 }} />
-            <Typography
-              style={{
-                fontFamily: '"ITC Eras Book", sans-serif',
-                fontSize: 40
-              }}>ova</Typography>
-            <Typography mb='0.2rem'
-            style={{
-              fontFamily: '"ITC Eras Demi", sans-serif',
-              fontSize: 40
-            }}>graph</Typography>
-
+            <ErasMedium fontSize={40}>ova</ErasMedium>
+            <ErasBold fontSize={40} mb={0.2}>graph</ErasBold>
           </Box>
           <GraphRenderer
             nodes={nodes}

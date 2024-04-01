@@ -3,6 +3,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import React, { useState } from 'react';
+import { ErasMedium } from "../Eras";
 
 const ImportGML = ({ open, onClose, module, updateGraph }) => {
   const [file, setFile] = useState(null);
@@ -36,7 +37,7 @@ const ImportGML = ({ open, onClose, module, updateGraph }) => {
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>
-        <Typography>Import Graph Modelling Language (GML) File</Typography>
+        <ErasMedium>Import Graph Modelling Language (GML) File</ErasMedium>
       </DialogTitle>
       <Divider  />
       <DialogContent>

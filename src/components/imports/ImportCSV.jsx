@@ -3,6 +3,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import React, { useState } from "react";
+import { ErasBold, ErasMedium } from "../Eras";
 
 const ImportCSV = ({ open, onClose, module, updateGraph }) => {
   const [tableView, setTableView] = useState(false);
@@ -51,7 +52,7 @@ const ImportCSV = ({ open, onClose, module, updateGraph }) => {
   return(
   <Dialog open={open} onClose={onClose} fullWidth>
     <DialogTitle>
-        <Typography>Import CSV Files</Typography>
+        <ErasMedium>Import CSV Files</ErasMedium>
     </DialogTitle>
     <Divider  />
       <DialogContent>
