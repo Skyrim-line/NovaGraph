@@ -13,6 +13,7 @@ import ImportMenu from './components/imports/ImportMenu';
 import { Algorithm } from './algorithms';
 import AlgorithmExplanation from './components/AlgorithmExplanation';
 import { ErasBold, ErasMedium } from './components/Eras';
+import AlgorithmOutput from './components/algorithmOutputs/AlgorithmOutput';
 
 const darkTheme = createTheme({
   palette: {
@@ -43,10 +44,11 @@ function App() {
   const [sizeMap, setSizeMap] = useState({});
   const [renderMode, setRenderMode] = useState(1);
   const [text, setText] = useState("");
+  const [activeAlgorithm, setActiveAlgorithm] = useState(null);
+  const [activeResponse, setActiveResponse] = useState(null);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [hoveredAlgorithm, setHoveredAlgorithm] = useState(null);
-  const [activeAlgorithm, setActiveAlgorithm] = useState(null); // TODO: implement for conditional rendering
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -87,7 +89,7 @@ function App() {
     setExpanded(newExpanded ? panel : false);
   };
 
-  const postAlgorithmState = response => {
+  const postAlgorithmState = (alg, response) => {
     if (response.colorMap) {
       setSizeMap(response.sizeMap ? response.sizeMap : {})
       setColorMap(response.colorMap)
@@ -100,6 +102,8 @@ function App() {
     }
     setText(response.message)
     setRenderMode(response.mode)
+    setActiveAlgorithm(alg)
+    setActiveResponse(response)
   }
 
   const toId = name => {
@@ -111,100 +115,100 @@ function App() {
     const source = prompt("Enter source vertex");
     const target = prompt("Enter target vertex");
     const response = wasmModule.vertices_are_connected(toId(source), toId(target))
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.NEIGHBOR_JOINING, response)
   }
   const doDijkstraSingle = () => {
     const source = prompt("Enter source vertex");
     const target = prompt("Enter target vertex");
     const response = wasmModule.dijkstra_source_to_target(toId(source), toId(target));
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.DIJKSTRA_A_TO_B, response)
   }
   const doDijkstraMulti = () => {
     const source = prompt("Enter source vertex");
     const response = wasmModule.dijkstra_source_to_all(toId(source));
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.DIJKSTRA_ALL, response)
   }
   const doYen = () => {
     const source = prompt("Enter source vertex");
     const target = prompt("Enter target vertex");
     const k = prompt("Enter k (number of paths)", "1");
     const response = wasmModule.yens_algorithm(toId(source), toId(target), parseInt(k));
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.YEN, response)
   }
   const doBFSingle = () => {
     const source = prompt("Enter source vertex");
     const target = prompt("Enter target vertex");
     const response = wasmModule.bellman_ford_source_to_target(toId(source), toId(target));
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.BELLMAN_FORD_A_TO_B, response)
   }
   const doBFMulti = () => {
     const source = prompt("Enter source vertex");
     const response = wasmModule.bellman_ford_source_to_all(toId(source));
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.BELLMAN_FORD_ALL, response)
   }
   const doBFS = () => {
     const source = prompt("Enter source vertex");
     const response = wasmModule.bfs(toId(source));
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.BFS, response)
   }
   const doDFS = () => {
     const source = prompt("Enter source vertex");
     const response = wasmModule.dfs(toId(source));
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.DFS, response)
   }
   const doRW = () => {
     const start = prompt("Enter starting vertex");
     const steps = prompt("Enter step count", "1");
     const response = wasmModule.random_walk(toId(start), parseInt(steps));
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.RANDOM_WALK, response)
   }
   const doMST = () => {
     const response = wasmModule.min_spanning_tree();
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.MINIMAL_SPANNING_TREE, response)
   }
 
   const doBetweennessCentrality = () => {
     const response = wasmModule.betweenness_centrality();
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.BETWEENNESS_CENTRALITY, response)
   }
   const doClosenessCentrality = () => {
     const response = wasmModule.closeness_centrality();
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.CLOSENESS_CENTRALITY, response)
   }
   const doDegreeCentrality = () => {
     const response = wasmModule.degree_centrality();
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.DEGREE_CENTRALITY, response)
   }
   const doEigenCentrality = () => {
     const response = wasmModule.eigenvector_centrality();
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.EIGENVECTOR_CENTRALITY, response)
   }
   const doStrength = () => {
     const response = wasmModule.strength_centrality();
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.STRENGTH_CENTRALITY, response)
   }
   const doHarmonicCentrality = () => {
     const response = wasmModule.harmonic_centrality();
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.HARMONIC_CENTRALITY, response)
   }
   const doPageRank = () => {
     const response = wasmModule.pagerank(0.85);
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.PAGERANK, response)
   }
 
   const doLouvain = () => {
     const resolution = prompt("Enter resolution", "1.0");
     const response = wasmModule.louvain(parseFloat(resolution));
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.LOUVAIN, response)
   }
   const doLeiden = () => {
     const resolution = prompt("Enter resolution (Start at 1)", "1.0");
     const response = wasmModule.leiden(parseFloat(resolution));
-    postAlgorithmState(response)
+    postAlgorithmState(Algorithm.LEIDEN, response)
   }
   const doFastGreedy = () => {
     const response = wasmModule.fast_greedy();
-    postAlgorithmState(response);
+    postAlgorithmState(Algorithm.FAST_GREEDY, response);
   }
 
 
@@ -234,7 +238,7 @@ function App() {
             sizes={sizeMap}
             mode={renderMode}
           />
-          <Typography variant='h4'>Output</Typography>
+          <AlgorithmOutput algorithm={activeAlgorithm} response={activeResponse} />
           <Divider />
           <pre>{text}</pre>
         </Box>
