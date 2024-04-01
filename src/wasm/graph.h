@@ -25,6 +25,7 @@ void cleanupGraph(void);
 
 std::string igraph_check_attribute(const igraph_t *graph);
 igraph_error_t igraph_init_copy(igraph_t *to, const igraph_t *from);
+std::string igraph_get_name(igraph_integer_t v);
 
 val igraph_vector_int_to_val(igraph_vector_int_t* vec);
 val igraph_vector_int_list_to_val(igraph_vector_int_list_t* v);

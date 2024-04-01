@@ -31,37 +31,47 @@ val vertices_are_connected(igraph_integer_t src, igraph_integer_t tar) {
 
 val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     IGraphVectorInt vertices;
+    IGraphVectorInt edges;
+    bool hasWeights = VECTOR(globalWeights) != NULL;
+    int edges_count = 0;
 
-    // TODO: change final NULL to weights
-    igraph_get_shortest_path_dijkstra(&igraphGlobalGraph, vertices.vec(), NULL, src, tar, NULL, IGRAPH_OUT);
+    igraph_get_shortest_path_dijkstra(&igraphGlobalGraph, vertices.vec(), edges.vec(), src, tar, hasWeights ? &globalWeights : NULL, IGRAPH_OUT);
 
     val result = val::object();
     val colorMap = val::object();
-    std::string msg =
-        "Dijkstra's Shortest Path from ["
-        + std::to_string(src)
-        + "] to ["
-        + std::to_string(tar)
-        + "]:\n";
+    val data = val::object();
 
+    data.set("source", igraph_get_name(src));
+    data.set("target", igraph_get_name(tar));
+    data.set("weighted", hasWeights);
+
+    val path = val::array();
     for (int i = 0; i < vertices.size(); ++i) {
-        std::string nodeId = std::to_string(vertices.at(i));
+        int node = vertices.at(i);
+        std::string nodeId = std::to_string(node);
+        colorMap.set(nodeId, 0.5);
 
         if (i > 0) {
             std::string linkId = std::to_string(vertices.at(i-1)) + '-' + nodeId;
             colorMap.set(linkId, 1);
-            msg += " -> ";
+
+            val link = val::object();
+            link.set("from", igraph_get_name(vertices.at(i-1)));
+            link.set("to", igraph_get_name(node));
+
+            int weight_index = edges.at(edges_count++);
+            if (hasWeights) link.set("weight", VECTOR(globalWeights)[weight_index]);
+
+            path.set(i-1, link);
         }
-        colorMap.set(nodeId, 0.5);
-        msg += "[" + nodeId + "]";
     }
     colorMap.set(src, 1);
     colorMap.set(tar, 1);
 
     result.set("colorMap", colorMap);
-    result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_DEFAULT);
-
+    data.set("path", path);
+    result.set("data", data);
     return result;
 }
 
