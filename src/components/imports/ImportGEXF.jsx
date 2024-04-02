@@ -49,7 +49,24 @@ const ImportGEXF = ({ open, onClose, module, updateGraph }) => {
           <SyntaxHighlighter style={dracula} language="xml">
 {`<?xml version="1.0" encoding="UTF-8"?>
 <gexf xmlns="http://gexf.net/1.2" version="1.2">
-TODO`}
+    <graph mode="static" defaultedgetype="directed">
+        <nodes>
+            <node id="0" label="CEO" />
+            <node id="1" label="Board of Directors" />
+            <node id="2" label="IT Director" />
+            <node id="3" label="HR Director" />
+            <node id="4" label="Team Leader" />
+            <node id="5" label="Intern" />
+        </nodes>
+        <edges>
+            <edge id="0" source="0" target="1" />
+            <edge id="1" source="1" target="2" />
+            <edge id="2" source="1" target="3" />
+            <edge id="3" source="2" target="4" />
+            <edge id="4" source="4" target="5" />
+        </edges>
+    </graph>
+</gexf>`}
 
           </SyntaxHighlighter>
           <Box sx={{ textAlign: 'center' }}><i>graph.gexf</i></Box>
@@ -86,8 +103,8 @@ TODO`}
           </Button>
           </Box>
         <Typography variant="caption">
-          Note: Top level attributes are ignored but GML files from most applications 
-          (e.g. Cytoscape, Gephi, NetworkX) can still be imported without any issues.
+          Note: Meta tags can be included but will be ignored, allowing GEXF from most applications 
+          (e.g. Gephi, NetworkX) to be imported without any issues.
         </Typography>
       </DialogContent>
     </Dialog>
