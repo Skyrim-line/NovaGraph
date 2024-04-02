@@ -79,6 +79,7 @@ function App() {
   const updateGraph = (nodes, edges, directed) => {
     setColorMap({});
     setSizeMap({});
+    setActiveAlgorithm(null);
     setNodes(nodes);
     setEdges(edges);
     setDirected(directed);
@@ -239,7 +240,7 @@ function App() {
             mode={renderMode}
           />
           <AlgorithmOutput algorithm={activeAlgorithm} response={activeResponse} />
-          <Divider />
+
           <pre>{text}</pre>
         </Box>
 

@@ -10,7 +10,7 @@ const AlgorithmOutput = ({ algorithm, response }) => {
     const Component = response && components[algorithm];
     return (
         <>
-            { Component ? <Component response={response} /> : null }
+            { Component ? <Component data={response.data} /> : null }
         </>
     );
 };

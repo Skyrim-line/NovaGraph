@@ -34,6 +34,7 @@ val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     IGraphVectorInt edges;
     bool hasWeights = VECTOR(globalWeights) != NULL;
     int edges_count = 0;
+    int total_weight = 0;
 
     igraph_get_shortest_path_dijkstra(&igraphGlobalGraph, vertices.vec(), edges.vec(), src, tar, hasWeights ? &globalWeights : NULL, IGRAPH_OUT);
 
@@ -60,7 +61,10 @@ val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
             link.set("to", igraph_get_name(node));
 
             int weight_index = edges.at(edges_count++);
-            if (hasWeights) link.set("weight", VECTOR(globalWeights)[weight_index]);
+            if (hasWeights) {
+                link.set("weight", VECTOR(globalWeights)[weight_index]);
+                total_weight += VECTOR(globalWeights)[weight_index];
+            };
 
             path.set(i-1, link);
         }
@@ -71,6 +75,7 @@ val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     result.set("colorMap", colorMap);
     result.set("mode", MODE_COLOR_SHADE_DEFAULT);
     data.set("path", path);
+    if (hasWeights) data.set("totalWeight", total_weight);
     result.set("data", data);
     return result;
 }
