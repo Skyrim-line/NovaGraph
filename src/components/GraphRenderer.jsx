@@ -210,7 +210,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                         <Box>
                             <Typography variant='h6' align='center'>Repulsion</Typography>
                             <Slider
-                                defaultValue={repulsion}
+                                value={repulsion}
                                 color='info'
                                 min={0}
                                 max={2}
@@ -223,7 +223,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                         <Box>
                             <Typography variant='h6' align='center'>Gravity Strength</Typography>
                             <Slider
-                                defaultValue={gravity}
+                                value={gravity}
                                 color='info'
                                 min={0}
                                 max={0.5}
@@ -238,7 +238,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                         <Box>
                             <Typography variant='h6' align='center'>Node Scalar Size</Typography>
                             <Slider
-                                defaultValue={nodeSizeScale}
+                                value={nodeSizeScale}
                                 color='info'
                                 min={0}
                                 max={2}
