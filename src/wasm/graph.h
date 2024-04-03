@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 
 //#define N 11 // number of nodes
 extern igraph_t igraphGlobalGraph;      // igraph structure

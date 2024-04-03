@@ -370,41 +370,51 @@ val bfs(igraph_integer_t src) {
 
 
 val dfs(igraph_integer_t src) {
-    IGraphVectorInt order, dist;
+    IGraphVectorInt order, dist, order_out;
 
-    igraph_dfs(&igraphGlobalGraph, src, IGRAPH_OUT, false, order.vec(), NULL, NULL, dist.vec(), NULL, NULL, NULL);
-
-    int orderLength = order.size();
-    int maxDist = dist.max();
+    igraph_dfs(&igraphGlobalGraph, src, IGRAPH_OUT, false, order.vec(), order_out.vec(), NULL, dist.vec(), NULL, NULL, NULL);
 
     val result = val::object();
     val colorMap = val::object();
-    //val exported = val::object(); // for user export on frontend
-    std::string msg = "DFS order from [" + std::to_string(src) + "]\n";
+    val data = val::object();
 
-    for (long int i = 0; i < orderLength; ++i) {
-        std::string nodeId = std::to_string(order.at(i));
-        if (order.at(i) == -1) continue;
+    data.set("source", igraph_get_name(src));
 
-        msg += nodeId;
-        if (i < orderLength - 1) msg += " -> ";
-        // TODO: push nodeId to exported
-    }
+    val subtrees = val::array();
+    std::unordered_set<int> visited;
+    val tree = val::array();
+    int tree_index;
+    int subtree_index = 0;
 
-    // get scaled distance for colour map
     std::unordered_map<int, int> fm;
-    for (long int i = 0; i < dist.size(); ++i) {
-        int distance_from_src = dist.at(i);
-
-        if (distance_from_src >= 0) {
-            fm[i] = maxDist - distance_from_src + 1;
+    for (igraph_integer_t i = 0; i < order_out.size(); ++i) {
+        int node = order_out.at(i);
+        if (visited.find(node) == visited.end()) {
+            tree = val::array();
+            tree_index = 0;
+            for (igraph_integer_t j; j < order.size(); ++j) {
+                int orderNode = order.at(j);
+                std::cout << " " << std::endl; // TODO: removing this causes errors???
+                if (visited.find(orderNode) != visited.end()) continue;
+                visited.insert(orderNode);
+                fm[orderNode] = subtree_index;
+                tree.set(tree_index++, igraph_get_name(orderNode));
+                if (orderNode == node) break;
+            }
+            if (tree_index > 0) subtrees.set(subtree_index++, tree);
         }
     }
 
+    // map function over fm: value => (subtree_index - value)
+    for (auto& kv: fm) kv.second = subtree_index - kv.second + 1;
+
     frequenciesToColorMap(fm, colorMap);
+
     result.set("colorMap", colorMap);
-    result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_ERROR);
+    data.set("nodesFound", visited.size());
+    data.set("subtrees", subtrees);
+    result.set("data", data);
     return result;
 }
 
