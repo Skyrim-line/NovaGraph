@@ -18,7 +18,7 @@ const DijkstraSinglePath = ({ data }) => {
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
             <Box>
                 <Typography fontSize={15}>Path Length: {data.path.length}</Typography>
-                {data.weighted && <Typography>Path Weight: {data.totalWeight}</Typography>}
+                {data.weighted && <Typography fontSize={15}>Path Weight: {data.totalWeight}</Typography>}
             </Box>
             <Button variant='contained' color='info' onClick={handleClick}>More Details</Button>
             <Dialog open={open} onClose={handleClick} fullWidth>
