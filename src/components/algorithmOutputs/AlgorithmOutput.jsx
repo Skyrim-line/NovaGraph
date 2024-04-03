@@ -5,6 +5,7 @@ import DijkstraSingleSource from './DijkstraSingleSource';
 import Yen from './Yen';
 import BellmanFordSinglePath from './BellmanFordSinglePath';
 import BellmanFordSingleSource from './BellmanFordSingleSource';
+import BFS from './BFS';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -12,6 +13,7 @@ const components = {
     [Algorithm.YEN]: Yen,
     [Algorithm.BELLMAN_FORD_A_TO_B]: BellmanFordSinglePath,
     [Algorithm.BELLMAN_FORD_ALL]: BellmanFordSingleSource,
+    [Algorithm.BFS]: BFS,
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {

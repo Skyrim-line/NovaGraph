@@ -323,40 +323,48 @@ val bfs(igraph_integer_t src) {
 
     val result = val::object();
     val colorMap = val::object();
-    std::string msg = "BFS from [" + std::to_string(src) + "]:\n";
+    val data = val::object();
+
+    data.set("source", igraph_get_name(src));
 
     N = igraph_vcount(&igraphGlobalGraph);
     nodes_remaining = N;
     bool new_iteration = true;
     orderLength = order.size();
-    igraph_integer_t current_layer = 1;
+    igraph_integer_t current_layer = 0;
+    int nodes_found = 0;
 
+    val layersArray = val::array();
     std::unordered_map<int, int> fm;
+
+    val layerArray = val::array();
+    int layer_index;
     for (igraph_integer_t i = 0; i < orderLength; ++i) {
         if (new_iteration) {
-            msg += "Iteration " + std::to_string(current_layer) + ": [";
+            layerArray = val::array();
+            layer_index = 0;
             new_iteration = false;
         }
 
         int nodeId = order.at(i);
-        msg += std::to_string(nodeId);
+        layerArray.set(layer_index++, igraph_get_name(nodeId));
         fm[nodeId] = nodes_remaining;
+        nodes_found++;
 
-        int layer = layers.at(current_layer);    
+        int layer = layers.at(current_layer + 1);    
         if (i + 1 == layer || i + 1 == orderLength) {
-            msg += "]\n";
+            layersArray.set(current_layer++, layerArray);
             nodes_remaining = N - i - 1;
-            ++current_layer;
             new_iteration = true;
-        } else {
-            msg += ", ";
         }
     }
-
     frequenciesToColorMap(fm, colorMap);
     result.set("colorMap", colorMap);
-    result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_ERROR);
+
+    data.set("nodesFound", nodes_found);
+    data.set("layers", layersArray);
+    result.set("data", data);
     return result;
 }
 
