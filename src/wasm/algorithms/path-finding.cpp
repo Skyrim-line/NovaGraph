@@ -148,50 +148,55 @@ val dijkstra_source_to_all(igraph_integer_t src) {
 
 // Yen
 val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_integer_t k) {
-    IGraphVectorIntList paths;
-
-    igraph_get_k_shortest_paths(&igraphGlobalGraph, NULL, paths.vec(), NULL, k, src, tar, IGRAPH_OUT);
-    int pathsLength = paths.size();
-
+    IGraphVectorIntList paths, edges;
+    bool hasWeights = VECTOR(globalWeights) != NULL;
     val result = val::object();
     val colorMap = val::object();
-    std::string msg =
-        (pathsLength == 0) ? (
-            "No paths "
-        ) : (pathsLength < k) ? (
-            "Only " + std::to_string(pathsLength) +
-            " (from " + std::to_string(k) + ") shortest paths "
-        ) : (
-            std::to_string(k) + " shortest paths "
-        );
+    val data = val::object();
     
-    msg +=
-        "found from [" + std::to_string(src) + "] " +
-        "to [" + std::to_string(tar) + "] using Yen's algorithm";
+    igraph_get_k_shortest_paths(&igraphGlobalGraph, hasWeights ? &globalWeights : NULL, paths.vec(), edges.vec(), k, src, tar, IGRAPH_OUT);
 
-    for (long i = 0; i < pathsLength; ++i) {
+    data.set("source", igraph_get_name(src));
+    data.set("target", igraph_get_name(tar));
+    data.set("k", k);
+    data.set("weighted", hasWeights);
+    
+    val pathsArray = val::array();
+    for (long i = 0; i < paths.size(); ++i) {
         igraph_vector_int_t p = paths.at(i);
-        msg += "\nPath " + std::to_string(i+1) + ": ";
+        igraph_vector_int_t e = edges.at(i);
+        int path_weight = 0;
 
+        val pathDetails = val::object();
+        val pathArray = val::array();
         for (long j = 0; j < igraph_vector_int_size(&p); ++j) {
-            std::string nodeId = std::to_string(VECTOR(p)[j]);
+            int node = VECTOR(p)[j];
+            std::string nodeId = std::to_string(node);
 
             if (j > 0) {
                 std::string linkId = std::to_string(VECTOR(p)[j-1]) + '-' + nodeId;
                 colorMap.set(linkId, 1);
-                msg += " -> ";
+                
+                int weight_index = VECTOR(e)[j-1];
+                if (hasWeights) {
+                    path_weight += VECTOR(globalWeights)[weight_index];
+                }
             }
             colorMap.set(nodeId, 0.5);
-            msg += "[" + nodeId + "]";
+            pathArray.set(j, igraph_get_name(node));
         }
+        if (hasWeights) pathDetails.set("weight", path_weight);
+        pathDetails.set("path", pathArray);
+        pathsArray.set(i, pathDetails);
     }
 
     colorMap.set(src, 1);
     colorMap.set(tar, 1);
     result.set("colorMap", colorMap);
-    result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_DEFAULT);
 
+    data.set("paths", pathsArray);
+    result.set("data", data);
     return result;
 }
 
@@ -199,79 +204,112 @@ val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_inte
 // BELLMAN-FORD
 
 val bf_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
-    IGraphVectorInt vertices;
+    IGraphVectorInt vertices, edges;
+    bool hasWeights = VECTOR(globalWeights) != NULL;
+    int edges_count = 0;
+    int total_weight = 0;
 
-    // TODO: change final NULL to weights
-    igraph_get_shortest_path_bellman_ford(&igraphGlobalGraph, vertices.vec(), NULL, src, tar, NULL, IGRAPH_OUT);
+    igraph_get_shortest_path_bellman_ford(&igraphGlobalGraph, vertices.vec(), edges.vec(), src, tar, hasWeights ? &globalWeights : NULL, IGRAPH_OUT);
 
     val result = val::object();
     val colorMap = val::object();
-    std::string msg =
-        "Bellman-Ford Shortest Path from [" +
-        std::to_string(src) + "] to [" +
-        std::to_string(tar) + "]:\n";
+    val data = val::object();
+
+    data.set("source", igraph_get_name(src));
+    data.set("target", igraph_get_name(tar));
+    data.set("weighted", hasWeights);
     
+    val path = val::array();
     for (int i = 0; i < vertices.size(); ++i) {
-        std::string nodeId = std::to_string(vertices.at(i));
+        int node = vertices.at(i);
+        std::string nodeId = std::to_string(node);
+        colorMap.set(nodeId, 0.5);
 
         if (i > 0) {
             std::string linkId = std::to_string(vertices.at(i-1)) + '-' + nodeId;
             colorMap.set(linkId, 1);
-            msg += " -> ";
+            
+            val link = val::object();
+            link.set("from", igraph_get_name(vertices.at(i-1)));
+            link.set("to", igraph_get_name(node));
+
+            int weight_index = edges.at(edges_count++);
+            if (hasWeights) {
+                link.set("weight", VECTOR(globalWeights)[weight_index]);
+                total_weight += VECTOR(globalWeights)[weight_index];
+            };
+
+            path.set(i-1, link);
         }
-        colorMap.set(nodeId, 0.5);
-        msg += "[" + nodeId + "]";
     }
     colorMap.set(src, 1);
     colorMap.set(tar, 1);
 
     result.set("colorMap", colorMap);
-    result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_DEFAULT);
-
+    data.set("path", path);
+    if (hasWeights) data.set("totalWeight", total_weight);
+    result.set("data", data);
     return result;
 }
 
 val bf_source_to_all(igraph_integer_t src) {
-    IGraphVectorIntList paths;
+    IGraphVectorIntList paths, edges;
+    bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_get_shortest_paths_bellman_ford(&igraphGlobalGraph, paths.vec(), NULL, src, igraph_vss_all(), /* TODO*/ NULL, IGRAPH_OUT, NULL, NULL);
+    igraph_get_shortest_paths_bellman_ford(&igraphGlobalGraph, paths.vec(), edges.vec(), src, igraph_vss_all(), hasWeights ? &globalWeights : NULL, IGRAPH_OUT, NULL, NULL);
 
     val result = val::object();
     val colorMap = val::object();
-    std::string msg =
-        "Bellman-Ford Shortest Paths from ["
-        + std::to_string(src)
-        + "] to all:";
+    val data = val::object();
 
+    data.set("source", igraph_get_name(src));
+    data.set("weighted", hasWeights);
+
+    val pathsArray = val::array();
+    int paths_count = 0;
     std::unordered_map<int, int> fm;
     for (long i = 0; i < paths.size(); ++i) {
         igraph_vector_int_t p = paths.at(i);
+        igraph_vector_int_t e = edges.at(i);
+        int edges_count = 0;
+        int path_weight = 0;
+        val pathDetails = val::object();
+
         int pLength = igraph_vector_int_size(&p);
         igraph_integer_t dest = VECTOR(p)[pLength - 1];
 
-        if (dest == src) continue;
+        if (dest == src || pLength == 0) continue;
 
-        msg += "\n[" + std::to_string(dest) + "]: ";
-
+        pathDetails.set("target", igraph_get_name(dest));
+        val pathArray = val::array();
         for (long j = 0; j < pLength; ++j) {
-            int nodeId = VECTOR(p)[j];
+            int node = VECTOR(p)[j];
+            std::string nodeId = std::to_string(node);
 
             if (j > 0) {
-                std::string linkId = std::to_string(VECTOR(p)[j-1]) + '-' + std::to_string(nodeId);
-                colorMap.set(linkId, getFreq(colorMap, linkId) + 1);
-                msg += " -> ";
+                std::string linkId = std::to_string(VECTOR(p)[j-1]) + '-' + nodeId;
+                colorMap.set(linkId, 1);
+                
+                int weight_index = VECTOR(e)[edges_count++];
+                if (hasWeights) {
+                    path_weight += VECTOR(globalWeights)[weight_index];
+                }
             }
-            if (nodeId != src) fm[nodeId]++;
-            msg += "[" + std::to_string(nodeId) + "]";
+            if (node != src) fm[node]++;
+            pathArray.set(j, igraph_get_name(node));
         }
+        if (hasWeights) pathDetails.set("weight", path_weight);
+        pathDetails.set("path", pathArray);
+        pathsArray.set(paths_count++, pathDetails);
     }
     frequenciesToColorMap(fm, colorMap);
     colorMap.set(src, 1);
     result.set("colorMap", colorMap);
-    result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_ERROR);
 
+    data.set("paths", pathsArray);
+    result.set("data", data);
     return result;
 }
 
