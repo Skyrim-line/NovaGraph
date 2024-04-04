@@ -10,6 +10,12 @@ import DFS from './DFS';
 import RandomWalk from './RandomWalk';
 import SpanningTree from './SpanningTree';
 import BetweennessCentrality from './BetweennessCentrality';
+import ClosenessCentrality from './ClosenessCentrality';
+import DegreeCentrality from './DegreeCentrality';
+import EigenvectorCentrality from './EigenvectorCentrality';
+import HarmonicCentrality from './HarmonicCentrality';
+import Strength from './Strength';
+import PageRank from './PageRank';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -22,6 +28,12 @@ const components = {
     [Algorithm.RANDOM_WALK]: RandomWalk,
     [Algorithm.MINIMAL_SPANNING_TREE]: SpanningTree,
     [Algorithm.BETWEENNESS_CENTRALITY]: BetweennessCentrality,
+    [Algorithm.CLOSENESS_CENTRALITY]: ClosenessCentrality,
+    [Algorithm.DEGREE_CENTRALITY]: DegreeCentrality,
+    [Algorithm.EIGENVECTOR_CENTRALITY]: EigenvectorCentrality,
+    [Algorithm.HARMONIC_CENTRALITY]: HarmonicCentrality,
+    [Algorithm.STRENGTH_CENTRALITY]: Strength,
+    [Algorithm.PAGERANK]: PageRank,
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {
