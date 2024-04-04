@@ -9,6 +9,7 @@ import BFS from './BFS';
 import DFS from './DFS';
 import RandomWalk from './RandomWalk';
 import SpanningTree from './SpanningTree';
+import BetweennessCentrality from './BetweennessCentrality';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -20,6 +21,7 @@ const components = {
     [Algorithm.DFS]: DFS,
     [Algorithm.RANDOM_WALK]: RandomWalk,
     [Algorithm.MINIMAL_SPANNING_TREE]: SpanningTree,
+    [Algorithm.BETWEENNESS_CENTRALITY]: BetweennessCentrality,
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {

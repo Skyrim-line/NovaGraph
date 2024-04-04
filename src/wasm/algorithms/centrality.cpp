@@ -16,27 +16,43 @@ double scaleCentrality(double centrality, double max_centrality) {
 
 val betweenness_centrality(void) {
     IGraphVector betweenness;
+    bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_betweenness(&globalGraph, betweenness.vec(), igraph_vss_all(), true, NULL);
+    igraph_betweenness(&globalGraph, betweenness.vec(), igraph_vss_all(), true, hasWeights ? &globalWeights : NULL);
 
     double max_centrality = betweenness.max();
     val result = val::object();
     val sizeMap = val::object();
-    std::string msg = "Betweenness Centrality:\n";
+    val data = val::object();
 
+    int highestCentralityNode = 0;
+    double highestCentrality = 0;
+    val centralities = val::array();
     for (igraph_integer_t v = 0; v < igraph_vcount(&globalGraph); ++v) {
+        val c = val::object();
         double centrality = betweenness.at(v);
         double scaled_centrality = scaleCentrality(centrality, max_centrality);
 
-        sizeMap.set(v, scaled_centrality);
+        if (centrality > highestCentrality) {
+            highestCentrality = centrality;
+            highestCentralityNode = v;
+        }
 
         std::stringstream stream;
         stream << std::fixed << std::setprecision(2) << centrality;
-        msg += std::to_string(v) + "\t" + stream.str() + "\n";
+
+        sizeMap.set(v, scaled_centrality);
+        c.set("node", igraph_get_name(v));
+        c.set("centrality", stream.str());
+        centralities.set(v, c);
     }
+    data.set("maxCentralityNode", igraph_get_name(highestCentralityNode));
+    data.set("maxCentrality", highestCentrality);
+    data.set("centralities", centralities);
+
     result.set("sizeMap", sizeMap);
-    result.set("message", msg);
     result.set("mode", MODE_SIZE_SCALAR);
+    result.set("data", data);
     return result;
 }
 
