@@ -5,8 +5,10 @@ import { ErasBold, ErasMedium } from '../Eras';
 
 const ClosenessCentrality = ({ data }) => {
     const [open, setOpen] = useState(false);
+    const [centralities, setCentralities] = useState([]);
     useEffect(() => {
         console.log(data);
+        data && setCentralities([...data.centralities].sort((a, b) => b.centrality - a.centrality));
     }, [data]);
 
     const handleClick = () => {
@@ -17,8 +19,8 @@ const ClosenessCentrality = ({ data }) => {
         <ErasBold fontSize={20} mb={1}>Closeness Centrality</ErasBold>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
             <Box>
-                <Typography fontSize={15}>Maximum Centrality found: {data.maxCentrality}</Typography>
-                <Typography fontSize={15}>Node with centrality of {data.maxCentrality}: {data.maxCentralityNode}</Typography>
+                <Typography fontSize={15}>Maximum Centrality Node:</Typography>
+                <Typography fontSize={15}>[{centralities[0] && centralities[0].node}]</Typography>
             </Box>
             <Button variant='contained' color='info' onClick={handleClick}>More Details</Button>
             <Dialog open={open} onClose={handleClick} fullWidth>
@@ -36,9 +38,9 @@ const ClosenessCentrality = ({ data }) => {
                                 </RTableRow>
                             </TableHead>
                             <TableBody>
-                                {data && data.centralities.map((c, index) => (
+                                {centralities.map((c, index) => (
                                     <RTableRow key={index}>
-                                        <RTableCell>{index}</RTableCell>
+                                        <RTableCell>{c.id}</RTableCell>
                                         <RTableCell>{c.node}</RTableCell>
                                         <RTableCell>{c.centrality}</RTableCell>
                                     </RTableRow>

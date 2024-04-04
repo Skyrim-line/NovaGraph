@@ -5,8 +5,10 @@ import { ErasBold, ErasMedium } from '../Eras';
 
 const PageRank = ({ data }) => {
     const [open, setOpen] = useState(false);
+    const [centralities, setCentralities] = useState([]);
     useEffect(() => {
         console.log(data);
+        data && setCentralities([...data.centralities].sort((a, b) => b.centrality - a.centrality));
     }, [data]);
 
     const handleClick = () => {
@@ -17,8 +19,8 @@ const PageRank = ({ data }) => {
         <ErasBold fontSize={20} mb={1}>Google PageRank</ErasBold>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
             <Box>
-                <Typography fontSize={15}>Maximum Centrality found: {data.maxCentrality}</Typography>
-                <Typography fontSize={15}>Node with centrality of {data.maxCentrality}: {data.maxCentralityNode}</Typography>
+                <Typography fontSize={15}>Maximum Centrality Node:</Typography>
+                <Typography fontSize={15}>[{centralities[0] && centralities[0].node}]</Typography>
             </Box>
             <Typography fontSize={15}>Damping factor: {data.damping}</Typography>
             <Button variant='contained' color='info' onClick={handleClick}>More Details</Button>
@@ -37,9 +39,9 @@ const PageRank = ({ data }) => {
                                 </RTableRow>
                             </TableHead>
                             <TableBody>
-                                {data && data.centralities.map((c, index) => (
+                                {centralities.map((c, index) => (
                                     <RTableRow key={index}>
-                                        <RTableCell>{index}</RTableCell>
+                                        <RTableCell>{c.id}</RTableCell>
                                         <RTableCell>{c.node}</RTableCell>
                                         <RTableCell>{c.centrality}</RTableCell>
                                     </RTableRow>

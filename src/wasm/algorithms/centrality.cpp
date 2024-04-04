@@ -25,29 +25,21 @@ val betweenness_centrality(void) {
     val sizeMap = val::object();
     val data = val::object();
 
-    int highestCentralityNode = 0;
-    double highestCentrality = 0;
     val centralities = val::array();
     for (igraph_integer_t v = 0; v < igraph_vcount(&globalGraph); ++v) {
         val c = val::object();
         double centrality = betweenness.at(v);
         double scaled_centrality = scaleCentrality(centrality, max_centrality);
 
-        if (centrality > highestCentrality) {
-            highestCentrality = centrality;
-            highestCentralityNode = v;
-        }
-
         std::stringstream stream;
         stream << std::fixed << std::setprecision(2) << centrality;
 
         sizeMap.set(v, scaled_centrality);
+        c.set("id", v);
         c.set("node", igraph_get_name(v));
-        c.set("centrality", stream.str());
+        c.set("centrality", std::stod(stream.str()));
         centralities.set(v, c);
     }
-    data.set("maxCentralityNode", igraph_get_name(highestCentralityNode));
-    data.set("maxCentrality", highestCentrality);
     data.set("centralities", centralities);
 
     result.set("sizeMap", sizeMap);
@@ -62,33 +54,26 @@ val closeness_centrality(void) {
 
     igraph_closeness(&globalGraph, closeness.vec(), NULL, NULL, igraph_vss_all(), IGRAPH_OUT, hasWeights ? &globalWeights : NULL, true);
 
+    double max_centrality = closeness.max_nonan();
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
 
-    int highestCentralityNode = -1;
-    double highestCentrality = closeness.max_nonan();
     val centralities = val::array();
-
     for (igraph_integer_t v = 0; v < igraph_vcount(&globalGraph); ++v) {
         val c = val::object();
         double centrality = closeness.at(v);
-        double scaled_centrality = scaleCentrality(isnan(centrality) ? 0 : centrality, highestCentrality);
-
-        if (centrality == highestCentrality && highestCentralityNode == -1) {
-            highestCentralityNode = v;
-        }
+        double scaled_centrality = scaleCentrality(isnan(centrality) ? 0 : centrality, max_centrality);
 
         std::stringstream stream;
         stream << std::fixed << std::setprecision(2) << centrality;
 
         sizeMap.set(v, scaled_centrality);
+        c.set("id", v);
         c.set("node", igraph_get_name(v));
-        c.set("centrality", stream.str());
+        c.set("centrality", std::stod(stream.str()));
         centralities.set(v, c);
     }
-    data.set("maxCentralityNode", igraph_get_name(highestCentralityNode));
-    data.set("maxCentrality", highestCentrality);
     data.set("centralities", centralities);
 
     result.set("sizeMap", sizeMap);
@@ -102,33 +87,27 @@ val degree_centrality(void) {
 
     igraph_degree(&globalGraph, degrees.vec(), igraph_vss_all(), IGRAPH_OUT, IGRAPH_NO_LOOPS);
 
+    double max_centrality = degrees.max();
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
 
-    int highestCentralityNode = -1;
-    double highestCentrality = degrees.max();
     val centralities = val::array();
 
     for (igraph_integer_t v = 0; v < degrees.size(); ++v) {
         val c = val::object();
         double centrality = degrees.at(v);
-        double scaled_centrality = scaleCentrality(centrality, highestCentrality);
+        double scaled_centrality = scaleCentrality(centrality, max_centrality);
         
-        if (centrality == highestCentrality && highestCentralityNode == -1) {
-            highestCentralityNode = v;
-        }
-
         std::stringstream stream;
         stream << std::fixed << std::setprecision(2) << centrality;
 
         sizeMap.set(v, scaled_centrality);
+        c.set("id", v);
         c.set("node", igraph_get_name(v));
-        c.set("centrality", stream.str());
+        c.set("centrality", std::stod(stream.str()));
         centralities.set(v, c);
     }
-    data.set("maxCentralityNode", igraph_get_name(highestCentralityNode));
-    data.set("maxCentrality", highestCentrality);
     data.set("centralities", centralities);
 
     result.set("sizeMap", sizeMap);
@@ -144,38 +123,30 @@ val eigenvector_centrality(void) {
 
     igraph_eigenvector_centrality(&globalGraph, evs.vec(), &value, IGRAPH_DIRECTED, false, hasWeights ? &globalWeights : NULL, NULL);
 
+    double max_centrality = evs.max();
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
 
-    int highestCentralityNode = -1;
-    double highestCentrality = evs.max();
+    std::stringstream stream;
+    stream << std::fixed << std::setprecision(2) << value;
+    data.set("eigenvalue", std::stod(stream.str()));
+
     val centralities = val::array();
-
-    //std::cout << "Max eigenvector centrality: " << max_centrality << std::endl;
-    //std::string msg = "Eigenvector Centrality (scaled such that \"|max| = 1\"):\n";
-    //msg += "(eigenvalue = " + std::to_string(value) + ")\n";
-    data.set("eigenvalue", value);
-
     for (igraph_integer_t v = 0; v < evs.size(); ++v) {
         val c = val::object();
         double centrality = evs.at(v);
-        double scaled_centrality = scaleCentrality(centrality, highestCentrality);
+        double scaled_centrality = scaleCentrality(centrality, max_centrality);
         
-        if (centrality == highestCentrality && highestCentralityNode == -1) {
-            highestCentralityNode = v;
-        }
-
         std::stringstream stream;
         stream << std::fixed << std::setprecision(2) << centrality;
         
         sizeMap.set(v, scaled_centrality);
+        c.set("id", v);
         c.set("node", igraph_get_name(v));
-        c.set("centrality", stream.str());
+        c.set("centrality", std::stod(stream.str()));
         centralities.set(v, c);
     }
-    data.set("maxCentralityNode", igraph_get_name(highestCentralityNode));
-    data.set("maxCentrality", highestCentrality);
     data.set("centralities", centralities);
     
     result.set("sizeMap", sizeMap);
@@ -190,33 +161,26 @@ val harmonic_centrality(void) {
 
     igraph_harmonic_centrality(&globalGraph, scores.vec(), igraph_vss_all(), IGRAPH_OUT, hasWeights ? &globalWeights : NULL, true);
 
+    double max_centrality = scores.max();
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
-
-    int highestCentralityNode = -1;
-    double highestCentrality = scores.max();
 
     val centralities = val::array();
     for (igraph_integer_t v = 0; v < igraph_vcount(&globalGraph); ++v) {
         val c = val::object();
         double centrality = scores.at(v);
-        double scaled_centrality = scaleCentrality(isnan(centrality) ? 0 : centrality, highestCentrality);
-
-        if (centrality == highestCentrality && highestCentralityNode == -1) {
-            highestCentralityNode = v;
-        }
+        double scaled_centrality = scaleCentrality(isnan(centrality) ? 0 : centrality, max_centrality);
 
         std::stringstream stream;
         stream << std::fixed << std::setprecision(2) << centrality;
         
         sizeMap.set(v, scaled_centrality);
+        c.set("id", v);
         c.set("node", igraph_get_name(v));
-        c.set("centrality", stream.str());
+        c.set("centrality", std::stod(stream.str()));
         centralities.set(v, c);
     }
-    data.set("maxCentralityNode", igraph_get_name(highestCentralityNode));
-    data.set("maxCentrality", highestCentrality);
     data.set("centralities", centralities);
 
     result.set("sizeMap", sizeMap);
@@ -231,33 +195,26 @@ val strength(void) {
 
     igraph_strength(&globalGraph, strengths.vec(), igraph_vss_all(), IGRAPH_OUT, IGRAPH_NO_LOOPS, hasWeights ? &globalWeights : NULL);
 
+    double max_centrality = strengths.max();
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
 
-    int highestCentralityNode = -1;
-    double highestCentrality = strengths.max();
     val centralities = val::array();
-    
     for (igraph_integer_t v = 0; v < strengths.size(); ++v) {
         val c = val::object();
         double centrality = strengths.at(v);
-        double scaled_centrality = scaleCentrality(centrality, highestCentrality);
+        double scaled_centrality = scaleCentrality(centrality, max_centrality);
         
-        if (centrality == highestCentrality && highestCentralityNode == -1) {
-            highestCentralityNode = v;
-        }
-
         std::stringstream stream;
         stream << std::fixed << std::setprecision(2) << centrality;
         
         sizeMap.set(v, scaled_centrality);
+        c.set("id", v);
         c.set("node", igraph_get_name(v));
-        c.set("centrality", stream.str());
+        c.set("centrality", std::stod(stream.str()));
         centralities.set(v, c);
     }
-    data.set("maxCentralityNode", igraph_get_name(highestCentralityNode));
-    data.set("maxCentrality", highestCentrality);
     data.set("centralities", centralities);
 
     result.set("sizeMap", sizeMap);
@@ -276,34 +233,28 @@ val pagerank(igraph_real_t damping) {
 
     igraph_pagerank(&globalGraph, IGRAPH_PAGERANK_ALGO_PRPACK, vec.vec(), &value, igraph_vss_all(), IGRAPH_DIRECTED, damping, hasWeights ? &globalWeights : NULL, NULL);
 
+    double max_centrality = vec.max();
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
 
     data.set("damping", stream.str());
 
-    int highestCentralityNode = -1;
-    double highestCentrality = vec.max();
     val centralities = val::array();
     for (igraph_integer_t v = 0; v < vec.size(); ++v) {
         val c = val::object();
         double centrality = vec.at(v);
-        double scaled_centrality = scaleCentrality(centrality, highestCentrality);
+        double scaled_centrality = scaleCentrality(centrality, max_centrality);
         
-        if (centrality == highestCentrality && highestCentralityNode == -1) {
-            highestCentralityNode = v;
-        }
-
         std::stringstream stream;
         stream << std::fixed << std::setprecision(2) << centrality;
 
         sizeMap.set(v, scaled_centrality);
+        c.set("id", v);
         c.set("node", igraph_get_name(v));
-        c.set("centrality", stream.str());
+        c.set("centrality", std::stod(stream.str()));
         centralities.set(v, c);
     }
-    data.set("maxCentralityNode", igraph_get_name(highestCentralityNode));
-    data.set("maxCentrality", highestCentrality);
     data.set("centralities", centralities);
 
     result.set("sizeMap", sizeMap);
