@@ -420,72 +420,94 @@ val dfs(igraph_integer_t src) {
 
 
 val randomWalk(igraph_integer_t start, int steps) {
-    IGraphVectorInt vertices;
+    IGraphVectorInt vertices, edges;
 
     igraph_random_walk(&igraphGlobalGraph, NULL, vertices.vec(), NULL, start, IGRAPH_OUT, steps, IGRAPH_RANDOM_WALK_STUCK_RETURN);
 
     val result = val::object();
     val colorMap = val::object();
-    std::string msg =
-        "Random Walk from [" +
-        std::to_string(start) + "] with " +
-        std::to_string(steps) + " steps:\n";
+    val data = val::object();
 
+    data.set("source", igraph_get_name(start));
+    data.set("steps", steps);
+
+    val path = val::array();
     std::unordered_map<int, int> fm;
+    int highestFrequency = 0;
+    int highestFrequencyNode = 0;
     for (int i = 0; i < vertices.size(); ++i) {
         int node = vertices.at(i);
         fm[node]++;
+        if (fm[node] > highestFrequency) {
+            highestFrequency = fm[node];
+            highestFrequencyNode = node;
+        }
 
         std::string nodeId = std::to_string(node);
 
         if (i > 0) {
             std::string linkId = std::to_string(vertices.at(i-1)) + '-' + nodeId;
             colorMap.set(linkId, 1);
-            msg += " -> ";
+            
+            val link = val::object();
+            link.set("from", igraph_get_name(vertices.at(i-1)));
+            link.set("to", igraph_get_name(node));
+            path.set(i-1, link);
         }
-        msg += "[" + nodeId + "]";
     }
 
+    data.set("maxFrequencyNode", igraph_get_name(highestFrequencyNode));
+    data.set("maxFrequency", highestFrequency);
+    
     frequenciesToColorMap(fm, colorMap);
     result.set("colorMap", colorMap);
-    result.set("message", msg);
     result.set("mode", MODE_COLOR_SHADE_ERROR);
+    data.set("path", path);
+    result.set("data", data);
     return result;
 }
 
 
 val min_spanning_tree(void) {
-    igraph_t mst;
-
-    // TODO: check for weights
-    igraph_minimum_spanning_tree_unweighted(&igraphGlobalGraph, &mst);
-
     IGraphVectorInt edges;
-    igraph_get_edgelist(&mst, edges.vec(), 0);
+    bool hasWeights = VECTOR(globalWeights) != NULL;
+
+    igraph_minimum_spanning_tree(&igraphGlobalGraph, edges.vec(), hasWeights ? &globalWeights : NULL);
 
     val result = val::object();
     val colorMap = val::object();
-    std::string msg = "";
-    //val exported = val::array(); (or return entire tree as json?)
+    val data = val::object();
 
-    for (int i = 0; i < igraph_ecount(&mst); ++i) {
-        //val link = val::object();
-        int n1 = edges.at(2 * i);
-        int n2 = edges.at(2 * i + 1);
-        std::string linkId = std::to_string(n1) + '-' + std::to_string(n2);
-        
-        colorMap.set(n1, 1);
-        colorMap.set(n2, 1);
+    data.set("weighted", hasWeights);
+    data.set("maxEdges", igraph_ecount(&igraphGlobalGraph));
+
+    int total_weight = 0;
+    val edgesArray = val::array();
+    for (int i = 0; i < edges.size(); ++i) {
+        val link = val::object();
+        int edge = edges.at(i);
+        igraph_integer_t from, to;
+        igraph_edge(&igraphGlobalGraph, edge, &from, &to);
+
+        std::string linkId = std::to_string(from) + '-' + std::to_string(to);
+        colorMap.set(from, 0.5);
+        colorMap.set(to, 0.5);
         colorMap.set(linkId, 1);
 
-        //link.set("from", VECTOR(edges)[2 * i]);
-        //link.set("to", VECTOR(edges)[2 * i + 1]);
-        //exported.set(i, v);
-    }
-    result.set("colorMap", colorMap);
-    result.set("message", msg);
-    result.set("mode", MODE_COLOR_SHADE_ERROR); // TODO: test with larger disconnection?
+        link.set("from", igraph_get_name(from));
+        link.set("to", igraph_get_name(to));
+        if (hasWeights) {
+            link.set("weight", VECTOR(globalWeights)[edge]);
+            total_weight += VECTOR(globalWeights)[edge];
+        }
 
-    igraph_destroy(&mst);
+        edgesArray.set(i, link);
+    }
+    if (hasWeights) data.set("totalWeight", total_weight);
+
+    result.set("colorMap", colorMap);
+    result.set("mode", MODE_COLOR_SHADE_ERROR);
+    data.set("edges", edgesArray);
+    result.set("data", data);
     return result;
 }
