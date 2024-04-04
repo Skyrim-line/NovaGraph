@@ -1,8 +1,6 @@
 #include "../graph.h"
 #include <iostream>
 #include <string>
-#include <sstream>
-#include <iomanip>
 
 // For rendering on the frontend
 #define MIN_SCALE 5

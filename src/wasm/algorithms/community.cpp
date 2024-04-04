@@ -2,89 +2,108 @@
 #include <iostream>
 #include <string>
 
-/* Community Algorithms future change:
-    - instead of a table where each vertex is a row,
-    - have a table where each community is a row and vertices are shown in an array
-*/ 
-
 val louvain(igraph_real_t resolution) {
     IGraphVectorInt membership;
     IGraphVector modularity;
     igraph_real_t modularity_metric;
+    std::stringstream stream;
 
     igraph_community_multilevel(&globalGraph, NULL /*todo*/, resolution, membership.vec(), NULL, modularity.vec());
-    igraph_modularity(&globalGraph, membership.vec(), NULL /*todo*/, resolution, IGRAPH_UNDIRECTED, &modularity_metric);
+    igraph_modularity(&globalGraph, membership.vec(), NULL /*todo*/, resolution, IGRAPH_DIRECTED, &modularity_metric);
 
     val result = val::object();
     val colorMap = val::object();
-    std::string msg = "Louvain Community Detection Algorithm\n";
+    val data = val::object();
 
-    msg += "Modularity: " + std::to_string(modularity_metric) + "\n";
-    msg += "Number of communities: " + std::to_string(membership.max() + 1) + "\n";
-
-    msg += "Vertex ID\tCommunity ID\n";
+    stream << std::fixed << std::setprecision(2) << modularity_metric;
+    data.set("modularity", std::stod(stream.str()));
+    
+    std::map<int, std::vector<std::string>> communityMap;
     for (igraph_integer_t v = 0; v < membership.size(); ++v) {
         igraph_integer_t community = membership.at(v);
         colorMap.set(v, community);
-        msg += std::to_string(v) + "\t\t" + std::to_string(community) + "\n";
+        communityMap[community].push_back(igraph_get_name(v));
+    }
+
+    val communities = val::array();
+    for (const auto& [community, vertices] : communityMap) {
+        communities.set(community, val::array(vertices));
     }
 
     result.set("colorMap", colorMap);
-    result.set("message", msg);
     result.set("mode", MODE_RAINBOW);
+    data.set("communities", communities);
+    result.set("data", data);
     return result;
 }
 
 val leiden(igraph_real_t resolution) {
     igraph_integer_t n_iterations = 10; // TODO: Might need to modify this value in future?
     IGraphVectorInt membership;
-    igraph_integer_t nb_clusters;
-    igraph_real_t quality;
+    igraph_real_t quality, modularity_metric;
+    std::stringstream stream, stream2;
 
-    igraph_community_leiden(&globalGraph, NULL /*todo*/, NULL, resolution, 0.01, false, n_iterations, membership.vec(), &nb_clusters, &quality);
+    igraph_community_leiden(&globalGraph, NULL /*todo*/, NULL, resolution, 0.01, false, n_iterations, membership.vec(), NULL, &quality);
+    igraph_modularity(&globalGraph, membership.vec(), NULL /*todo*/, resolution, IGRAPH_DIRECTED, &modularity_metric);
 
     val result = val::object();
     val colorMap = val::object();
-    std::string msg = "Leiden Community Detection Algorithm\n";
+    val data = val::object();
 
-    msg += "Number of communities: " + std::to_string(nb_clusters) + "\n";
-    msg += "Partition quality: " + std::to_string(quality) + "\n";
+    stream << std::fixed << std::setprecision(2) << modularity_metric;
+    data.set("modularity", std::stod(stream.str()));
 
-    msg += "Vertex ID\tCommunity ID\n";
+    stream2 << std::fixed << std::setprecision(2) << quality;
+    data.set("quality", std::stod(stream2.str()));
+
+    std::map<int, std::vector<std::string>> communityMap;
     for (igraph_integer_t v = 0; v < membership.size(); ++v) {
         igraph_integer_t community = membership.at(v);
         colorMap.set(v, community);
-        msg += std::to_string(v) + "\t\t" + std::to_string(community) + "\n";
+        communityMap[community].push_back(igraph_get_name(v));
+    }
+
+    val communities = val::array();
+    for (const auto& [community, vertices] : communityMap) {
+        communities.set(community, val::array(vertices));
     }
 
     result.set("colorMap", colorMap);
-    result.set("message", msg);
     result.set("mode", MODE_RAINBOW);
+    data.set("communities", communities);
+    result.set("data", data);
     return result;
 }
 
 val fast_greedy(void) {
     IGraphVectorInt membership;
     IGraphVector modularity;
+    std::stringstream stream;
 
     igraph_community_fastgreedy(&globalGraph, NULL /*todo: weights*/, NULL, modularity.vec(), membership.vec());
 
     val result = val::object();
     val colorMap = val::object();
-    std::string msg = "Community Detection Greedy Algorithm\n";
+    val data = val::object();
 
-    msg += "Modularity: " + std::to_string(modularity.max()) + "\n";
-    msg += "Number of communities: " + std::to_string(membership.max() + 1) + "\n";
+    stream << std::fixed << std::setprecision(2) << modularity.max();
+    data.set("modularity", std::stod(stream.str()));
 
-    msg += "Vertex ID\tCommunity ID\n";
+    std::map<int, std::vector<std::string>> communityMap;
     for (igraph_integer_t v = 0; v < membership.size(); ++v) {
         igraph_integer_t community = membership.at(v);
         colorMap.set(v, community);
-        msg += std::to_string(v) + "\t\t" + std::to_string(community) + "\n";
+        communityMap[community].push_back(igraph_get_name(v));
+    }
+
+    val communities = val::array();
+    for (const auto& [community, vertices] : communityMap) {
+        communities.set(community, val::array(vertices));
     }
     
     result.set("colorMap", colorMap);
-    result.set("message", msg);
     result.set("mode", MODE_RAINBOW);
+    data.set("communities", communities);
+    result.set("data", data);
     return result;
 }

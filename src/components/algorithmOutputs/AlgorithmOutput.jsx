@@ -16,6 +16,9 @@ import EigenvectorCentrality from './EigenvectorCentrality';
 import HarmonicCentrality from './HarmonicCentrality';
 import Strength from './Strength';
 import PageRank from './PageRank';
+import Louvain from './Louvain';
+import Leiden from './Leiden';
+import FastGreedy from './FastGreedy';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -34,6 +37,9 @@ const components = {
     [Algorithm.HARMONIC_CENTRALITY]: HarmonicCentrality,
     [Algorithm.STRENGTH_CENTRALITY]: Strength,
     [Algorithm.PAGERANK]: PageRank,
+    [Algorithm.LOUVAIN]: Louvain,
+    [Algorithm.LEIDEN]: Leiden,
+    [Algorithm.FAST_GREEDY]: FastGreedy,
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {

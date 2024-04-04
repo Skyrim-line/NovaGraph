@@ -6,6 +6,8 @@
 #include <emscripten/bind.h>
 #include <vector>
 #include <string>
+#include <sstream>
+#include <iomanip>
 #include <unordered_map>
 #include <unordered_set>
 
