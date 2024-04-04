@@ -122,14 +122,14 @@ void process_edges_csv(const std::string &edgesFilename, std::unordered_map<std:
     }
 
     // remove existing graph and create new
-    igraph_destroy(&igraphGlobalGraph);
-    igraph_create(&igraphGlobalGraph, edges.vec(), nodeMap.size(), directed);   
+    igraph_destroy(&globalGraph);
+    igraph_create(&globalGraph, edges.vec(), nodeMap.size(), directed);   
 
     // add node names as attributes
     std::cout << "reading node names..." << std::endl;
 
     for (auto &pair : nodeMap) {
-        SETVAS(&igraphGlobalGraph, "name", pair.second, pair.first.c_str());
+        SETVAS(&globalGraph, "name", pair.second, pair.first.c_str());
     }
 
     // store weights in global variable

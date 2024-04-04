@@ -67,12 +67,12 @@ bool process_json(const std::string& filename) {
     }
 
     // remove existing graph and create a new one
-    igraph_destroy(&igraphGlobalGraph);
-    igraph_create(&igraphGlobalGraph, igraph_edges.vec(), nodeMap.size(), directed.GetBool());
+    igraph_destroy(&globalGraph);
+    igraph_create(&globalGraph, igraph_edges.vec(), nodeMap.size(), directed.GetBool());
 
     // add node names as attributes
     for (auto &pair : nodeMap) {
-        SETVAS(&igraphGlobalGraph, "name", pair.second, pair.first.c_str());
+        SETVAS(&globalGraph, "name", pair.second, pair.first.c_str());
     }
 
     // store weights in global variable

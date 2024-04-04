@@ -8,8 +8,8 @@ val graph_from_gml(const std::string& filename) {
     igraph_read_graph_gml(&graph, file);
     fclose(file);
 
-    igraph_destroy(&igraphGlobalGraph);
-    igraph_init_copy(&igraphGlobalGraph, &graph);
+    igraph_destroy(&globalGraph);
+    igraph_init_copy(&globalGraph, &graph);
 
     val result = val::object();
     result.set("nodes", graph_nodes());

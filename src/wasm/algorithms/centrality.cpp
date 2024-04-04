@@ -17,14 +17,14 @@ double scaleCentrality(double centrality, double max_centrality) {
 val betweenness_centrality(void) {
     IGraphVector betweenness;
 
-    igraph_betweenness(&igraphGlobalGraph, betweenness.vec(), igraph_vss_all(), true, NULL);
+    igraph_betweenness(&globalGraph, betweenness.vec(), igraph_vss_all(), true, NULL);
 
     double max_centrality = betweenness.max();
     val result = val::object();
     val sizeMap = val::object();
     std::string msg = "Betweenness Centrality:\n";
 
-    for (igraph_integer_t v = 0; v < igraph_vcount(&igraphGlobalGraph); ++v) {
+    for (igraph_integer_t v = 0; v < igraph_vcount(&globalGraph); ++v) {
         double centrality = betweenness.at(v);
         double scaled_centrality = scaleCentrality(centrality, max_centrality);
 
@@ -43,7 +43,7 @@ val betweenness_centrality(void) {
 val closeness_centrality(void) {
     IGraphVector closeness;
 
-    igraph_closeness(&igraphGlobalGraph, closeness.vec(), NULL, NULL, igraph_vss_all(), IGRAPH_OUT, NULL, true);
+    igraph_closeness(&globalGraph, closeness.vec(), NULL, NULL, igraph_vss_all(), IGRAPH_OUT, NULL, true);
 
     double max_centrality = closeness.max_nonan();
     std::cout << "Max closeness centrality: " << max_centrality << std::endl;
@@ -51,7 +51,7 @@ val closeness_centrality(void) {
     val sizeMap = val::object();
     std::string msg = "Closeness Centrality:\n";
 
-    for (igraph_integer_t v = 0; v < igraph_vcount(&igraphGlobalGraph); ++v) {
+    for (igraph_integer_t v = 0; v < igraph_vcount(&globalGraph); ++v) {
         double centrality = closeness.at(v);
         double scaled_centrality = scaleCentrality(isnan(centrality) ? 0 : centrality, max_centrality);
 
@@ -70,7 +70,7 @@ val closeness_centrality(void) {
 val degree_centrality(void) {
     IGraphVectorInt degrees;
 
-    igraph_degree(&igraphGlobalGraph, degrees.vec(), igraph_vss_all(), IGRAPH_OUT, IGRAPH_NO_LOOPS);
+    igraph_degree(&globalGraph, degrees.vec(), igraph_vss_all(), IGRAPH_OUT, IGRAPH_NO_LOOPS);
 
     double max_centrality = degrees.max();
     val result = val::object();
@@ -98,7 +98,7 @@ val eigenvector_centrality(void) {
     IGraphVector evs;
     igraph_real_t value;
 
-    igraph_eigenvector_centrality(&igraphGlobalGraph, evs.vec(), &value, IGRAPH_DIRECTED, false, NULL /*todo weights*/, NULL);
+    igraph_eigenvector_centrality(&globalGraph, evs.vec(), &value, IGRAPH_DIRECTED, false, NULL /*todo weights*/, NULL);
 
     double max_centrality = evs.max();
     std::cout << "Max eigenvector centrality: " << max_centrality << std::endl;
@@ -126,14 +126,14 @@ val eigenvector_centrality(void) {
 val harmonic_centrality(void) {
     IGraphVector scores;
 
-    igraph_harmonic_centrality(&igraphGlobalGraph, scores.vec(), igraph_vss_all(), IGRAPH_OUT, NULL /*TODO: weights*/, true);
+    igraph_harmonic_centrality(&globalGraph, scores.vec(), igraph_vss_all(), IGRAPH_OUT, NULL /*TODO: weights*/, true);
 
     double max_centrality = scores.max();
     val result = val::object();
     val sizeMap = val::object();
     std::string msg = "Harmonic Centrality:\n";
 
-    for (igraph_integer_t v = 0; v < igraph_vcount(&igraphGlobalGraph); ++v) {
+    for (igraph_integer_t v = 0; v < igraph_vcount(&globalGraph); ++v) {
         double centrality = scores.at(v);
         double scaled_centrality = scaleCentrality(isnan(centrality) ? 0 : centrality, max_centrality);
 
@@ -154,7 +154,7 @@ val harmonic_centrality(void) {
 val strength(void) {
     IGraphVector strengths;
 
-    igraph_strength(&igraphGlobalGraph, strengths.vec(), igraph_vss_all(), IGRAPH_OUT, IGRAPH_NO_LOOPS, NULL /*TODO: weights*/);
+    igraph_strength(&globalGraph, strengths.vec(), igraph_vss_all(), IGRAPH_OUT, IGRAPH_NO_LOOPS, NULL /*TODO: weights*/);
 
     double max_centrality = strengths.max();
     val result = val::object();
@@ -184,7 +184,7 @@ val pagerank(igraph_real_t damping) {
     std::stringstream stream;
     stream << std::fixed << std::setprecision(2) << damping;
 
-    igraph_pagerank(&igraphGlobalGraph, IGRAPH_PAGERANK_ALGO_PRPACK, vec.vec(), &value, igraph_vss_all(), IGRAPH_DIRECTED, damping, NULL /*TODO*/, NULL);
+    igraph_pagerank(&globalGraph, IGRAPH_PAGERANK_ALGO_PRPACK, vec.vec(), &value, igraph_vss_all(), IGRAPH_DIRECTED, damping, NULL /*TODO*/, NULL);
 
     double max_centrality = vec.max();
     val result = val::object();

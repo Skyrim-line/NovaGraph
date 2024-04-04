@@ -12,8 +12,8 @@ val louvain(igraph_real_t resolution) {
     IGraphVector modularity;
     igraph_real_t modularity_metric;
 
-    igraph_community_multilevel(&igraphGlobalGraph, NULL /*todo*/, resolution, membership.vec(), NULL, modularity.vec());
-    igraph_modularity(&igraphGlobalGraph, membership.vec(), NULL /*todo*/, resolution, IGRAPH_UNDIRECTED, &modularity_metric);
+    igraph_community_multilevel(&globalGraph, NULL /*todo*/, resolution, membership.vec(), NULL, modularity.vec());
+    igraph_modularity(&globalGraph, membership.vec(), NULL /*todo*/, resolution, IGRAPH_UNDIRECTED, &modularity_metric);
 
     val result = val::object();
     val colorMap = val::object();
@@ -41,7 +41,7 @@ val leiden(igraph_real_t resolution) {
     igraph_integer_t nb_clusters;
     igraph_real_t quality;
 
-    igraph_community_leiden(&igraphGlobalGraph, NULL /*todo*/, NULL, resolution, 0.01, false, n_iterations, membership.vec(), &nb_clusters, &quality);
+    igraph_community_leiden(&globalGraph, NULL /*todo*/, NULL, resolution, 0.01, false, n_iterations, membership.vec(), &nb_clusters, &quality);
 
     val result = val::object();
     val colorMap = val::object();
@@ -67,7 +67,7 @@ val fast_greedy(void) {
     IGraphVectorInt membership;
     IGraphVector modularity;
 
-    igraph_community_fastgreedy(&igraphGlobalGraph, NULL /*todo: weights*/, NULL, modularity.vec(), membership.vec());
+    igraph_community_fastgreedy(&globalGraph, NULL /*todo: weights*/, NULL, modularity.vec(), membership.vec());
 
     val result = val::object();
     val colorMap = val::object();

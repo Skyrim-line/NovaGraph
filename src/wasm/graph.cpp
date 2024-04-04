@@ -5,7 +5,7 @@
 
 using namespace emscripten;
 
-igraph_t igraphGlobalGraph;
+igraph_t globalGraph;
 igraph_vector_t globalWeights;
 
 
@@ -13,32 +13,32 @@ igraph_vector_t globalWeights;
 val initGraph(void) {
     igraph_set_attribute_table(&igraph_cattribute_table);
 
-    igraph_empty(&igraphGlobalGraph, 10, IGRAPH_UNDIRECTED);
+    igraph_empty(&globalGraph, 10, IGRAPH_UNDIRECTED);
 
     // Use European cities as nodes
-    SETVAS(&igraphGlobalGraph, "name", 0, "London");
-    SETVAS(&igraphGlobalGraph, "name", 1, "Paris");
-    SETVAS(&igraphGlobalGraph, "name", 2, "Berlin");
-    SETVAS(&igraphGlobalGraph, "name", 3, "Rome");
-    SETVAS(&igraphGlobalGraph, "name", 4, "Madrid");
-    SETVAS(&igraphGlobalGraph, "name", 5, "Athens");
-    SETVAS(&igraphGlobalGraph, "name", 6, "Amsterdam");
-    SETVAS(&igraphGlobalGraph, "name", 7, "Brussels");
-    SETVAS(&igraphGlobalGraph, "name", 8, "Lisbon");
-    SETVAS(&igraphGlobalGraph, "name", 9, "Prague");
+    SETVAS(&globalGraph, "name", 0, "London");
+    SETVAS(&globalGraph, "name", 1, "Paris");
+    SETVAS(&globalGraph, "name", 2, "Berlin");
+    SETVAS(&globalGraph, "name", 3, "Rome");
+    SETVAS(&globalGraph, "name", 4, "Madrid");
+    SETVAS(&globalGraph, "name", 5, "Athens");
+    SETVAS(&globalGraph, "name", 6, "Amsterdam");
+    SETVAS(&globalGraph, "name", 7, "Brussels");
+    SETVAS(&globalGraph, "name", 8, "Lisbon");
+    SETVAS(&globalGraph, "name", 9, "Prague");
 
     // Create some edges to connect these cities in a network
-    igraph_add_edge(&igraphGlobalGraph, 0, 1);
-    igraph_add_edge(&igraphGlobalGraph, 0, 6);
-    igraph_add_edge(&igraphGlobalGraph, 1, 7);
-    igraph_add_edge(&igraphGlobalGraph, 1, 4);
-    igraph_add_edge(&igraphGlobalGraph, 1, 3);
-    igraph_add_edge(&igraphGlobalGraph, 1, 2);
-    igraph_add_edge(&igraphGlobalGraph, 2, 6);
-    igraph_add_edge(&igraphGlobalGraph, 2, 9);
-    igraph_add_edge(&igraphGlobalGraph, 4, 8);
-    igraph_add_edge(&igraphGlobalGraph, 5, 9);
-    igraph_add_edge(&igraphGlobalGraph, 6, 7);
+    igraph_add_edge(&globalGraph, 0, 1);
+    igraph_add_edge(&globalGraph, 0, 6);
+    igraph_add_edge(&globalGraph, 1, 7);
+    igraph_add_edge(&globalGraph, 1, 4);
+    igraph_add_edge(&globalGraph, 1, 3);
+    igraph_add_edge(&globalGraph, 1, 2);
+    igraph_add_edge(&globalGraph, 2, 6);
+    igraph_add_edge(&globalGraph, 2, 9);
+    igraph_add_edge(&globalGraph, 4, 8);
+    igraph_add_edge(&globalGraph, 5, 9);
+    igraph_add_edge(&globalGraph, 6, 7);
 
     val result = val::object();
     result.set("nodes", graph_nodes());
@@ -47,7 +47,7 @@ val initGraph(void) {
 }
 
 void cleanupGraph(void) {
-    igraph_destroy(&igraphGlobalGraph);
+    igraph_destroy(&globalGraph);
     igraph_vector_destroy(&globalWeights);
 }
 

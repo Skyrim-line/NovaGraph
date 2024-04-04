@@ -8,7 +8,7 @@ val vertices_are_connected(igraph_integer_t src, igraph_integer_t tar) {
     val colorMap = val::object();
     std::string msg = "[" + std::to_string(src) + "] and [" + std::to_string(tar) + "] are ";
     igraph_bool_t res;
-    igraph_are_connected(&igraphGlobalGraph, src, tar, &res);
+    igraph_are_connected(&globalGraph, src, tar, &res);
     if (res) {
         msg += "neighbours!";
         colorMap.set(src, 1);
@@ -35,7 +35,7 @@ val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     int edges_count = 0;
     int total_weight = 0;
 
-    igraph_get_shortest_path_dijkstra(&igraphGlobalGraph, vertices.vec(), edges.vec(), src, tar, hasWeights ? &globalWeights : NULL, IGRAPH_OUT);
+    igraph_get_shortest_path_dijkstra(&globalGraph, vertices.vec(), edges.vec(), src, tar, hasWeights ? &globalWeights : NULL, IGRAPH_OUT);
 
     val result = val::object();
     val colorMap = val::object();
@@ -83,7 +83,7 @@ val dijkstra_source_to_all(igraph_integer_t src) {
     IGraphVectorIntList paths, edges;
     bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_get_shortest_paths_dijkstra(&igraphGlobalGraph, paths.vec(), edges.vec(), src, igraph_vss_all(), hasWeights ? &globalWeights : NULL, IGRAPH_OUT, NULL, NULL);
+    igraph_get_shortest_paths_dijkstra(&globalGraph, paths.vec(), edges.vec(), src, igraph_vss_all(), hasWeights ? &globalWeights : NULL, IGRAPH_OUT, NULL, NULL);
 
     val result = val::object();
     val colorMap = val::object();
@@ -154,7 +154,7 @@ val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_inte
     val colorMap = val::object();
     val data = val::object();
     
-    igraph_get_k_shortest_paths(&igraphGlobalGraph, hasWeights ? &globalWeights : NULL, paths.vec(), edges.vec(), k, src, tar, IGRAPH_OUT);
+    igraph_get_k_shortest_paths(&globalGraph, hasWeights ? &globalWeights : NULL, paths.vec(), edges.vec(), k, src, tar, IGRAPH_OUT);
 
     data.set("source", igraph_get_name(src));
     data.set("target", igraph_get_name(tar));
@@ -209,7 +209,7 @@ val bf_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     int edges_count = 0;
     int total_weight = 0;
 
-    igraph_get_shortest_path_bellman_ford(&igraphGlobalGraph, vertices.vec(), edges.vec(), src, tar, hasWeights ? &globalWeights : NULL, IGRAPH_OUT);
+    igraph_get_shortest_path_bellman_ford(&globalGraph, vertices.vec(), edges.vec(), src, tar, hasWeights ? &globalWeights : NULL, IGRAPH_OUT);
 
     val result = val::object();
     val colorMap = val::object();
@@ -257,7 +257,7 @@ val bf_source_to_all(igraph_integer_t src) {
     IGraphVectorIntList paths, edges;
     bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_get_shortest_paths_bellman_ford(&igraphGlobalGraph, paths.vec(), edges.vec(), src, igraph_vss_all(), hasWeights ? &globalWeights : NULL, IGRAPH_OUT, NULL, NULL);
+    igraph_get_shortest_paths_bellman_ford(&globalGraph, paths.vec(), edges.vec(), src, igraph_vss_all(), hasWeights ? &globalWeights : NULL, IGRAPH_OUT, NULL, NULL);
 
     val result = val::object();
     val colorMap = val::object();
@@ -319,7 +319,7 @@ val bfs(igraph_integer_t src) {
     IGraphVectorInt order, layers;
     int N, nodes_remaining, orderLength;
 
-    igraph_bfs_simple(&igraphGlobalGraph, src, IGRAPH_OUT, order.vec(), layers.vec(), NULL);
+    igraph_bfs_simple(&globalGraph, src, IGRAPH_OUT, order.vec(), layers.vec(), NULL);
 
     val result = val::object();
     val colorMap = val::object();
@@ -327,7 +327,7 @@ val bfs(igraph_integer_t src) {
 
     data.set("source", igraph_get_name(src));
 
-    N = igraph_vcount(&igraphGlobalGraph);
+    N = igraph_vcount(&globalGraph);
     nodes_remaining = N;
     bool new_iteration = true;
     orderLength = order.size();
@@ -372,7 +372,7 @@ val bfs(igraph_integer_t src) {
 val dfs(igraph_integer_t src) {
     IGraphVectorInt order, dist, order_out;
 
-    igraph_dfs(&igraphGlobalGraph, src, IGRAPH_OUT, false, order.vec(), order_out.vec(), NULL, dist.vec(), NULL, NULL, NULL);
+    igraph_dfs(&globalGraph, src, IGRAPH_OUT, false, order.vec(), order_out.vec(), NULL, dist.vec(), NULL, NULL, NULL);
 
     val result = val::object();
     val colorMap = val::object();
@@ -422,7 +422,7 @@ val dfs(igraph_integer_t src) {
 val randomWalk(igraph_integer_t start, int steps) {
     IGraphVectorInt vertices, edges;
 
-    igraph_random_walk(&igraphGlobalGraph, NULL, vertices.vec(), NULL, start, IGRAPH_OUT, steps, IGRAPH_RANDOM_WALK_STUCK_RETURN);
+    igraph_random_walk(&globalGraph, NULL, vertices.vec(), NULL, start, IGRAPH_OUT, steps, IGRAPH_RANDOM_WALK_STUCK_RETURN);
 
     val result = val::object();
     val colorMap = val::object();
@@ -472,14 +472,14 @@ val min_spanning_tree(void) {
     IGraphVectorInt edges;
     bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_minimum_spanning_tree(&igraphGlobalGraph, edges.vec(), hasWeights ? &globalWeights : NULL);
+    igraph_minimum_spanning_tree(&globalGraph, edges.vec(), hasWeights ? &globalWeights : NULL);
 
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
 
     data.set("weighted", hasWeights);
-    data.set("maxEdges", igraph_ecount(&igraphGlobalGraph));
+    data.set("maxEdges", igraph_ecount(&globalGraph));
 
     int total_weight = 0;
     val edgesArray = val::array();
@@ -487,7 +487,7 @@ val min_spanning_tree(void) {
         val link = val::object();
         int edge = edges.at(i);
         igraph_integer_t from, to;
-        igraph_edge(&igraphGlobalGraph, edge, &from, &to);
+        igraph_edge(&globalGraph, edge, &from, &to);
 
         std::string linkId = std::to_string(from) + '-' + std::to_string(to);
         colorMap.set(from, 0.5);

@@ -54,11 +54,11 @@ val graph_from_gexf(const std::string& filename) {
         }
     }
 
-    igraph_destroy(&igraphGlobalGraph);
-    igraph_create(&igraphGlobalGraph, igraph_edges.vec(), nodeMap.size(), directed);
+    igraph_destroy(&globalGraph);
+    igraph_create(&globalGraph, igraph_edges.vec(), nodeMap.size(), directed);
 
     for (int i = 0; i < labels.size(); i++) {
-        SETVAS(&igraphGlobalGraph, "name", i, labels[i].c_str());
+        SETVAS(&globalGraph, "name", i, labels[i].c_str());
     }
 
 

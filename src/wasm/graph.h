@@ -10,7 +10,7 @@
 #include <unordered_set>
 
 //#define N 11 // number of nodes
-extern igraph_t igraphGlobalGraph;      // igraph structure
+extern igraph_t globalGraph;      // igraph structure
 extern igraph_vector_t globalWeights;   // edge weights
 
 #define MODE_COLOR_IMPORTANT        1   // Dark for important, light for less important

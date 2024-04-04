@@ -41,10 +41,10 @@ igraph_error_t igraph_init_copy(igraph_t *to, const igraph_t *from) {
 }
 
 std::string igraph_get_name(igraph_integer_t v) {
-    std::string attr = igraph_check_attribute(&igraphGlobalGraph);
+    std::string attr = igraph_check_attribute(&globalGraph);
     if (attr.empty()) {
         return std::to_string(v);
     } else {
-        return VAS(&igraphGlobalGraph, attr.c_str(), v);
+        return VAS(&globalGraph, attr.c_str(), v);
     }
 }
