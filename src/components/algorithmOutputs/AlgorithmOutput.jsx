@@ -7,6 +7,8 @@ import BellmanFordSinglePath from './BellmanFordSinglePath';
 import BellmanFordSingleSource from './BellmanFordSingleSource';
 import BFS from './BFS';
 import DFS from './DFS';
+import RandomWalk from './RandomWalk';
+import SpanningTree from './SpanningTree';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -16,6 +18,8 @@ const components = {
     [Algorithm.BELLMAN_FORD_ALL]: BellmanFordSingleSource,
     [Algorithm.BFS]: BFS,
     [Algorithm.DFS]: DFS,
+    [Algorithm.RANDOM_WALK]: RandomWalk,
+    [Algorithm.MINIMAL_SPANNING_TREE]: SpanningTree,
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {
