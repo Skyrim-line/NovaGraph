@@ -227,9 +227,9 @@ function App() {
       <Box sx={{ display: 'flex', gap: 1 }}>
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <img src="./logo.png" alt='logo' width={60} style={{ paddingBottom: 10, paddingLeft: 10 }} />
-            <ErasMedium fontSize={40}>ova</ErasMedium>
-            <ErasBold fontSize={40} mb={0.2}>graph</ErasBold>
+            <img src="./logo.png" alt='logo' width={50} style={{ paddingBottom: 10, paddingLeft: 10 }} />
+            <ErasMedium fontSize={36}>ova</ErasMedium>
+            <ErasBold fontSize={36} mb={0.2}>graph</ErasBold>
           </Box>
           <GraphRenderer
             nodes={nodes}
