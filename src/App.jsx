@@ -109,7 +109,9 @@ function App() {
 
   const toId = name => {
     const node = nodes.find(node => node.name === name)
-    return node ? node.id : null
+    if (node) return node.id
+    const node2 = nodes.find(node => node.id === parseInt(name))
+    return node2 ? node2.id : null
   }
 
   const doAreConnected = () => {
