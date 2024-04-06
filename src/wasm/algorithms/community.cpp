@@ -2,14 +2,21 @@
 #include <iostream>
 #include <string>
 
+void throw_error_if_directed(const std::string& algorithm) {
+    if (igraph_is_directed(&globalGraph)) {
+        std::string message = "The " + algorithm + " algorithm does not support directed graphs";
+        throw std::runtime_error(message);
+    }
+}
+
 val louvain(igraph_real_t resolution) {
     IGraphVectorInt membership;
     IGraphVector modularity;
     igraph_real_t modularity_metric;
     std::stringstream stream;
 
+    throw_error_if_directed("Louvain");
     igraph_community_multilevel(&globalGraph, NULL /*todo*/, resolution, membership.vec(), NULL, modularity.vec());
-    igraph_modularity(&globalGraph, membership.vec(), NULL /*todo*/, resolution, IGRAPH_DIRECTED, &modularity_metric);
 
     val result = val::object();
     val colorMap = val::object();
@@ -43,6 +50,7 @@ val leiden(igraph_real_t resolution) {
     igraph_real_t quality, modularity_metric;
     std::stringstream stream, stream2;
 
+    throw_error_if_directed("Leiden");
     igraph_community_leiden(&globalGraph, NULL /*todo*/, NULL, resolution, 0.01, false, n_iterations, membership.vec(), NULL, &quality);
     igraph_modularity(&globalGraph, membership.vec(), NULL /*todo*/, resolution, IGRAPH_DIRECTED, &modularity_metric);
 
@@ -80,6 +88,7 @@ val fast_greedy(void) {
     IGraphVector modularity;
     std::stringstream stream;
 
+    throw_error_if_directed("Fast-Greedy");
     igraph_community_fastgreedy(&globalGraph, NULL /*todo: weights*/, NULL, modularity.vec(), membership.vec());
 
     val result = val::object();
