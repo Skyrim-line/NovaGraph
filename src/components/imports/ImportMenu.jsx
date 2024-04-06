@@ -9,6 +9,7 @@ import ImportCSV from "./ImportCSV";
 import ImportJSON from "./ImportJSON";
 import ImportGML from "./ImportGML";
 import ImportGEXF from "./ImportGEXF";
+import ImportAutoRandom from "./ImportAutoRandom";
 
 const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
     const [openDialog, setOpenDialog] = useState({
@@ -102,7 +103,12 @@ const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
             module={module}
             updateGraph={handleGraphUpdate}
         />
-        {/* Include more import components when completed */}
+        <ImportAutoRandom
+            open={openDialog.auto}
+            onClose={() => handleCloseDialog('auto')}
+            module={module}
+            updateGraph={handleGraphUpdate}
+        />
     </>)
 }
 

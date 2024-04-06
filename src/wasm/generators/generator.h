@@ -27,5 +27,6 @@ val graph_from_csv(const std::string& nodesFilename, const std::string& edgesFil
 val graph_from_json(const std::string& filename);
 val graph_from_gml(const std::string& filename);
 val graph_from_gexf(const std::string& filename);
+val graph_from_n_nodes(igraph_integer_t n, igraph_real_t p, bool directed);
 
 #endif
