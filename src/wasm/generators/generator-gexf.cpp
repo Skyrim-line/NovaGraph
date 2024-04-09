@@ -28,11 +28,6 @@ val graph_from_gexf(const std::string& filename) {
 
     if (nodeMap.empty()) throw std::runtime_error("No nodes found in the file");
 
-    // print all nodes in nodemap
-    for (auto &pair : nodeMap) {
-        std::cout << pair.first << " " << pair.second << std::endl;
-    }
-
     IGraphVectorInt igraph_edges;
     IGraphVector igraph_weights;
     for (pugi::xml_node edge : graph_element.child("edges").children("edge")) {
