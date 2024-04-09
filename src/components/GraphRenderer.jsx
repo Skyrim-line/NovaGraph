@@ -1,6 +1,7 @@
 import { Cosmograph, CosmographProvider, CosmographSearch } from '@cosmograph/react'
 import React, { useRef, useCallback, useEffect, useState, useLayoutEffect } from 'react';
 import chroma from "chroma-js";
+import { debounce } from "lodash";
 import { Box, Button, Divider, Drawer, IconButton, Slider, Tooltip, Typography } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -216,7 +217,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                                 max={2}
                                 step={0.05}
                                 valueLabelDisplay='auto'
-                                onChange={(_, value) => setRepulsion(value)}
+                                onChange={debounce((_, value) => setRepulsion(value), 300)}
                             />
                             <Typography variant='body2'>Affects how quickly nodes repel from each other (default: 2)</Typography>
                         </Box>
@@ -229,7 +230,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                                 max={0.5}
                                 step={0.1}
                                 valueLabelDisplay='auto'
-                                onChange={(_, value) => setGravity(value)}
+                                onChange={debounce((_, value) => setGravity(value), 300)}
                             />
                             <Typography variant='body2'>
                                 Modifies the gravitational strength of the center of the graph (default: 0)
@@ -244,7 +245,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                                 max={2}
                                 step={0.25}
                                 valueLabelDisplay='auto'
-                                onChange={(_, value) => setNodeSizeScale(value)}
+                                onChange={debounce((_, value) => setNodeSizeScale(value), 300)}
                             />
                             <Typography variant='body2'>Modify node sizes (default: 1)</Typography>
                         </Box>
