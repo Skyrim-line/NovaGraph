@@ -49,6 +49,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
         if (node && i != undefined && node != selectedNode) {
             cosmograph.current?.selectNode(node);
             cosmograph.current?.zoomToNode(node);
+            cosmograph.current?.pause();
             setSelectedNode(node);
         } else {
             zoomOut();
@@ -127,6 +128,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 nodeSizeScale={nodeSizeScale}
                 simulationRepulsion={repulsion}
                 simulationGravity={gravity}
+                simulationLinkDistance={20}
 
                 onClick={zoomToNode}
             />
@@ -202,7 +204,14 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 slotProps={{ backdrop: {sx: { backgroundColor: 'transparent' }} }}
                 elevation={0}
             >
-                <Box width={{ xs: '10rem', sm: '15rem'}} p={3}>
+                <div
+                    onMouseLeave={() => setOptionsDrawer(false)}
+                    style={{ height: '100%' }}
+                >
+                <Box
+                    width={{ xs: '10rem', sm: '15rem'}}
+                    p={3}
+                >
                     <Typography variant='h5' align='center' pb={2}>Graph Options</Typography>
                     <Divider />
 
@@ -253,6 +262,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                     </Box>
                     
                 </Box>
+                </div>
             </Drawer>
         </Box>
         
