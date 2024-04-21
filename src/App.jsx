@@ -14,6 +14,7 @@ import { Algorithm } from './algorithms';
 import AlgorithmExplanation from './components/AlgorithmExplanation';
 import { ErasBold, ErasMedium } from './components/Eras';
 import AlgorithmOutput from './components/algorithmOutputs/AlgorithmOutput';
+import AlgorithmInput from './components/AlgorithmInput';
 
 const darkTheme = createTheme({
   palette: {
@@ -291,10 +292,19 @@ function App() {
             </AccordionSummary>
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
-                <Button size='small' onClick={doAreConnected}
-                  onMouseEnter={() => setHoveredAlgorithm(Algorithm.NEIGHBOR_JOINING)}
-                  onMouseLeave={() => setHoveredAlgorithm(null)}
-                >Neighbour Status?</Button>
+                <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.vertices_are_connected}
+                  postState={postAlgorithmState.bind(null, Algorithm.NEIGHBOR_JOINING)}
+                  algorithmName="Neighbour Status?"
+                  desc="This algorithm checks to see if two nodes are connected by a single edge."
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.NEIGHBOR_JOINING}
+                  inputs={[
+                    { label: 'Enter source vertex', explanation: 'Select the source vertex', type: 'text' },
+                    { label: 'Enter target vertex', explanation: 'Select the target vertex', type: 'text' }
+                  ]}
+                />
                 <Button size='small' onClick={doDijkstraSingle}
                   onMouseEnter={() => setHoveredAlgorithm(Algorithm.DIJKSTRA_A_TO_B)}
                   onMouseLeave={() => setHoveredAlgorithm(null)}
