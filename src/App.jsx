@@ -191,19 +191,6 @@ function App() {
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
                 <AlgorithmInput
-                  wasmFunction={wasmModule && wasmModule.vertices_are_connected}
-                  postState={postAlgorithmState.bind(null, Algorithm.NEIGHBOR_JOINING)}
-                  algorithmName="Neighbour Status?"
-                  desc={["This algorithm checks to see if two nodes are connected by a single edge."]}
-                  nodes={nodes}
-                  setHoveredAlgorithm={setHoveredAlgorithm}
-                  hoveredAlgorithm={Algorithm.NEIGHBOR_JOINING}
-                  inputs={[
-                    { label: 'Enter source vertex', explanation: 'Select the source vertex', type: 'text' },
-                    { label: 'Enter target vertex', explanation: 'Select the target vertex', type: 'text' }
-                  ]}
-                />
-                <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.dijkstra_source_to_target}
                   postState={postAlgorithmState.bind(null, Algorithm.DIJKSTRA_A_TO_B)}
                   algorithmName="Dijkstra (A to B)"
@@ -476,7 +463,19 @@ function App() {
             </AccordionSummary>
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
-                <Button size='small' disabled>so empty...</Button>
+                <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.vertices_are_connected}
+                  postState={postAlgorithmState.bind(null, Algorithm.NEIGHBOR_JOINING)}
+                  algorithmName="Neighbour Status?"
+                  desc={["This algorithm checks to see if two nodes are connected by a single edge."]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.NEIGHBOR_JOINING}
+                  inputs={[
+                    { label: 'Enter source vertex', explanation: 'Select the source vertex', type: 'text' },
+                    { label: 'Enter target vertex', explanation: 'Select the target vertex', type: 'text' }
+                  ]}
+                />
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>
