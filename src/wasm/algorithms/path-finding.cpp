@@ -421,8 +421,9 @@ val dfs(igraph_integer_t src) {
 
 val randomWalk(igraph_integer_t start, int steps) {
     IGraphVectorInt vertices, edges;
+    bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_random_walk(&globalGraph, NULL, vertices.vec(), NULL, start, IGRAPH_OUT, steps, IGRAPH_RANDOM_WALK_STUCK_RETURN);
+    igraph_random_walk(&globalGraph, NULL, vertices.vec(), edges.vec(), start, IGRAPH_OUT, steps, IGRAPH_RANDOM_WALK_STUCK_RETURN);
 
     val result = val::object();
     val colorMap = val::object();
@@ -430,6 +431,7 @@ val randomWalk(igraph_integer_t start, int steps) {
 
     data.set("source", igraph_get_name(start));
     data.set("steps", steps);
+    data.set("weighted", hasWeights);
 
     val path = val::array();
     std::unordered_map<int, int> fm;
@@ -452,6 +454,10 @@ val randomWalk(igraph_integer_t start, int steps) {
             val link = val::object();
             link.set("from", igraph_get_name(vertices.at(i-1)));
             link.set("to", igraph_get_name(node));
+            if (hasWeights) {
+                int weight_index = edges.at(i-1);
+                link.set("weight", VECTOR(globalWeights)[weight_index]);
+            }
             path.set(i-1, link);
         }
     }
