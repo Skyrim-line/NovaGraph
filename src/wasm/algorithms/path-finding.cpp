@@ -461,7 +461,7 @@ val randomWalk(igraph_integer_t start, int steps) {
     
     frequenciesToColorMap(fm, colorMap);
     result.set("colorMap", colorMap);
-    result.set("mode", MODE_COLOR_SHADE_ERROR);
+    result.set("mode", MODE_COLOR_SHADE_DEFAULT);
     data.set("path", path);
     result.set("data", data);
     return result;
