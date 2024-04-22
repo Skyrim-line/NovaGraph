@@ -48,3 +48,8 @@ std::string igraph_get_name(igraph_integer_t v) {
         return VAS(&globalGraph, attr.c_str(), v);
     }
 }
+
+igraph_vector_t *igraph_weights() {
+    bool hasWeights = VECTOR(globalWeights) != NULL;
+    return hasWeights ? &globalWeights : NULL;
+}

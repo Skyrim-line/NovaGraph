@@ -14,9 +14,8 @@ double scaleCentrality(double centrality, double max_centrality) {
 
 val betweenness_centrality(void) {
     IGraphVector betweenness;
-    bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_betweenness(&globalGraph, betweenness.vec(), igraph_vss_all(), true, hasWeights ? &globalWeights : NULL);
+    igraph_betweenness(&globalGraph, betweenness.vec(), igraph_vss_all(), true, igraph_weights());
 
     double max_centrality = betweenness.max();
     val result = val::object();
@@ -48,9 +47,8 @@ val betweenness_centrality(void) {
 
 val closeness_centrality(void) {
     IGraphVector closeness;
-    bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_closeness(&globalGraph, closeness.vec(), NULL, NULL, igraph_vss_all(), IGRAPH_OUT, hasWeights ? &globalWeights : NULL, true);
+    igraph_closeness(&globalGraph, closeness.vec(), NULL, NULL, igraph_vss_all(), IGRAPH_OUT, igraph_weights(), true);
 
     double max_centrality = closeness.max_nonan();
     val result = val::object();
@@ -117,9 +115,8 @@ val degree_centrality(void) {
 val eigenvector_centrality(void) {
     IGraphVector evs;
     igraph_real_t value;
-    bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_eigenvector_centrality(&globalGraph, evs.vec(), &value, IGRAPH_DIRECTED, false, hasWeights ? &globalWeights : NULL, NULL);
+    igraph_eigenvector_centrality(&globalGraph, evs.vec(), &value, IGRAPH_DIRECTED, false, igraph_weights(), NULL);
 
     double max_centrality = evs.max();
     val result = val::object();
@@ -155,9 +152,8 @@ val eigenvector_centrality(void) {
 
 val harmonic_centrality(void) {
     IGraphVector scores;
-    bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_harmonic_centrality(&globalGraph, scores.vec(), igraph_vss_all(), IGRAPH_OUT, hasWeights ? &globalWeights : NULL, true);
+    igraph_harmonic_centrality(&globalGraph, scores.vec(), igraph_vss_all(), IGRAPH_OUT, igraph_weights(), true);
 
     double max_centrality = scores.max();
     val result = val::object();
@@ -189,9 +185,8 @@ val harmonic_centrality(void) {
 
 val strength(void) {
     IGraphVector strengths;
-    bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_strength(&globalGraph, strengths.vec(), igraph_vss_all(), IGRAPH_OUT, IGRAPH_NO_LOOPS, hasWeights ? &globalWeights : NULL);
+    igraph_strength(&globalGraph, strengths.vec(), igraph_vss_all(), IGRAPH_OUT, IGRAPH_NO_LOOPS, igraph_weights());
 
     double max_centrality = strengths.max();
     val result = val::object();
@@ -224,12 +219,11 @@ val strength(void) {
 val pagerank(igraph_real_t damping) {
     igraph_real_t value;
     IGraphVector vec;
-    bool hasWeights = VECTOR(globalWeights) != NULL;
 
     std::stringstream stream;
     stream << std::fixed << std::setprecision(2) << damping;
 
-    igraph_pagerank(&globalGraph, IGRAPH_PAGERANK_ALGO_PRPACK, vec.vec(), &value, igraph_vss_all(), IGRAPH_DIRECTED, damping, hasWeights ? &globalWeights : NULL, NULL);
+    igraph_pagerank(&globalGraph, IGRAPH_PAGERANK_ALGO_PRPACK, vec.vec(), &value, igraph_vss_all(), IGRAPH_DIRECTED, damping, igraph_weights(), NULL);
 
     double max_centrality = vec.max();
     val result = val::object();

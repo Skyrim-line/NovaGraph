@@ -16,7 +16,8 @@ val louvain(igraph_real_t resolution) {
     std::stringstream stream;
 
     throw_error_if_directed("Louvain");
-    igraph_community_multilevel(&globalGraph, NULL /*todo*/, resolution, membership.vec(), NULL, modularity.vec());
+    igraph_community_multilevel(&globalGraph, igraph_weights(), resolution, membership.vec(), NULL, modularity.vec());
+    igraph_modularity(&globalGraph, membership.vec(), igraph_weights(), resolution, IGRAPH_DIRECTED, &modularity_metric);
 
     val result = val::object();
     val colorMap = val::object();
@@ -45,14 +46,14 @@ val louvain(igraph_real_t resolution) {
 }
 
 val leiden(igraph_real_t resolution) {
-    igraph_integer_t n_iterations = 10; // TODO: Might need to modify this value in future?
+    igraph_integer_t n_iterations = 100;
     IGraphVectorInt membership;
     igraph_real_t quality, modularity_metric;
     std::stringstream stream, stream2;
 
     throw_error_if_directed("Leiden");
-    igraph_community_leiden(&globalGraph, NULL /*todo*/, NULL, resolution, 0.01, false, n_iterations, membership.vec(), NULL, &quality);
-    igraph_modularity(&globalGraph, membership.vec(), NULL /*todo*/, resolution, IGRAPH_DIRECTED, &modularity_metric);
+    igraph_community_leiden(&globalGraph, igraph_weights(), NULL, resolution, 0.01, false, n_iterations, membership.vec(), NULL, &quality);
+    igraph_modularity(&globalGraph, membership.vec(), igraph_weights(), resolution, IGRAPH_DIRECTED, &modularity_metric);
 
     val result = val::object();
     val colorMap = val::object();
@@ -89,7 +90,7 @@ val fast_greedy(void) {
     std::stringstream stream;
 
     throw_error_if_directed("Fast-Greedy");
-    igraph_community_fastgreedy(&globalGraph, NULL /*todo: weights*/, NULL, modularity.vec(), membership.vec());
+    igraph_community_fastgreedy(&globalGraph, igraph_weights(), NULL, modularity.vec(), membership.vec());
 
     val result = val::object();
     val colorMap = val::object();

@@ -35,7 +35,7 @@ val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     int edges_count = 0;
     int total_weight = 0;
 
-    igraph_get_shortest_path_dijkstra(&globalGraph, vertices.vec(), edges.vec(), src, tar, hasWeights ? &globalWeights : NULL, IGRAPH_OUT);
+    igraph_get_shortest_path_dijkstra(&globalGraph, vertices.vec(), edges.vec(), src, tar, igraph_weights(), IGRAPH_OUT);
 
     val result = val::object();
     val colorMap = val::object();
@@ -83,7 +83,7 @@ val dijkstra_source_to_all(igraph_integer_t src) {
     IGraphVectorIntList paths, edges;
     bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_get_shortest_paths_dijkstra(&globalGraph, paths.vec(), edges.vec(), src, igraph_vss_all(), hasWeights ? &globalWeights : NULL, IGRAPH_OUT, NULL, NULL);
+    igraph_get_shortest_paths_dijkstra(&globalGraph, paths.vec(), edges.vec(), src, igraph_vss_all(), igraph_weights(), IGRAPH_OUT, NULL, NULL);
 
     val result = val::object();
     val colorMap = val::object();
@@ -154,7 +154,7 @@ val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_inte
     val colorMap = val::object();
     val data = val::object();
     
-    igraph_get_k_shortest_paths(&globalGraph, hasWeights ? &globalWeights : NULL, paths.vec(), edges.vec(), k, src, tar, IGRAPH_OUT);
+    igraph_get_k_shortest_paths(&globalGraph, igraph_weights(), paths.vec(), edges.vec(), k, src, tar, IGRAPH_OUT);
 
     data.set("source", igraph_get_name(src));
     data.set("target", igraph_get_name(tar));
@@ -209,7 +209,7 @@ val bf_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     int edges_count = 0;
     int total_weight = 0;
 
-    igraph_get_shortest_path_bellman_ford(&globalGraph, vertices.vec(), edges.vec(), src, tar, hasWeights ? &globalWeights : NULL, IGRAPH_OUT);
+    igraph_get_shortest_path_bellman_ford(&globalGraph, vertices.vec(), edges.vec(), src, tar, igraph_weights(), IGRAPH_OUT);
 
     val result = val::object();
     val colorMap = val::object();
@@ -257,7 +257,7 @@ val bf_source_to_all(igraph_integer_t src) {
     IGraphVectorIntList paths, edges;
     bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_get_shortest_paths_bellman_ford(&globalGraph, paths.vec(), edges.vec(), src, igraph_vss_all(), hasWeights ? &globalWeights : NULL, IGRAPH_OUT, NULL, NULL);
+    igraph_get_shortest_paths_bellman_ford(&globalGraph, paths.vec(), edges.vec(), src, igraph_vss_all(), igraph_weights(), IGRAPH_OUT, NULL, NULL);
 
     val result = val::object();
     val colorMap = val::object();
@@ -472,7 +472,7 @@ val min_spanning_tree(void) {
     IGraphVectorInt edges;
     bool hasWeights = VECTOR(globalWeights) != NULL;
 
-    igraph_minimum_spanning_tree(&globalGraph, edges.vec(), hasWeights ? &globalWeights : NULL);
+    igraph_minimum_spanning_tree(&globalGraph, edges.vec(), igraph_weights());
 
     val result = val::object();
     val colorMap = val::object();
