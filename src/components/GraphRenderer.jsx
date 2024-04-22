@@ -141,20 +141,6 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 onClick={zoomToNode}
             />
 
-            {/*
-            TODO: have some sort of a form/modal here:
-
-            Select source vertex: (info hover icon)
-            <CosmographSearch onSelectResult={event => setState(event.id)} />
-
-            Select target vertex: (info hover icon)
-            <CosmographSearch onSelectResult={event => console.log(event)} />
-
-            Enter some other variable: _______
-
-            [Cancel] [Go]
-        */}
-
         </CosmographProvider>
 
         <Box display='flex'>
@@ -223,7 +209,6 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                     <Typography variant='h5' align='center' pb={2}>Graph Options</Typography>
                     <Divider />
 
-                    {/* Title and slider for graph repulsion (default 2 but slider should range from 0-3) */}
                     <Box pt={3} sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                         <Box>
                             <Typography variant='h6' align='center'>Repulsion</Typography>
