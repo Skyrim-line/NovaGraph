@@ -115,110 +115,8 @@ function App() {
     return node2 ? node2.id : null
   }
 
-  const doAreConnected = () => {
-    const source = prompt("Enter source vertex");
-    const target = prompt("Enter target vertex");
-    const response = wasmModule.vertices_are_connected(toId(source), toId(target))
-    postAlgorithmState(Algorithm.NEIGHBOR_JOINING, response)
-  }
-  const doDijkstraSingle = () => {
-    const source = prompt("Enter source vertex");
-    const target = prompt("Enter target vertex");
-    const response = wasmModule.dijkstra_source_to_target(toId(source), toId(target));
-    postAlgorithmState(Algorithm.DIJKSTRA_A_TO_B, response)
-  }
-  const doDijkstraMulti = () => {
-    const source = prompt("Enter source vertex");
-    const response = wasmModule.dijkstra_source_to_all(toId(source));
-    postAlgorithmState(Algorithm.DIJKSTRA_ALL, response)
-  }
-  const doYen = () => {
-    const source = prompt("Enter source vertex");
-    const target = prompt("Enter target vertex");
-    const k = prompt("Enter k (number of paths)", "1");
-    const response = wasmModule.yens_algorithm(toId(source), toId(target), parseInt(k));
-    postAlgorithmState(Algorithm.YEN, response)
-  }
-  const doBFSingle = () => {
-    const source = prompt("Enter source vertex");
-    const target = prompt("Enter target vertex");
-    const response = wasmModule.bellman_ford_source_to_target(toId(source), toId(target));
-    postAlgorithmState(Algorithm.BELLMAN_FORD_A_TO_B, response)
-  }
-  const doBFMulti = () => {
-    const source = prompt("Enter source vertex");
-    const response = wasmModule.bellman_ford_source_to_all(toId(source));
-    postAlgorithmState(Algorithm.BELLMAN_FORD_ALL, response)
-  }
-  const doBFS = () => {
-    const source = prompt("Enter source vertex");
-    const response = wasmModule.bfs(toId(source));
-    postAlgorithmState(Algorithm.BFS, response)
-  }
-  const doDFS = () => {
-    const source = prompt("Enter source vertex");
-    const response = wasmModule.dfs(toId(source));
-    postAlgorithmState(Algorithm.DFS, response)
-  }
-  const doRW = () => {
-    const start = prompt("Enter starting vertex");
-    const steps = prompt("Enter step count", "1");
-    const response = wasmModule.random_walk(toId(start), parseInt(steps));
-    postAlgorithmState(Algorithm.RANDOM_WALK, response)
-  }
-  const doMST = () => {
-    const response = wasmModule.min_spanning_tree();
-    postAlgorithmState(Algorithm.MINIMAL_SPANNING_TREE, response)
-  }
-
-  const doBetweennessCentrality = () => {
-    const response = wasmModule.betweenness_centrality();
-    postAlgorithmState(Algorithm.BETWEENNESS_CENTRALITY, response)
-  }
-  const doClosenessCentrality = () => {
-    const response = wasmModule.closeness_centrality();
-    postAlgorithmState(Algorithm.CLOSENESS_CENTRALITY, response)
-  }
-  const doDegreeCentrality = () => {
-    const response = wasmModule.degree_centrality();
-    postAlgorithmState(Algorithm.DEGREE_CENTRALITY, response)
-  }
-  const doEigenCentrality = () => {
-    const response = wasmModule.eigenvector_centrality();
-    postAlgorithmState(Algorithm.EIGENVECTOR_CENTRALITY, response)
-  }
-  const doStrength = () => {
-    const response = wasmModule.strength_centrality();
-    postAlgorithmState(Algorithm.STRENGTH_CENTRALITY, response)
-  }
-  const doHarmonicCentrality = () => {
-    const response = wasmModule.harmonic_centrality();
-    postAlgorithmState(Algorithm.HARMONIC_CENTRALITY, response)
-  }
-  const doPageRank = () => {
-    const response = wasmModule.pagerank(0.85);
-    postAlgorithmState(Algorithm.PAGERANK, response)
-  }
-
-  const doLouvain = () => {
-    const resolution = prompt("Enter resolution", "1.0");
-    const response = wasmModule.louvain(parseFloat(resolution));
-    postAlgorithmState(Algorithm.LOUVAIN, response)
-  }
-  const doLeiden = () => {
-    const resolution = prompt("Enter resolution (Start at 1)", "1.0");
-    const response = wasmModule.leiden(parseFloat(resolution));
-    postAlgorithmState(Algorithm.LEIDEN, response)
-  }
-  const doFastGreedy = () => {
-    const response = wasmModule.fast_greedy();
-    postAlgorithmState(Algorithm.FAST_GREEDY, response);
-  }
-
-
   return (
     <ThemeProvider theme={darkTheme}>
-
       <Snackbar
         open={error !== null}
         autoHideDuration={6000}
@@ -578,7 +476,7 @@ function App() {
             </AccordionSummary>
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
-                <Button size='small' onClick={doFastGreedy} disabled>so empty...</Button>
+                <Button size='small' disabled>so empty...</Button>
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>

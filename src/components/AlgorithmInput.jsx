@@ -1,6 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { Children, cloneElement, forwardRef, useEffect, useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Autocomplete, Box, Typography } from '@mui/material';
 import { ErasBold, ErasMedium } from './Eras';
+import { FixedSizeList as List } from 'react-window';
+
+const ListboxComponent = forwardRef(function ListboxComponent(props, ref) {
+  const { children, ...other } = props;
+  const itemData = Children.toArray(children);
+  const itemCount = itemData.length;
+  const itemSize = 36;
+  const maxHeight = 7 * itemSize;
+  const totalHeight = (itemCount * itemSize);
+
+  const [focused, setFocused] = useState(null);
+
+  return (
+    <div ref={ref}>
+      <List
+        height={Math.min(maxHeight, totalHeight)}
+        width={300}
+        itemSize={itemSize}
+        itemCount={itemCount}
+        itemData={itemData}
+        {...other}
+      >
+        {({ data, index, style }) => cloneElement(data[index], {
+          style: {
+            ...style,
+            backgroundColor: focused === index ? '#696969' : 'transparent',
+            cursor: 'pointer',
+          },
+          onMouseEnter: () => setFocused(index),
+          onMouseLeave: () => setFocused(null),
+        })}
+      </List>
+    </div>
+  );
+});
 
 const AlgorithmInput = ({ wasmFunction, postState, algorithmName, desc, inputs, nodes, setHoveredAlgorithm, hoveredAlgorithm }) => {
   const [open, setOpen] = useState(false);
@@ -97,6 +132,7 @@ const AlgorithmInput = ({ wasmFunction, postState, algorithmName, desc, inputs, 
                   style={{ width: 300 }}
                   renderInput={(params) => <TextField {...params} label={input.label} variant="outlined" color='secondary' />}
                   onChange={handleChange(input.label, input.type)}
+                  ListboxComponent={ListboxComponent}
                   autoSelect
                 />
               )}
