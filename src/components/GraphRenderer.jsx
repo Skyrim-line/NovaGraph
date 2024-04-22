@@ -18,6 +18,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     const error = '#F05480'
     const neutral = '#9f8fc3'
     const contrast_green = '#67baa7'
+    const out_of_focus = '#332d48'
     /* Palette: https://mycolor.space/?hex=%236750C6&sub=1 (Spot Palette)
         - Dark: #6750c6
         - Default: #9f8fc3
@@ -62,7 +63,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
             case Mode.COLOR_IMPORTANT:
                 return value > 0 ? scale(1).hex() : (value < 0 ? error : neutral);
             case Mode.COLOR_SHADE_DEFAULT:
-                return isNaN(value) ? scale(0).hex() : scale(value).hex();
+                return isNaN(value) ? out_of_focus : scale(value).hex();
             case Mode.COLOR_SHADE_ERROR:
                 return isNaN(value) ? error : scale(value).hex();
             case Mode.SIZE_SCALAR:
@@ -72,6 +73,13 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
             default:
                 return neutral
         }
+    }
+
+    const getSize = id => {
+        if (mode === Mode.COLOR_SHADE_DEFAULT && isNaN(colors[id])) {
+            return 5
+        }
+        return sizes[id] ? sizes[id] : 20
     }
 
     const getLinkColor = link => {
@@ -108,7 +116,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 //initialZoomLevel={1}
                 disableSimulation={false}
                 //backgroundColor='#151515'
-                nodeSize={(_node, id) => sizes[id] ? sizes[id] : 20}
+                nodeSize={(_node, id) => getSize(id)}
                 nodeColor={(_node, id) => getColor(colors[id])}
                 linkColor={link => getLinkColor(link)}
                 nodeGreyoutOpacity={0.1}
