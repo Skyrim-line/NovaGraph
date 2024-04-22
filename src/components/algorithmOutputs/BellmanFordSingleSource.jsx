@@ -1,16 +1,41 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableContainer, TableHead, Paper, Box, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { RTableCell, RTableRow } from './ResultsTable';
+import { RTableCell as Cell, RTableRow as Row } from './ResultsTable';
+import InfiniteScroll from 'react-infinite-scroller';
 import { ErasBold, ErasMedium } from '../Eras';
 
 const BellmanFordSingleSource = ({ data }) => {
+    const itemsPerPage = 20;
     const [open, setOpen] = useState(false);
+    const [records, setRecords] = useState(itemsPerPage);
+
+    const hasMore = records < data.paths.length;
+
     useEffect(() => {
         console.log(data);
     }, [data]);
 
     const handleClick = () => {
         setOpen(!open);
+    }
+
+    const loadMore = () => {
+        if (records === data.length) {
+        } else {
+            setTimeout(() => {
+                setRecords(records + itemsPerPage);
+            }, 500);
+        }
+    }
+
+    const loadItems = (paths) => {
+        return paths.slice(0, records).map((path, index) => (
+            <Row key={index}>
+                <Cell>{path.target}</Cell>
+                <Cell style={{ wordWrap: 'break-word', maxWidth: 250 }}>{path.path.join(' → ')}</Cell>
+                <Cell align='center'>{data.weighted ? path.weight : path.path.length}</Cell>
+            </Row>
+        ));
     }
 
     return (<>
@@ -25,21 +50,23 @@ const BellmanFordSingleSource = ({ data }) => {
                     <TableContainer component={Paper} style={{ maxWidth: 'auto', margin: 'auto' }}>
                         <Table size='small' sx={{ tableLayout: 'auto' }}>
                             <TableHead>
-                                <RTableRow>
-                                    <RTableCell>To</RTableCell>
-                                    <RTableCell>Path</RTableCell>
-                                    <RTableCell>{data.weighted ? "Weight" : "Length"}</RTableCell>
-                                </RTableRow>
+                                <Row>
+                                    <Cell>To</Cell>
+                                    <Cell>Path</Cell>
+                                    <Cell>{data.weighted ? "Weight" : "Length"}</Cell>
+                                </Row>
                             </TableHead>
-                            <TableBody>
-                                {data.paths.map((path, index) => (
-                                    <RTableRow key={index}>
-                                        <RTableCell>{path.target}</RTableCell>
-                                        <RTableCell style={{ wordWrap: 'break-word', maxWidth: 250 }}>{path.path.join(' → ')}</RTableCell>
-                                        <RTableCell align='center'>{data.weighted ? path.weight : path.path.length}</RTableCell>
-                                    </RTableRow>
-                                ))}
-                            </TableBody>
+                            <InfiniteScroll
+                                pageStart={0}
+                                element={TableBody}
+                                loadMore={loadMore}
+                                hasMore={hasMore}
+                                loader={<Row key={0}><Cell /><Cell>Loading...</Cell><Cell /></Row>}
+                                useWindow={false}
+                                style={{ width: '100%' }}
+                            >
+                                {loadItems(data.paths)}
+                            </InfiniteScroll>
                         </Table>
                     </TableContainer>
                 </DialogContent>

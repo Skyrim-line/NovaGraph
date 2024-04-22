@@ -1,16 +1,40 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableContainer, TableHead, Paper, Box, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { RTableCell, RTableRow } from './ResultsTable';
+import { RTableCell as Cell, RTableRow as Row } from './ResultsTable';
+import InfiniteScroll from 'react-infinite-scroller';
 import { ErasBold, ErasMedium } from '../Eras';
 
 const Leiden = ({ data }) => {
+    const itemsPerPage = 20;
     const [open, setOpen] = useState(false);
+    const [records, setRecords] = useState(itemsPerPage);
+
+    const hasMore = records < data.communities.length;
+
     useEffect(() => {
         console.log(data);
     }, [data]);
 
     const handleClick = () => {
         setOpen(!open);
+    }
+
+    const loadMore = () => {
+        if (records === data.length) {
+        } else {
+            setTimeout(() => {
+                setRecords(records + itemsPerPage);
+            }, 500);
+        }
+    }
+
+    const loadItems = (communities) => {
+        return communities.slice(0, records).map((community, index) => (
+            <Row key={index}>
+                <Cell>{index}</Cell>
+                <Cell style={{ wordWrap: 'break-word', maxWidth: 400 }}>{community.join(', ')}</Cell>
+            </Row>
+        ));
     }
 
     return (<>
@@ -30,19 +54,22 @@ const Leiden = ({ data }) => {
                     <TableContainer component={Paper} style={{ maxWidth: 'auto', margin: 'auto' }}>
                         <Table size='small' sx={{ tableLayout: 'auto' }}>
                             <TableHead>
-                                <RTableRow>
-                                    <RTableCell>Community</RTableCell>
-                                    <RTableCell>Nodes</RTableCell>
-                                </RTableRow>
+                                <Row>
+                                    <Cell>Community</Cell>
+                                    <Cell>Nodes</Cell>
+                                </Row>
                             </TableHead>
-                            <TableBody>
-                                {data && data.communities.map((community, index) => (
-                                    <RTableRow key={index}>
-                                        <RTableCell>{index}</RTableCell>
-                                        <RTableCell style={{ wordWrap: 'break-word', maxWidth: 400 }}>[{community.join(', ')}]</RTableCell>
-                                    </RTableRow>
-                                ))}
-                            </TableBody>
+                            <InfiniteScroll
+                                pageStart={0}
+                                element={TableBody}
+                                loadMore={loadMore}
+                                hasMore={hasMore}
+                                loader={<Row key={0}><Cell /><Cell>Loading...</Cell><Cell /></Row>}
+                                useWindow={false}
+                                style={{ width: '100%' }}
+                            >
+                                {loadItems(data.communities)}
+                            </InfiniteScroll>
                         </Table>
                     </TableContainer>
                 </DialogContent>

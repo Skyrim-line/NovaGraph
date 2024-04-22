@@ -1,11 +1,17 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableContainer, TableHead, Paper, Box, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { RTableCell, RTableRow } from './ResultsTable';
+import { RTableCell as Cell, RTableRow as Row } from './ResultsTable';
+import InfiniteScroll from 'react-infinite-scroller';
 import { ErasBold, ErasMedium } from '../Eras';
 
 const HarmonicCentrality = ({ data }) => {
+    const itemsPerPage = 20;
     const [open, setOpen] = useState(false);
     const [centralities, setCentralities] = useState([]);
+    const [records, setRecords] = useState(itemsPerPage);
+
+    const hasMore = records < centralities.length;
+
     useEffect(() => {
         console.log(data);
         data && setCentralities([...data.centralities].sort((a, b) => b.centrality - a.centrality));
@@ -13,6 +19,25 @@ const HarmonicCentrality = ({ data }) => {
 
     const handleClick = () => {
         setOpen(!open);
+    }
+
+    const loadMore = () => {
+        if (records === centralities.length) {
+        } else {
+            setTimeout(() => {
+                setRecords(records + itemsPerPage);
+            }, 500);
+        }
+    }
+
+    const loadItems = (centralities) => {
+        return centralities.slice(0, records).map((c, index) => (
+            <Row key={index}>
+                <Cell>{c.id}</Cell>
+                <Cell>{c.node}</Cell>
+                <Cell>{c.centrality}</Cell>
+            </Row>
+        ));
     }
 
     return (<>
@@ -31,21 +56,23 @@ const HarmonicCentrality = ({ data }) => {
                     <TableContainer component={Paper} style={{ maxWidth: 'auto', margin: 'auto' }}>
                         <Table size='small' sx={{ tableLayout: 'auto' }}>
                             <TableHead>
-                                <RTableRow>
-                                    <RTableCell>ID</RTableCell>
-                                    <RTableCell>Node</RTableCell>
-                                    <RTableCell>Centrality</RTableCell>
-                                </RTableRow>
+                                <Row>
+                                    <Cell>ID</Cell>
+                                    <Cell>Node</Cell>
+                                    <Cell>Centrality</Cell>
+                                </Row>
                             </TableHead>
-                            <TableBody>
-                                {centralities.map((c, index) => (
-                                    <RTableRow key={index}>
-                                        <RTableCell>{c.id}</RTableCell>
-                                        <RTableCell>{c.node}</RTableCell>
-                                        <RTableCell>{c.centrality}</RTableCell>
-                                    </RTableRow>
-                                ))}
-                            </TableBody>
+                            <InfiniteScroll
+                                pageStart={0}
+                                element={TableBody}
+                                loadMore={loadMore}
+                                hasMore={hasMore}
+                                loader={<Row key={0}><Cell /><Cell>Loading...</Cell><Cell /></Row>}
+                                useWindow={false}
+                                style={{ width: '100%' }}
+                            >
+                                {loadItems(centralities)}
+                            </InfiniteScroll>
                         </Table>
                     </TableContainer>
                 </DialogContent>
