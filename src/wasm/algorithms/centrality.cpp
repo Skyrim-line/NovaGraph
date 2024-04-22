@@ -62,7 +62,7 @@ val closeness_centrality(void) {
         double scaled_centrality = scaleCentrality(isnan(centrality) ? 0 : centrality, max_centrality);
 
         std::stringstream stream;
-        stream << std::fixed << std::setprecision(2) << centrality;
+        stream << std::fixed << std::setprecision(4) << centrality;
 
         sizeMap.set(v, scaled_centrality);
         c.set("id", v);
@@ -134,7 +134,7 @@ val eigenvector_centrality(void) {
         double scaled_centrality = scaleCentrality(centrality, max_centrality);
         
         std::stringstream stream;
-        stream << std::fixed << std::setprecision(2) << centrality;
+        stream << std::fixed << std::setprecision(4) << centrality;
         
         sizeMap.set(v, scaled_centrality);
         c.set("id", v);
@@ -167,7 +167,7 @@ val harmonic_centrality(void) {
         double scaled_centrality = scaleCentrality(isnan(centrality) ? 0 : centrality, max_centrality);
 
         std::stringstream stream;
-        stream << std::fixed << std::setprecision(2) << centrality;
+        stream << std::fixed << std::setprecision(4) << centrality;
         
         sizeMap.set(v, scaled_centrality);
         c.set("id", v);
@@ -239,7 +239,7 @@ val pagerank(igraph_real_t damping) {
         double scaled_centrality = scaleCentrality(centrality, max_centrality);
         
         std::stringstream stream;
-        stream << std::fixed << std::setprecision(2) << centrality;
+        stream << std::fixed << std::setprecision(4) << centrality;
 
         sizeMap.set(v, scaled_centrality);
         c.set("id", v);
