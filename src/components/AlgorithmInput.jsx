@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Autocomplete, Box, Typography } from '@mui/material';
 import { ErasBold, ErasMedium } from './Eras';
 
 const AlgorithmInput = ({ wasmFunction, postState, algorithmName, desc, inputs, nodes, setHoveredAlgorithm, hoveredAlgorithm }) => {
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState({});
+  const [errors, setErrors] = useState(
+    inputs.reduce((acc, input) => ({ ...acc, [input.label]: false }), {})
+  )
+
+  useEffect(() => {
+    inputs.forEach(input => {
+      setValues({ ...values, [input.label]: input.defaultValue });
+    });
+  }, [inputs]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -24,10 +33,21 @@ const AlgorithmInput = ({ wasmFunction, postState, algorithmName, desc, inputs, 
   };
 
   const handleSubmit = () => {
+    const hasError = Object.values(values).some(value => value === null);
+    if (hasError) {
+      setErrors(
+        Object.keys(values).reduce((acc, key) => ({ ...acc, [key]: values[key] === null }), {})
+      );
+      return;
+    }
     const args = inputs.map(input => values[input.label])
     const response = wasmFunction(...args);
     postState(response);
     handleClose();
+
+    setErrors(
+      Object.keys(values).reduce((acc, key) => ({ ...acc, [key]: false }), {})
+    );
   };
 
   return (
@@ -59,12 +79,13 @@ const AlgorithmInput = ({ wasmFunction, postState, algorithmName, desc, inputs, 
                   label={input.label}
                   color='secondary'
                   type={input.type}
-                  defaultValue={input.defaultValue}
+                  value={values[input.label]}
                   onChange={handleChange(input.label, input.type)}
                   helperText={input.explanation}
                   inputProps={{
                     step: input.step,
                   }}
+                  error={errors[input.label]}
                 />
               ) : (
                 <Autocomplete
