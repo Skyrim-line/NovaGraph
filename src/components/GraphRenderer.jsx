@@ -14,7 +14,7 @@ import { Mode } from '../renderModes';
 
 export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     const cosmograph = useRef()
-    const scale = chroma.scale(['#F7EBFF', '#6750C6']);
+    const scale = chroma.scale(['#e4c1ff', '#6750C6']);
     const error = '#F05480'
     const neutral = '#9f8fc3'
     const contrast_green = '#67baa7'
