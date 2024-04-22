@@ -18,7 +18,7 @@ const SpanningTree = ({ data }) => {
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
             <Box>
                 <Typography fontSize={15}>Edges in MST: {data.edges.length} </Typography>
-                <Typography fontSize={15}>Max edges in Spanning Tree: {data.maxEdges}</Typography>
+                <Typography fontSize={15}>Total edges: {data.maxEdges}</Typography>
             </Box>
             {data.weighted && <Typography fontSize={15}>MST Total Weight: {data.totalWeight}</Typography>}
             <Button variant='contained' color='info' onClick={handleClick}>More Details</Button>
