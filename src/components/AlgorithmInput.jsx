@@ -128,9 +128,7 @@ const AlgorithmInput = ({ wasmFunction, postState, algorithmName, desc, inputs, 
                   id={input.label}
                   options={nodes}
                   color='info'
-                  value={values[input.label] || ''}
-                  getOptionLabel={(option) => option.name || String(option.id)}
-                  style={{ width: 300 }}
+                  getOptionLabel={(option) => option.name ? option.name : option.id }                  style={{ width: 300 }}
                   renderInput={(params) => <TextField {...params} label={input.label} variant="outlined" color='secondary' />}
                   onChange={handleChange(input.label, input.type)}
                   ListboxComponent={ListboxComponent}
