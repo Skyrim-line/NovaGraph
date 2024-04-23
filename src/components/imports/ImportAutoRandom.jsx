@@ -2,7 +2,7 @@ import { Box, Button, Dialog, DialogContent, DialogTitle, Divider, FormControlLa
 import React, { useState } from 'react';
 import { ErasMedium } from "../Eras";
 
-const ImportAutoRandom = ({ open, onClose, module, updateGraph }) => {
+const ImportAutoRandom = ({ open, onClose, module, updateGraph, setLoading }) => {
   const [n, setN] = useState('');
   const [p, setP] = useState('');
   const [directed, setDirected] = useState(false);
@@ -36,6 +36,7 @@ const ImportAutoRandom = ({ open, onClose, module, updateGraph }) => {
   const handleSubmit = async () => {
     if (!validateInput()) return;
     
+    setLoading(true);
     const response = module.generate_graph_from_n_nodes(n, p, directed);
     if (response && response.nodes) updateGraph(response.nodes, response.edges, response.directed);
   }

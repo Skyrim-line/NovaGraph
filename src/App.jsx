@@ -51,6 +51,7 @@ function App() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [hoveredAlgorithm, setHoveredAlgorithm] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     createModule().then(mod => {
@@ -63,12 +64,26 @@ function App() {
         if (typeof error != 'number') return;
         const pointer = error;
         const error_message = mod.what_to_stderr(pointer);
+        console.log("error ", error)
         setError(error_message);
+        setLoading(false);
       }
 
       window.onunload = () => {
         console.log("Cleanup")
         mod.cleanupGraph()
+      }
+
+      window.onbeforeunload = () => {
+        console.log("Before unload")
+      }
+
+      window.onpagehide = () => {
+        console.log("Page hide")
+      }
+
+      document.onvisibilitychange = () => {
+        console.log("Visibility change")
       }
     })
   }, []);
@@ -85,6 +100,7 @@ function App() {
     setEdges(edges);
     setDirected(directed);
     setRenderMode(1);
+    setLoading(false);
   }
 
   const handleAccordianChange = (panel) => (event, newExpanded) => {
@@ -117,6 +133,12 @@ function App() {
 
   return (
     <ThemeProvider theme={darkTheme}>
+      { loading &&
+        <div className="loader-container">
+          <span className="loader"></span>
+          <p className="loading-text">Importing graph...</p>
+        </div>
+      }
       <Snackbar
         open={error !== null}
         autoHideDuration={6000}
@@ -182,6 +204,7 @@ function App() {
               setAnchorEl={setAnchorEl}
               module={wasmModule}
               updateGraph={updateGraph}
+              setLoading={setLoading}
             />
           </Box>
           <Accordion expanded={expanded === 'panel1'} onChange={handleAccordianChange('panel1')}>

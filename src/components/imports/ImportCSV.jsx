@@ -5,7 +5,7 @@ import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import React, { useState } from "react";
 import { ErasBold, ErasMedium } from "../Eras";
 
-const ImportCSV = ({ open, onClose, module, updateGraph }) => {
+const ImportCSV = ({ open, onClose, module, updateGraph, setLoading }) => {
   const [tableView, setTableView] = useState(false);
   const [nodesFile, setNodesFile] = useState(null);
   const [edgesFile, setEdgesFile] = useState(null);
@@ -23,6 +23,7 @@ const ImportCSV = ({ open, onClose, module, updateGraph }) => {
   const handleSubmit = async () => {
     if (!nodesFile || !edgesFile) return;
 
+    setLoading(true);
     const reader1 = new FileReader();
     const reader2 = new FileReader();
     const nodesFilename = "nodes.csv"

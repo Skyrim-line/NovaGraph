@@ -4,14 +4,14 @@ import DataObjectIcon from '@mui/icons-material/DataObject';
 import CodeIcon from '@mui/icons-material/Code';
 import DataArrayIcon from '@mui/icons-material/DataArray';
 import AutoModeIcon from '@mui/icons-material/AutoMode';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImportCSV from "./ImportCSV";
 import ImportJSON from "./ImportJSON";
 import ImportGML from "./ImportGML";
 import ImportGEXF from "./ImportGEXF";
 import ImportAutoRandom from "./ImportAutoRandom";
 
-const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
+const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph, setLoading }) => {
     const [openDialog, setOpenDialog] = useState({
         csv: false,
         json: false,
@@ -40,7 +40,6 @@ const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
     }
 
     return(<>
-        
         <Menu
             anchorEl={anchorEl}
             keepMounted
@@ -84,30 +83,35 @@ const ImportMenu = ({ anchorEl, setAnchorEl, module, updateGraph }) => {
             onClose={() => handleCloseDialog('csv')}
             module={module}
             updateGraph={handleGraphUpdate}
+            setLoading={setLoading}
         />
         <ImportJSON
             open={openDialog.json}
             onClose={() => handleCloseDialog('json')}
             module={module}
             updateGraph={handleGraphUpdate}
+            setLoading={setLoading}
         />
         <ImportGML
             open={openDialog.gml}
             onClose={() => handleCloseDialog('gml')}
             module={module}
             updateGraph={handleGraphUpdate}
+            setLoading={setLoading}
         />
         <ImportGEXF
             open={openDialog.gexf}
             onClose={() => handleCloseDialog('gexf')}
             module={module}
             updateGraph={handleGraphUpdate}
+            setLoading={setLoading}
         />
         <ImportAutoRandom
             open={openDialog.auto}
             onClose={() => handleCloseDialog('auto')}
             module={module}
             updateGraph={handleGraphUpdate}
+            setLoading={setLoading}
         />
     </>)
 }

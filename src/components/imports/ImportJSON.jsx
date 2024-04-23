@@ -5,7 +5,7 @@ import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import React, { useState } from 'react';
 import { ErasMedium } from "../Eras";
 
-const ImportJSON = ({ open, onClose, module, updateGraph }) => {
+const ImportJSON = ({ open, onClose, module, updateGraph, setLoading }) => {
   const [file, setFile] = useState(null);
 
   const handleFileUpload = (event) => {
@@ -20,6 +20,7 @@ const ImportJSON = ({ open, onClose, module, updateGraph }) => {
   const handleSubmit = async () => {
     if (!file) return;
 
+    setLoading(true);
     const reader = new FileReader();
     const filename = "graph.json";
     module.FS.unlink(filename);
