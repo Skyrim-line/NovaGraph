@@ -20,7 +20,7 @@ const ImportGML = ({ open, onClose, module, updateGraph, setLoading }) => {
   const handleSubmit = async () => {
     if (!file) return;
 
-    setLoading(true);
+    setLoading("Loading graph from GML file...");
     const reader = new FileReader();
     const filename = "graph.gml";
     module.FS.unlink(filename);

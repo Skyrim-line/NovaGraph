@@ -23,7 +23,7 @@ const ImportCSV = ({ open, onClose, module, updateGraph, setLoading }) => {
   const handleSubmit = async () => {
     if (!nodesFile || !edgesFile) return;
 
-    setLoading(true);
+    setLoading("Loading graph from CSV files...");
     const reader1 = new FileReader();
     const reader2 = new FileReader();
     const nodesFilename = "nodes.csv"

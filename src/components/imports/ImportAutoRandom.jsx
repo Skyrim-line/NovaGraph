@@ -1,6 +1,7 @@
 import { Box, Button, Dialog, DialogContent, DialogTitle, Divider, FormControlLabel, Switch, TextField, Typography } from "@mui/material";
 import React, { useState } from 'react';
 import { ErasMedium } from "../Eras";
+import { toInteger } from "lodash";
 
 const ImportAutoRandom = ({ open, onClose, module, updateGraph, setLoading }) => {
   const [n, setN] = useState('');
@@ -36,7 +37,8 @@ const ImportAutoRandom = ({ open, onClose, module, updateGraph, setLoading }) =>
   const handleSubmit = async () => {
     if (!validateInput()) return;
     
-    setLoading(true);
+    setLoading("Loading graph...");
+    console.log(n, p, directed)
     const response = module.generate_graph_from_n_nodes(n, p, directed);
     if (response && response.nodes) updateGraph(response.nodes, response.edges, response.directed);
   }
@@ -58,6 +60,7 @@ const ImportAutoRandom = ({ open, onClose, module, updateGraph, setLoading }) =>
           <TextField
             label="Number of Nodes (n)"
             variant="standard"
+            color="secondary"
             value={n}
             onChange={(e) => setN(e.target.value)}
             error={!!error.n}
@@ -66,12 +69,17 @@ const ImportAutoRandom = ({ open, onClose, module, updateGraph, setLoading }) =>
           <TextField
             label="Probability (p)"
             variant="standard"
+            color="secondary"
             value={p}
             onChange={(e) => setP(e.target.value)}
             error={!!error.p}
             helperText={error.p}
           />
         </Box>
+        {
+          !isNaN(n) && n > 0 && !isNaN(p) && p >= 0 && p <= 1 &&
+            <Typography variant="caption">Estimated number of edges = {toInteger(p*n*(n-1)/2)}</Typography>
+        }
         <Box p={2} sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 3 }}>
             <Box>
               <FormControlLabel
@@ -89,7 +97,7 @@ const ImportAutoRandom = ({ open, onClose, module, updateGraph, setLoading }) =>
           </Button>
           </Box>
         <Typography variant="caption">
-          Note: Entering an extremely large value for nodes will result in a very large graph which will cause the application to run slower.
+          Warning: Inputs which result in millions of nodes and edges may cause the application to run very slowly.
         </Typography>
       </DialogContent>
     </Dialog>

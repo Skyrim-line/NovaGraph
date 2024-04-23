@@ -15,6 +15,7 @@ import AlgorithmExplanation from './components/AlgorithmExplanation';
 import { ErasBold, ErasMedium } from './components/Eras';
 import AlgorithmOutput from './components/algorithmOutputs/AlgorithmOutput';
 import AlgorithmInput from './components/AlgorithmInput';
+import { set } from 'lodash';
 
 const darkTheme = createTheme({
   palette: {
@@ -51,7 +52,7 @@ function App() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [hoveredAlgorithm, setHoveredAlgorithm] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(null);
 
   useEffect(() => {
     createModule().then(mod => {
@@ -64,26 +65,13 @@ function App() {
         if (typeof error != 'number') return;
         const pointer = error;
         const error_message = mod.what_to_stderr(pointer);
-        console.log("error ", error)
         setError(error_message);
-        setLoading(false);
+        setLoading(null);
       }
 
       window.onunload = () => {
         console.log("Cleanup")
         mod.cleanupGraph()
-      }
-
-      window.onbeforeunload = () => {
-        console.log("Before unload")
-      }
-
-      window.onpagehide = () => {
-        console.log("Page hide")
-      }
-
-      document.onvisibilitychange = () => {
-        console.log("Visibility change")
       }
     })
   }, []);
@@ -100,7 +88,7 @@ function App() {
     setEdges(edges);
     setDirected(directed);
     setRenderMode(1);
-    setLoading(false);
+    setLoading(null);
   }
 
   const handleAccordianChange = (panel) => (event, newExpanded) => {
@@ -122,6 +110,7 @@ function App() {
     setRenderMode(response.mode)
     setActiveAlgorithm(alg)
     setActiveResponse(response)
+    setLoading(null)
   }
 
   const toId = name => {
@@ -136,7 +125,7 @@ function App() {
       { loading &&
         <div className="loader-container">
           <span className="loader"></span>
-          <p className="loading-text">Importing graph...</p>
+          <p className="loading-text">{loading}</p>
         </div>
       }
       <Snackbar
@@ -216,6 +205,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.dijkstra_source_to_target}
                   postState={postAlgorithmState.bind(null, Algorithm.DIJKSTRA_A_TO_B)}
+                  setLoading={setLoading}
                   algorithmName="Dijkstra (A to B)"
                   desc={["Dijkstra's algorithm finds the shortest path from one node to another."]}
                   nodes={nodes}
@@ -229,6 +219,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.dijkstra_source_to_all}
                   postState={postAlgorithmState.bind(null, Algorithm.DIJKSTRA_ALL)}
+                  setLoading={setLoading}
                   algorithmName="Dijkstra (A to all)"
                   desc={["Dijkstra's algorithm finds the shortest path from one node to all other nodes."]}
                   nodes={nodes}
@@ -241,6 +232,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.yens_algorithm}
                   postState={postAlgorithmState.bind(null, Algorithm.YEN)}
+                  setLoading={setLoading}
                   algorithmName="Yen's Shortest Path"
                   desc={["Yen's algorithm finds the top 'k' shortest paths between two nodes."]}
                   nodes={nodes}
@@ -255,6 +247,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.bellman_ford_source_to_target}
                   postState={postAlgorithmState.bind(null, Algorithm.BELLMAN_FORD_A_TO_B)}
+                  setLoading={setLoading}
                   algorithmName="Bellman-Ford (A to B)"
                   desc={["Bellman-Ford algorithm finds the shortest path from one node to another. It works similarly to Dijkstra's algorithm."]}
                   nodes={nodes}
@@ -268,6 +261,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.bellman_ford_source_to_all}
                   postState={postAlgorithmState.bind(null, Algorithm.BELLMAN_FORD_ALL)}
+                  setLoading={setLoading}
                   algorithmName="Bellman-Ford (A to all)"
                   desc={["Bellman-Ford algorithm finds the shortest path from one node to all other nodes."]}
                   nodes={nodes}
@@ -280,6 +274,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.bfs}
                   postState={postAlgorithmState.bind(null, Algorithm.BFS)}
+                  setLoading={setLoading}
                   algorithmName="Breadth First Search"
                   desc={["Breadth First Search algorithm traverses the graph from a source by exploring all neighbors before moving on to the next level. It continues until all nodes are visited."]}
                   nodes={nodes}
@@ -292,6 +287,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.dfs}
                   postState={postAlgorithmState.bind(null, Algorithm.DFS)}
+                  setLoading={setLoading}
                   algorithmName="Depth First Search"
                   desc={["Depth First Search algorithm traverses the graph from a source by exploring as far as possible along each branch before backtracking. It continues until all nodes are visited."]}
                   nodes={nodes}
@@ -304,6 +300,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.random_walk}
                   postState={postAlgorithmState.bind(null, Algorithm.RANDOM_WALK)}
+                  setLoading={setLoading}
                   algorithmName="Random Walk"
                   desc={["The algorithm will randomly walk through the graph starting from a source node for a specified number of steps."]}
                   nodes={nodes}
@@ -317,6 +314,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.min_spanning_tree}
                   postState={postAlgorithmState.bind(null, Algorithm.MINIMAL_SPANNING_TREE)}
+                  setLoading={setLoading}
                   algorithmName="Minimum Spanning Tree"
                   desc={["The algorithm finds the minimum spanning tree of the graph."]}
                   nodes={nodes}
@@ -337,6 +335,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.betweenness_centrality}
                   postState={postAlgorithmState.bind(null, Algorithm.BETWEENNESS_CENTRALITY)}
+                  setLoading={setLoading}
                   algorithmName="Betweenness Centrality"
                   desc={["Betweenness centrality measures the number of shortest paths that pass through a node."]}
                   nodes={nodes}
@@ -347,6 +346,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.closeness_centrality}
                   postState={postAlgorithmState.bind(null, Algorithm.CLOSENESS_CENTRALITY)}
+                  setLoading={setLoading}
                   algorithmName="Closeness Centrality"
                   desc={["Closeness centrality measures the average shortest path between a node and all other nodes."]}
                   nodes={nodes}
@@ -357,6 +357,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.degree_centrality}
                   postState={postAlgorithmState.bind(null, Algorithm.DEGREE_CENTRALITY)}
+                  setLoading={setLoading}
                   algorithmName="Degree Centrality"
                   desc={["Degree centrality measures the number of edges connected to a node."]}
                   nodes={nodes}
@@ -367,6 +368,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.eigenvector_centrality}
                   postState={postAlgorithmState.bind(null, Algorithm.EIGENVECTOR_CENTRALITY)}
+                  setLoading={setLoading}
                   algorithmName="Eigenvector Centrality"
                   desc={["Eigenvector centrality measures the influence of a node in a network."]}
                   nodes={nodes}
@@ -377,6 +379,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.strength_centrality}
                   postState={postAlgorithmState.bind(null, Algorithm.STRENGTH_CENTRALITY)}
+                  setLoading={setLoading}
                   algorithmName="Node Strength"
                   desc={["Node strength measures the sum of the weights of the edges connected to a node."]}
                   nodes={nodes}
@@ -387,6 +390,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.harmonic_centrality}
                   postState={postAlgorithmState.bind(null, Algorithm.HARMONIC_CENTRALITY)}
+                  setLoading={setLoading}
                   algorithmName="Harmonic Centrality"
                   desc={["Harmonic centrality is a variant of closeness centrality that measures the average harmonic mean of the shortest paths between a node and all other nodes."]}
                   nodes={nodes}
@@ -397,6 +401,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.pagerank}
                   postState={postAlgorithmState.bind(null, Algorithm.PAGERANK)}
+                  setLoading={setLoading}
                   algorithmName="Page Rank"
                   desc={[
                     "Page Rank is an algorithm that measures the importance of a node in a network.",
@@ -422,6 +427,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.louvain}
                   postState={postAlgorithmState.bind(null, Algorithm.LOUVAIN)}
+                  setLoading={setLoading}
                   algorithmName="Louvain Algorithm"
                   desc={[
                     "The Louvain algorithm uses a hierarchical approach to find communities in a network.",
@@ -439,6 +445,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.leiden}
                   postState={postAlgorithmState.bind(null, Algorithm.LEIDEN)}
+                  setLoading={setLoading}
                   algorithmName="Leiden Algorithm"
                   desc={[
                     "The Leiden algorithm uses a hierarchical approach to find communities in a network.",
@@ -456,6 +463,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.fast_greedy}
                   postState={postAlgorithmState.bind(null, Algorithm.FAST_GREEDY)}
+                  setLoading={setLoading}
                   algorithmName="Fast-Greedy Algorithm"
                   desc={[
                     "The Fast-Greedy algorithm uses the fast greedy modularity optimisation to find communities in a network.",
@@ -489,6 +497,7 @@ function App() {
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.vertices_are_connected}
                   postState={postAlgorithmState.bind(null, Algorithm.NEIGHBOR_JOINING)}
+                  setLoading={setLoading}
                   algorithmName="Neighbour Status?"
                   desc={["This algorithm checks to see if two nodes are connected by a single edge."]}
                   nodes={nodes}

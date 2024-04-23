@@ -21,7 +21,7 @@ const ImportGEXF = ({ open, onClose, module, updateGraph, setLoading }) => {
   const handleSubmit = async () => {
     if (!file) return;
 
-    setLoading(true);
+    setLoading("Loading graph from GEXF file...");
     const reader = new FileReader();
     const filename = "graph.gexf";
     module.FS.unlink(filename);

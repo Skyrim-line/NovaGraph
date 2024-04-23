@@ -37,7 +37,7 @@ const ListboxComponent = forwardRef(function ListboxComponent(props, ref) {
   );
 });
 
-const AlgorithmInput = ({ wasmFunction, postState, algorithmName, desc, inputs, nodes, setHoveredAlgorithm, hoveredAlgorithm }) => {
+const AlgorithmInput = ({ wasmFunction, postState, setLoading, algorithmName, desc, inputs, nodes, setHoveredAlgorithm, hoveredAlgorithm }) => {
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState(
@@ -75,6 +75,7 @@ const AlgorithmInput = ({ wasmFunction, postState, algorithmName, desc, inputs, 
       );
       return;
     }
+    setLoading("Running algorithm...")
     const args = inputs.map(input => values[input.label])
     const response = wasmFunction(...args);
     postState(response);
@@ -128,7 +129,7 @@ const AlgorithmInput = ({ wasmFunction, postState, algorithmName, desc, inputs, 
                   id={input.label}
                   options={nodes}
                   color='info'
-                  getOptionLabel={(option) => option.name ? option.name : option.id }                  style={{ width: 300 }}
+                  getOptionLabel={(option) => option.name ? option.name : String(option.id) }                  style={{ width: 300 }}
                   renderInput={(params) => <TextField {...params} label={input.label} variant="outlined" color='secondary' />}
                   onChange={handleChange(input.label, input.type)}
                   ListboxComponent={ListboxComponent}
