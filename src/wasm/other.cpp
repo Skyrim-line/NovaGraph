@@ -11,7 +11,7 @@ std::string igraph_check_attribute(const igraph_t *graph) {
     } else if (igraph_cattribute_has_attr(graph, IGRAPH_ATTRIBUTE_VERTEX, "id")) {
         return "id";
     } else {
-        return NULL;
+        return "";
     }
 }
 
