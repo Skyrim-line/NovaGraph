@@ -15,7 +15,6 @@ import AlgorithmExplanation from './components/AlgorithmExplanation';
 import { ErasBold, ErasMedium } from './components/Eras';
 import AlgorithmOutput from './components/algorithmOutputs/AlgorithmOutput';
 import AlgorithmInput from './components/AlgorithmInput';
-import { set } from 'lodash';
 
 const darkTheme = createTheme({
   palette: {
