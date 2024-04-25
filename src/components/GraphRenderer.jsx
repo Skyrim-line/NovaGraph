@@ -1,16 +1,18 @@
 import { Cosmograph, CosmographProvider, CosmographSearch } from '@cosmograph/react'
 import React, { useRef, useCallback, useEffect, useState, useLayoutEffect } from 'react';
 import chroma from "chroma-js";
-import { debounce } from "lodash";
-import { Box, Button, Divider, Drawer, IconButton, Slider, Tooltip, Typography } from '@mui/material';
+import { Box, Button, Divider, Drawer, FormControlLabel, IconButton, RadioGroup, Radio, Tooltip, Typography } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
 import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
-import LabelIcon from '@mui/icons-material/Label';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
+import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import LabelOffIcon from '@mui/icons-material/LabelOff';
 import { Mode } from '../renderModes';
+import { ErasBold, ErasMedium } from './Eras';
 
 export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     const cosmograph = useRef()
@@ -30,7 +32,6 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     const [dynamicLabels, setDynamicLabels] = useState(true);
     const [optionsDrawer, setOptionsDrawer] = useState(false);
 
-    const [repulsion, setRepulsion] = useState(2);
     const [gravity, setGravity] = useState(0);
     const [nodeSizeScale, setNodeSizeScale] = useState(1);
 
@@ -50,12 +51,25 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
         if (node && i != undefined && node != selectedNode) {
             cosmograph.current?.selectNode(node);
             cosmograph.current?.zoomToNode(node);
-            cosmograph.current?.pause();
             setSelectedNode(node);
         } else {
             zoomOut();
         }
-    })
+    });
+
+    const zoomGraphOut = () => {
+        const zoomLevel = cosmograph.current?.getZoomLevel();
+        if (zoomLevel <= 1) {
+            cosmograph.current?.setZoomLevel(0.1, 500);
+        } else {
+            cosmograph.current?.setZoomLevel(zoomLevel - 1, 500);
+        }
+    }
+
+    const zoomGraphIn = () => {
+        const zoomLevel = cosmograph.current?.getZoomLevel();
+        cosmograph.current?.setZoomLevel(zoomLevel + 1, 500);
+    }
 
     
     const getColor = value => {
@@ -113,9 +127,9 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
             
             <Cosmograph
                 ref={cosmograph}
-                //initialZoomLevel={1}
+                initialZoomLevel={1}
                 disableSimulation={false}
-                //backgroundColor='#151515'
+
                 nodeSize={(_node, id) => getSize(id)}
                 nodeColor={(_node, id) => getColor(colors[id])}
                 linkColor={link => getLinkColor(link)}
@@ -134,7 +148,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 simulationDecay={100000}
 
                 nodeSizeScale={nodeSizeScale}
-                simulationRepulsion={repulsion}
+                simulationRepulsion={2}
                 simulationGravity={gravity}
                 simulationLinkDistance={20}
 
@@ -165,15 +179,24 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 </IconButton>
             </Tooltip>
             
-            
-
             <Box flexGrow={1} />
 
+            <Tooltip title="Zoom Out">
+                <IconButton aria-label='zoom-out' onClick={zoomGraphOut}>
+                    <ZoomOutIcon />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Zoom In">
+                <IconButton aria-label='zoom-in' onClick={zoomGraphIn}>
+                    <ZoomInIcon />
+                </IconButton>
+            </Tooltip>
+            <Divider orientation="vertical" variant='middle' flexItem />
             {
                 dynamicLabels ?
                 <Tooltip title="Hide Dynamic Labels">
                     <IconButton aria-label='hide-labels' onClick={() => setDynamicLabels(false)}>
-                        <LabelIcon />
+                        <LabelOutlinedIcon />
                     </IconButton>
                 </Tooltip>
                 :
@@ -206,50 +229,74 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                     width={{ xs: '10rem', sm: '15rem'}}
                     p={3}
                 >
-                    <Typography variant='h5' align='center' pb={2}>Graph Options</Typography>
+                    <ErasBold pb={2} align='center' fontSize={24}>Graph Options</ErasBold>
                     <Divider />
 
                     <Box pt={3} sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                         <Box>
-                            <Typography variant='h6' align='center'>Repulsion</Typography>
-                            <Slider
-                                value={repulsion}
-                                color='info'
-                                min={0}
-                                max={2}
-                                step={0.05}
-                                valueLabelDisplay='auto'
-                                onChange={debounce((_, value) => setRepulsion(value), 300)}
-                            />
-                            <Typography variant='body2'>Affects how quickly nodes repel from each other (default: 2)</Typography>
-                        </Box>
-                        <Box>
-                            <Typography variant='h6' align='center'>Gravity Strength</Typography>
-                            <Slider
+                            <ErasMedium align='center'>Gravity Strength</ErasMedium>
+                            <RadioGroup
                                 value={gravity}
-                                color='info'
-                                min={0}
-                                max={0.5}
-                                step={0.1}
-                                valueLabelDisplay='auto'
-                                onChange={debounce((_, value) => setGravity(value), 300)}
-                            />
+                                onChange={(event) => setGravity(parseFloat(event.target.value))}
+                            >
+                                <FormControlLabel
+                                    value={0}
+                                    control={<Radio color='info' />}
+                                    label={<Typography variant='body2'>Zero Gravity (default)</Typography>}
+                                />
+                                <FormControlLabel
+                                    value={0.1}
+                                    control={<Radio color='info' />}
+                                    label={<Typography variant='body2'>Low Gravity</Typography>}
+                                />
+                                <FormControlLabel
+                                    value={0.5}
+                                    control={<Radio color='info' />}
+                                    label={<Typography variant='body2'>High Gravity</Typography>}
+                                />
+                            </RadioGroup>
                             <Typography variant='body2'>
-                                Modifies the gravitational strength of the center of the graph (default: 0)
+                                Modifies the gravitational strength of the center of the graph.
                             </Typography>
                         </Box>
                         <Box>
-                            <Typography variant='h6' align='center'>Node Scalar Size</Typography>
-                            <Slider
+                            <ErasMedium align='center'>Node Scalar Size</ErasMedium>
+                            <RadioGroup
                                 value={nodeSizeScale}
-                                color='info'
-                                min={0}
-                                max={2}
-                                step={0.25}
-                                valueLabelDisplay='auto'
-                                onChange={debounce((_, value) => setNodeSizeScale(value), 300)}
-                            />
-                            <Typography variant='body2'>Modify node sizes (default: 1)</Typography>
+                                onChange={(event) => setNodeSizeScale(parseFloat(event.target.value))}
+                            >
+                                <FormControlLabel
+                                    value={0}
+                                    control={<Radio color='info' />}
+                                    label={<Typography variant='body2'>Invisible</Typography>}
+                                />
+                                <FormControlLabel
+                                    value={0.25}
+                                    control={<Radio color='info' />}
+                                    label={<Typography variant='body2'>Extra Small</Typography>}
+                                />
+                                <FormControlLabel
+                                    value={0.5}
+                                    control={<Radio color='info' />}
+                                    label={<Typography variant='body2'>Small</Typography>}
+                                />
+                                <FormControlLabel
+                                    value={1}
+                                    control={<Radio color='info' />}
+                                    label={<Typography variant='body2'>Medium (default)</Typography>}
+                                />
+                                <FormControlLabel
+                                    value={1.5}
+                                    control={<Radio color='info' />}
+                                    label={<Typography variant='body2'>Large</Typography>}
+                                />
+                                <FormControlLabel
+                                    value={2}
+                                    control={<Radio color='info' />}
+                                    label={<Typography variant='body2'>Extra Large</Typography>}
+                                />
+                            </RadioGroup>
+                            <Typography variant='body2'>Modify the sizes for all nodes.</Typography>
                         </Box>
 
                     </Box>
