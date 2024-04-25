@@ -1,16 +1,40 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableContainer, TableHead, Paper, Box, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { RTableCell, RTableRow } from './ResultsTable';
+import { RTableCell as Cell, RTableRow as Row } from './ResultsTable';
 import { ErasBold, ErasMedium } from '../Eras';
+import InfiniteScroll from 'react-infinite-scroller';
 
 const BFS = ({ data }) => {
+    const itemsPerPage = 20;
     const [open, setOpen] = useState(false);
+    const [records, setRecords] = useState(itemsPerPage);
+
+    const hasMore = records < data.layers.length;
+
     useEffect(() => {
         console.log(data);
     }, [data]);
 
     const handleClick = () => {
         setOpen(!open);
+    }
+
+    const loadMore = () => {
+        if (records === data.length) {
+        } else {
+            setTimeout(() => {
+                setRecords(records + itemsPerPage);
+            }, 500);
+        }
+    }
+
+    const loadItems = (layers) => {
+        return layers.slice(0, records).map((layer, index) => (
+            <Row key={index}>
+                <Cell>{index}</Cell>
+                <Cell style={{ wordWrap: 'break-word', maxWidth: 450 }}>{layer.join(', ')}</Cell>
+            </Row>
+        ));
     }
 
     return (<>
@@ -30,19 +54,22 @@ const BFS = ({ data }) => {
                     <TableContainer component={Paper} style={{ maxWidth: 'auto', margin: 'auto' }}>
                         <Table size='small' sx={{ tableLayout: 'auto' }}>
                             <TableHead>
-                                <RTableRow>
-                                    <RTableCell>Depth</RTableCell>
-                                    <RTableCell>Nodes</RTableCell>
-                                </RTableRow>
+                                <Row>
+                                    <Cell>Depth</Cell>
+                                    <Cell>Nodes</Cell>
+                                </Row>
                             </TableHead>
-                            <TableBody>
-                                {data && data.layers.map((layer, index) => (
-                                    <RTableRow key={index}>
-                                        <RTableCell>{index}</RTableCell>
-                                        <RTableCell style={{ wordWrap: 'break-word', maxWidth: 450 }}>{layer.join(', ')}</RTableCell>
-                                    </RTableRow>
-                                ))}
-                            </TableBody>
+                            <InfiniteScroll
+                                pageStart={0}
+                                element={TableBody}
+                                loadMore={loadMore}
+                                hasMore={hasMore}
+                                loader={<Row key={0}><Cell /><Cell>Loading...</Cell></Row>}
+                                useWindow={false}
+                                style={{ width: '100%' }}
+                            >
+                                {loadItems(data.layers)}
+                            </InfiniteScroll>
                         </Table>
                     </TableContainer>
                 </DialogContent>
