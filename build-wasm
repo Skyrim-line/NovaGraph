@@ -14,7 +14,7 @@ em++ src/wasm/*.cpp src/wasm/algorithms/*.cpp src/wasm/generators/*.cpp -o src/g
     -s EXPORTED_RUNTIME_METHODS=['FS'] \
     -s ALLOW_MEMORY_GROWTH=1 \
     -lembind --no-entry \
-    -Os \
+    -O3 \
     ./src/wasm/igraph/build/src/libigraph.a \
     ./src/wasm/pugixml/build/libpugixml.a \
     && echo "Finished with no errors!"
