@@ -122,7 +122,10 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
         <CosmographProvider nodes={nodes} links={links}>
             <CosmographSearch
                 onSelectResult={n => cosmograph.current?.selectNode(n)}
-                accessors={[{ label: 'Name', accessor: n => n.name }]}
+                accessors={[
+                    { label: 'Name', accessor: n => n.name },
+                    { label: 'ID', accessor: n => n.id }
+                ]}
             />
             
             <Cosmograph
