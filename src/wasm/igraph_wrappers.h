@@ -33,6 +33,19 @@ public:
         return igraph_vector_max(&v);
     }
 
+    igraph_real_t avg_ignore_zeros() {
+        igraph_real_t sum = 0;
+        igraph_integer_t count = 0;
+        for (long int i = 0; i < igraph_vector_size(&v); ++i) {
+            igraph_real_t value = VECTOR(v)[i];
+            if (value != 0) {
+                sum += value;
+                count++;
+            }
+        }
+        return count == 0 ? 0 : sum / count;
+    }
+
     igraph_real_t max_nonan() {
         igraph_real_t max = NEGINF;
         for (long int i = 0; i < igraph_vector_size(&v); ++i) {

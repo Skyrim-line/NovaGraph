@@ -117,3 +117,39 @@ val fast_greedy(void) {
     result.set("data", data);
     return result;
 }
+
+val local_clustering_coefficient(void) {
+    IGraphVector res;
+
+    igraph_transitivity_local_undirected(&globalGraph, res.vec(), igraph_vss_all(), IGRAPH_TRANSITIVITY_ZERO);
+
+    igraph_real_t global_transitivity = res.avg_ignore_zeros();
+    double max_transitivity = res.max_nonan();
+    val result = val::object();
+    val colorMap = val::object();
+    val data = val::object();
+
+    val transitivities = val::array();
+    std::unordered_map<int, double> dm;
+    for (igraph_integer_t v = 0; v < res.size(); ++v) {
+        std::cout << "v[" << v << "] = " << res.at(v) << std::endl;
+        val t = val::object();
+        double transitivity = res.at(v);
+
+        std::stringstream stream;
+        stream << std::fixed << std::setprecision(4) << transitivity;
+
+        dm[v] = transitivity;
+        t.set("id", v);
+        t.set("node", igraph_get_name(v));
+        t.set("value", std::stod(stream.str()));
+        transitivities.set(v, t);
+    }
+
+    data.set("coefficients", transitivities);
+    data.set("global_coefficient", global_transitivity);
+    result.set("colorMap", colorMap);
+    result.set("mode", MODE_COLOR_SHADE_DEFAULT);
+    result.set("data", data);
+    return result;
+}

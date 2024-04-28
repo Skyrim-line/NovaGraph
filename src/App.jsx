@@ -468,6 +468,21 @@ function App() {
                   hoveredAlgorithm={Algorithm.FAST_GREEDY}
                   inputs={[]}
                 />
+                <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.local_clustering_coefficient}
+                  postState={postAlgorithmState.bind(null, Algorithm.LOCAL_CLUSTERING_COEFFICIENT)}
+                  setLoading={setLoading}
+                  algorithmName="Local Clustering Coefficient"
+                  desc={[
+                    "The local clustering coefficient measures the number of triangles that pass through a node.",
+                    "Any nodes with a clustering coefficient of 0 are not part of any triangles.",
+                    "D. J. Watts and S. Strogatz: Collective dynamics of small-world networks. Nature 393(6684):440-442 (1998)"
+                  ]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.LOCAL_CLUSTERING_COEFFICIENT}
+                  inputs={[]}
+                />
               </ButtonGroup>
               {/*
                 <p>Clustering Coefficient / Transitivity</p>

@@ -14,3 +14,17 @@ void frequenciesToColorMap(std::unordered_map<int, int> fm, val &colorMap) {
         colorMap.set(node, scaled);
     }
 }
+
+void doublesToColorMap(std::unordered_map<int, double> dm, val &colorMap) {
+    double max = 0.0;
+    for (auto& pair : dm) {
+        max = std::max(max, pair.second);
+    }
+
+    for (auto& pair : dm) {
+        int node = pair.first;
+        double value = pair.second;
+        double scaled = value / max;
+        colorMap.set(node, scaled);
+    }
+}

@@ -32,7 +32,7 @@ std::string igraph_get_name(igraph_integer_t v);
 igraph_vector_t *igraph_weights(void);
 
 void frequenciesToColorMap(std::unordered_map<int, int> fm, val &colorMap);
-
+void doublesToColorMap(std::unordered_map<int, double> dm, val &colorMap);
 
 val vertices_are_connected(igraph_integer_t src, igraph_integer_t tar);
 val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar);
@@ -56,6 +56,7 @@ val pagerank(igraph_real_t damping);
 val louvain(igraph_real_t resolution);
 val leiden(igraph_real_t resolution);
 val fast_greedy(void);
+val local_clustering_coefficient(void);
 
 
 #endif

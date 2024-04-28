@@ -18,5 +18,6 @@ export const Algorithm = {
     PAGERANK: 17,
     LOUVAIN: 18,
     LEIDEN: 19,
-    FAST_GREEDY: 20
+    FAST_GREEDY: 20,
+    LOCAL_CLUSTERING_COEFFICIENT: 21,
 }

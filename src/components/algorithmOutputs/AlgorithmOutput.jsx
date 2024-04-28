@@ -19,6 +19,7 @@ import PageRank from './PageRank';
 import Louvain from './Louvain';
 import Leiden from './Leiden';
 import FastGreedy from './FastGreedy';
+import LocalClusertingCoefficient from './LocalClusertingCoefficient';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -40,6 +41,7 @@ const components = {
     [Algorithm.LOUVAIN]: Louvain,
     [Algorithm.LEIDEN]: Leiden,
     [Algorithm.FAST_GREEDY]: FastGreedy,
+    [Algorithm.LOCAL_CLUSTERING_COEFFICIENT]: LocalClusertingCoefficient,
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {

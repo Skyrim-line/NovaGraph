@@ -60,7 +60,10 @@ function AlgorithmExplanation({ algorithm }) {
             Each community is represented by a different colour.</>,
         [Algorithm.FAST_GREEDY]:
             <>Uses a greedy algorithm to find the best community structure for a given graph without requiring a resolution parameter.
-            Each community is represented by a different colour.</>
+            Each community is represented by a different colour.</>,
+        [Algorithm.LOCAL_CLUSTERING_COEFFICIENT]:
+            <>Quantifies how densely connected a specific node's neighbours are to each other.
+            Nodes with greater coefficients are shown in darker shades.</>,
     };
 
     return (
