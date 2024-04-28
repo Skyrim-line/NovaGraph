@@ -15,6 +15,7 @@ import AlgorithmExplanation from './components/AlgorithmExplanation';
 import { ErasBold, ErasMedium } from './components/Eras';
 import AlgorithmOutput from './components/algorithmOutputs/AlgorithmOutput';
 import AlgorithmInput from './components/AlgorithmInput';
+import { SpinnerDotted } from 'spinners-react';
 
 const darkTheme = createTheme({
   palette: {
@@ -112,18 +113,11 @@ function App() {
     setLoading(null)
   }
 
-  const toId = name => {
-    const node = nodes.find(node => node.name === name)
-    if (node) return node.id
-    const node2 = nodes.find(node => node.id === parseInt(name))
-    return node2 ? node2.id : null
-  }
-
   return (
     <ThemeProvider theme={darkTheme}>
       { loading &&
         <div className="loader-container">
-          <span className="loader"></span>
+          <SpinnerDotted size={100} thickness={150} color="#6750C6" />
           <p className="loading-text">{loading}</p>
         </div>
       }

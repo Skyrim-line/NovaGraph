@@ -75,15 +75,18 @@ const AlgorithmInput = ({ wasmFunction, postState, setLoading, algorithmName, de
       );
       return;
     }
-    setLoading("Running algorithm...")
-    const args = inputs.map(input => values[input.label])
-    const response = wasmFunction(...args);
-    postState(response);
+    setLoading("Running algorithm...");
     handleClose();
 
     setErrors(
       Object.keys(values).reduce((acc, key) => ({ ...acc, [key]: false }), {})
     );
+
+    setTimeout(() => {
+      const args = inputs.map(input => values[input.label])
+      const response = wasmFunction(...args);
+      postState(response);      
+    }, 0);
   };
 
   return (
