@@ -53,17 +53,19 @@ function AlgorithmExplanation({ algorithm }) {
             <>Measures the importance of a node based on the number of incoming edges and the importance of neighbouring nodes.
             This is a simplified version of the <strong>PageRank Algorithm</strong> used by <strong>Google</strong>.</>,
         [Algorithm.LOUVAIN]: 
-            <>Groups the nodes into communities with higher resolutions resulting in more (and smaller) communities. 
+            <>Groups the nodes into <b>communities</b> with higher resolutions resulting in more (and smaller) communities. 
             Each community is represented by a different colour.</>,
         [Algorithm.LEIDEN]:
             <>A faster version of the Louvain algorithm which uses a different optimisation method.
             Each community is represented by a different colour.</>,
         [Algorithm.FAST_GREEDY]:
-            <>Uses a greedy algorithm to find the best community structure for a given graph without requiring a resolution parameter.
+            <>Uses a <b>greedy algorithm</b> to find the best community structure for a given graph without requiring a resolution parameter.
             Each community is represented by a different colour.</>,
         [Algorithm.LOCAL_CLUSTERING_COEFFICIENT]:
             <>Quantifies how densely connected a specific node's neighbours are to each other.
-            Nodes with greater coefficients are shown in darker shades.</>,
+            Nodes with greater <b>coefficients</b> are shown in darker shades.</>,
+        [Algorithm.K_CORE]:
+            <>Finds the <b>largest subgraph</b> where each node has at least <code>k</code> connections.</>,
     };
 
     return (

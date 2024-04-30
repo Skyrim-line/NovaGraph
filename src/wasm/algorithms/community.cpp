@@ -156,3 +156,64 @@ val local_clustering_coefficient(void) {
     result.set("data", data);
     return result;
 }
+
+val k_core(int k) {
+    IGraphVectorInt coreness, vertices_to_keep;
+    igraph_coreness(&globalGraph, coreness.vec(), IGRAPH_OUT);
+
+    for (igraph_integer_t v = 0; v < coreness.size(); ++v) {
+        std::cout << "Coreness of " << igraph_get_name(v) << " is " << coreness.at(v) << std::endl;
+        if (coreness.at(v) >= k) {
+            vertices_to_keep.push_back(v);
+        }
+    }
+
+    // Create a map to store the original vertex IDs
+    std::map<igraph_integer_t, igraph_integer_t> original_ids;
+    for (int i = 0; i < vertices_to_keep.size(); i++) {
+        original_ids[i] = vertices_to_keep.at(i);
+    }
+
+    // create induced subgraph
+    igraph_t subgraph;
+    igraph_vs_t vs;
+    igraph_vs_vector(&vs, vertices_to_keep.vec());
+    igraph_induced_subgraph(&globalGraph, &subgraph, vs, IGRAPH_SUBGRAPH_AUTO);
+
+    val result = val::object();
+    val colorMap = val::object();
+    val data = val::object();
+
+    for (igraph_integer_t e = 0; e < igraph_ecount(&subgraph); ++e) {
+        igraph_integer_t from, to;
+        igraph_edge(&subgraph, e, &from, &to);
+
+        int from_id = original_ids[from];
+        int to_id = original_ids[to];
+        
+        std::string linkId = std::to_string(from_id) + "-" + std::to_string(to_id);
+        colorMap.set(linkId, 1);
+        colorMap.set(from_id, 0.5);
+        colorMap.set(to_id, 0.5);
+    }
+
+    val cores = val::array();
+    for (igraph_integer_t i = 0; i < vertices_to_keep.size(); ++i) {
+        igraph_integer_t v = vertices_to_keep.at(i);
+        val node = val::object();
+        node.set("id", v);
+        node.set("node", igraph_get_name(v));
+        cores.set(v, node);
+    }
+    data.set("cores", cores);
+    data.set("k", k);
+    data.set("max_coreness", coreness.max());
+    result.set("colorMap", colorMap);
+    result.set("mode", MODE_COLOR_SHADE_DEFAULT);
+    result.set("data", data);
+
+    igraph_destroy(&subgraph);
+    igraph_vs_destroy(&vs);
+    return result;
+
+} 

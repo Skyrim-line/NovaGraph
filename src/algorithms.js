@@ -20,4 +20,5 @@ export const Algorithm = {
     LEIDEN: 19,
     FAST_GREEDY: 20,
     LOCAL_CLUSTERING_COEFFICIENT: 21,
+    K_CORE: 22,
 }

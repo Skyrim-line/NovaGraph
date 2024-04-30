@@ -483,10 +483,24 @@ function App() {
                   hoveredAlgorithm={Algorithm.LOCAL_CLUSTERING_COEFFICIENT}
                   inputs={[]}
                 />
+                <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.k_core}
+                  postState={postAlgorithmState.bind(null, Algorithm.K_CORE)}
+                  setLoading={setLoading}
+                  algorithmName="K-Core Decomposition"
+                  desc={[
+                    "The k-core decomposition algorithm finds the k-core of a graph.",
+                    "The k-core is a subgraph in which all nodes have a degree (number of outgoing edges) of at least k."
+                  ]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.K_CORE}
+                  inputs={[
+                    { label: 'Enter k', explanation: 'The minimum degree of the k-core', type: 'number', step: '1', defaultValue: 1 }
+                  ]}
+                />
               </ButtonGroup>
               {/*
-                <p>Clustering Coefficient / Transitivity</p>
-                <p>K-Core Decomposition</p>
                 <p>Label Propagation</p>
                 <p>Triangle Count</p>
                 <p>Strongly Connected Components</p>
