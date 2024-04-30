@@ -129,10 +129,13 @@ val local_clustering_coefficient(void) {
     val colorMap = val::object();
     val data = val::object();
 
+    std::stringstream s;
+    s << std::fixed << std::setprecision(4) << global_transitivity;
+    data.set("global_coefficient", std::stod(s.str()));
+
     val transitivities = val::array();
     std::unordered_map<int, double> dm;
     for (igraph_integer_t v = 0; v < res.size(); ++v) {
-        std::cout << "v[" << v << "] = " << res.at(v) << std::endl;
         val t = val::object();
         double transitivity = res.at(v);
 
@@ -145,9 +148,9 @@ val local_clustering_coefficient(void) {
         t.set("value", std::stod(stream.str()));
         transitivities.set(v, t);
     }
+    doublesToColorMap(dm, colorMap);
 
     data.set("coefficients", transitivities);
-    data.set("global_coefficient", global_transitivity);
     result.set("colorMap", colorMap);
     result.set("mode", MODE_COLOR_SHADE_DEFAULT);
     result.set("data", data);
