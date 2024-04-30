@@ -1,6 +1,8 @@
 # Novagraph
 A WebAssembly Project which uses C++ to deliver high-performance graph analytics.
 
+This project is part of my UNSW Honours Thesis and the description can be found at [TMS](https://thesis.cse.unsw.edu.au/topic/767).
+
 ## Build
 TO compile, ensure the igraph library has been built and `build-wasm` includes the correct header files.
 ```bash
@@ -15,6 +17,23 @@ To run locally, first use `npm i` to install all node packages, then run the ser
 npm run dev
 ```
 
+## Adding New Algorithms
+Currently, adding another algorithm requires a lot of file modification. The steps are:
+1. Create the function in C++
+    - the algorithm should be in a file located at `src/wasm/algorithms`
+    - takes in input passed from JavaScript
+    - return a `val` object with necessary fields for rendering output
+2. Add this function to `EMSCRIPTEN_BINDINGS` in `src/wasm/graph.cpp`
+3. Add the algorithm enum to `src/algorithms.js`
+4. Add the input button to `src/App.jsx`
+    - the button should be of type `AlgorithmInput`
+    - the button should fall in the relevant accordian (collapsible)
+5. Add algorithm explanation (hover text)
+    - `src/components/AlgorithmExplanation`
+6. Create the algorithm output file in `src/components/algorithmOutputs/NewAlgorithm.jsx`
+7. Add to `src/components/algorithmOutputs/AlgorithmOutput.jsx` in the `components` list
+
+> Future work may be done to reduce this number of steps. It is **not a high priority task** at the moment
 
 <!---
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
