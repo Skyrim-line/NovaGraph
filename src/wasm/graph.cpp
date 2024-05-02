@@ -100,6 +100,7 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("louvain", &louvain);
   function("leiden", &leiden);
   function("fast_greedy", &fast_greedy);
+  function("label_propagation", &label_propagation);
   function("local_clustering_coefficient", &local_clustering_coefficient);
   function("k_core", &k_core);
 }

@@ -61,6 +61,9 @@ function AlgorithmExplanation({ algorithm }) {
         [Algorithm.FAST_GREEDY]:
             <>Uses a <b>greedy algorithm</b> to find the best community structure for a given graph without requiring a resolution parameter.
             Each community is represented by a different colour.</>,
+        [Algorithm.LABEL_PROPAGATION]:
+            <>Groups nodes into communities where each node is assigned the <b>label</b> most common among its neighbours.
+            Each community is represented by a different colour.</>,
         [Algorithm.LOCAL_CLUSTERING_COEFFICIENT]:
             <>Quantifies how densely connected a specific node's neighbours are to each other.
             Nodes with greater <b>coefficients</b> are shown in darker shades.</>,

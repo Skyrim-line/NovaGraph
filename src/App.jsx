@@ -469,6 +469,22 @@ function App() {
                   inputs={[]}
                 />
                 <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.label_propagation}
+                  postState={postAlgorithmState.bind(null, Algorithm.LABEL_PROPAGATION)}
+                  setLoading={setLoading}
+                  algorithmName="Label Propagation"
+                  desc={[
+                    "The Label Propagation algorithm is a simple community detection algorithm that assigns nodes to communities based on their labels. In the event of a tie, the algorithm will randomly assign a label.",
+                    "Due to the randomness of the algorithm, the results may vary between runs.",
+                    "This version extends the original algorithm to take edge weights into account.",
+                    "Raghavan, U. N., Albert, R., & Kumara, S. (2007). Near linear time algorithm to detect community structures in large-scale networks. Physical Review E, 76(3), 036106. https://doi.org/10.1103/PhysRevE.76.036106"
+                  ]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.LABEL_PROPAGATION}
+                  inputs={[]}
+                />
+                <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.local_clustering_coefficient}
                   postState={postAlgorithmState.bind(null, Algorithm.LOCAL_CLUSTERING_COEFFICIENT)}
                   setLoading={setLoading}

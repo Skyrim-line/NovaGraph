@@ -56,6 +56,7 @@ val pagerank(igraph_real_t damping);
 val louvain(igraph_real_t resolution);
 val leiden(igraph_real_t resolution);
 val fast_greedy(void);
+val label_propagation(void);
 val local_clustering_coefficient(void);
 val k_core(int k);
 

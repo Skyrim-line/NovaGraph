@@ -21,6 +21,7 @@ import Leiden from './Leiden';
 import FastGreedy from './FastGreedy';
 import LocalClusertingCoefficient from './LocalClusertingCoefficient';
 import KCore from './KCore';
+import LabelPropagation from './LabelPropagation';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -42,6 +43,7 @@ const components = {
     [Algorithm.LOUVAIN]: Louvain,
     [Algorithm.LEIDEN]: Leiden,
     [Algorithm.FAST_GREEDY]: FastGreedy,
+    [Algorithm.LABEL_PROPAGATION]: LabelPropagation,
     [Algorithm.LOCAL_CLUSTERING_COEFFICIENT]: LocalClusertingCoefficient,
     [Algorithm.K_CORE]: KCore,
 }

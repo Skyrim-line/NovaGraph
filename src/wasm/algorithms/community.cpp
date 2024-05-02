@@ -118,6 +118,34 @@ val fast_greedy(void) {
     return result;
 }
 
+val label_propagation(void) {
+    IGraphVectorInt membership;
+
+    igraph_community_label_propagation(&globalGraph, membership.vec(), IGRAPH_OUT, igraph_weights(), NULL, NULL);
+
+    val result = val::object();
+    val colorMap = val::object();
+    val data = val::object();
+
+    std::map<int, std::vector<std::string>> communityMap;
+    for (igraph_integer_t v = 0; v < membership.size(); ++v) {
+        igraph_integer_t community = membership.at(v);
+        colorMap.set(v, community);
+        communityMap[community].push_back(igraph_get_name(v));
+    }
+
+    val communities = val::array();
+    for (const auto& [community, vertices] : communityMap) {
+        communities.set(community, val::array(vertices));
+    }
+
+    result.set("colorMap", colorMap);
+    result.set("mode", MODE_RAINBOW);
+    data.set("communities", communities);
+    result.set("data", data);
+    return result;
+}
+
 val local_clustering_coefficient(void) {
     IGraphVector res;
 
