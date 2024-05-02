@@ -105,7 +105,7 @@ const AlgorithmInput = ({ wasmFunction, postState, setLoading, algorithmName, de
         </DialogTitle>
         <DialogContent>
           {desc.map((line, index) => (
-            <Typography key={index} variant='body2' mb={2}>{line}</Typography>
+            <Typography key={index} variant='body2' mb={4}>{line}</Typography>
           ))}
           {inputs.map((input, index) => (
             <Box key={index} mt={2}>
