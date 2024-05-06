@@ -59,6 +59,6 @@ val fast_greedy(void);
 val label_propagation(void);
 val local_clustering_coefficient(void);
 val k_core(int k);
-
+val triangles(void);
 
 #endif

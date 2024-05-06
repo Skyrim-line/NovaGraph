@@ -22,6 +22,7 @@ import FastGreedy from './FastGreedy';
 import LocalClusertingCoefficient from './LocalClusertingCoefficient';
 import KCore from './KCore';
 import LabelPropagation from './LabelPropagation';
+import Triangles from './Triangles';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -46,6 +47,7 @@ const components = {
     [Algorithm.LABEL_PROPAGATION]: LabelPropagation,
     [Algorithm.LOCAL_CLUSTERING_COEFFICIENT]: LocalClusertingCoefficient,
     [Algorithm.K_CORE]: KCore,
+    [Algorithm.TRIANGLE_COUNT]: Triangles
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {

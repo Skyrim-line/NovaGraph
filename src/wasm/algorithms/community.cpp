@@ -244,4 +244,42 @@ val k_core(int k) {
     igraph_vs_destroy(&vs);
     return result;
 
-} 
+}
+
+val triangles(void) {
+    IGraphVectorInt res;
+
+    igraph_list_triangles(&globalGraph, res.vec());
+
+    val result = val::object();
+    val colorMap = val::object();
+    val data = val::object();
+
+    val triangles = val::array();
+    int id = 1;
+    for (igraph_integer_t v = 0; v < res.size(); v += 3) {
+        val t = val::object();
+        t.set("node1", igraph_get_name(res.at(v)));
+        t.set("node2", igraph_get_name(res.at(v + 1)));
+        t.set("node3", igraph_get_name(res.at(v + 2)));
+        t.set("id", id++);
+        triangles.set(v, t);
+
+        colorMap.set(res.at(v), 1);
+        colorMap.set(res.at(v + 1), 1);
+        colorMap.set(res.at(v + 2), 1);
+
+        std::string linkId1 = std::to_string(res.at(v)) + "-" + std::to_string(res.at(v + 1));
+        std::string linkId2 = std::to_string(res.at(v + 1)) + "-" + std::to_string(res.at(v + 2));
+        std::string linkId3 = std::to_string(res.at(v + 2)) + "-" + std::to_string(res.at(v));
+        colorMap.set(linkId1, 1);
+        colorMap.set(linkId2, 1);
+        colorMap.set(linkId3, 1);
+    }
+
+    data.set("triangles", triangles);
+    result.set("colorMap", colorMap);
+    result.set("mode", MODE_COLOR_SHADE_DEFAULT);
+    result.set("data", data);
+    return result;
+}

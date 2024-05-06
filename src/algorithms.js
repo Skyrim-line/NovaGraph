@@ -22,4 +22,5 @@ export const Algorithm = {
     LABEL_PROPAGATION: 21,
     LOCAL_CLUSTERING_COEFFICIENT: 22,
     K_CORE: 23,
+    TRIANGLE_COUNT: 24,
 }

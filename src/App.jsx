@@ -515,10 +515,19 @@ function App() {
                     { label: 'Enter k', explanation: 'The minimum degree of the k-core', type: 'number', step: '1', defaultValue: 1 }
                   ]}
                 />
+                <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.triangle_count}
+                  postState={postAlgorithmState.bind(null, Algorithm.TRIANGLE_COUNT)}
+                  setLoading={setLoading}
+                  algorithmName="Triangle Count"
+                  desc={["The triangle count algorithm counts the number of triangles (groups of 3 connected nodes) in a graph."]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.TRIANGLE_COUNT}
+                  inputs={[]}
+                />
               </ButtonGroup>
               {/*
-                <p>Label Propagation</p>
-                <p>Triangle Count</p>
                 <p>Strongly Connected Components</p>
                 <p>Weakly Connected Components</p>
               */}

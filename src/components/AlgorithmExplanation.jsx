@@ -69,6 +69,8 @@ function AlgorithmExplanation({ algorithm }) {
             Nodes with greater <b>coefficients</b> are shown in darker shades.</>,
         [Algorithm.K_CORE]:
             <>Finds the <b>largest subgraph</b> where each node has at least <code>k</code> connections.</>,
+        [Algorithm.TRIANGLE_COUNT]:
+            <>Counts the number of <b>triangles</b> (interconnected nodes triples) in the graph.</>,
     };
 
     return (
