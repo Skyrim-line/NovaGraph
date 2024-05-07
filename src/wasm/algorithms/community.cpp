@@ -272,9 +272,9 @@ val triangles(void) {
         t.set("id", id++);
         triangles.set(v, t);
 
-        colorMap.set(res.at(v), 1);
-        colorMap.set(res.at(v + 1), 1);
-        colorMap.set(res.at(v + 2), 1);
+        colorMap.set(res.at(v), 0.5);
+        colorMap.set(res.at(v + 1), 0.5);
+        colorMap.set(res.at(v + 2), 0.5);
 
         std::string linkId1 = std::to_string(res.at(v)) + "-" + std::to_string(res.at(v + 1));
         std::string linkId2 = std::to_string(res.at(v + 1)) + "-" + std::to_string(res.at(v + 2));
