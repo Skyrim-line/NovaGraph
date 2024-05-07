@@ -24,7 +24,7 @@ dist-ssr
 *.sw?
 
 # WASM
-src/wasm/igraph
+src/wasm/igraph*
 src/wasm/rapidjson
 src/wasm/pugixml
 src/graph.js
