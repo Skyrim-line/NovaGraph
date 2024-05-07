@@ -37,7 +37,7 @@ const ListboxComponent = forwardRef(function ListboxComponent(props, ref) {
   );
 });
 
-const AlgorithmInput = ({ wasmFunction, postState, setLoading, algorithmName, desc, inputs, nodes, setHoveredAlgorithm, hoveredAlgorithm }) => {
+const AlgorithmInput = ({ wasmFunction, postState, setLoading, algorithmName, buttonLabel, desc, inputs, nodes, setHoveredAlgorithm, hoveredAlgorithm }) => {
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState(
@@ -97,7 +97,7 @@ const AlgorithmInput = ({ wasmFunction, postState, setLoading, algorithmName, de
         onMouseEnter={() => setHoveredAlgorithm(hoveredAlgorithm)}
         onMouseLeave={() => setHoveredAlgorithm(null)}
       >
-        {algorithmName}
+        {buttonLabel ? buttonLabel : algorithmName}
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">

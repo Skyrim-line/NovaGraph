@@ -531,6 +531,7 @@ function App() {
                   postState={postAlgorithmState.bind(null, Algorithm.STRONGLY_CONNECTED_COMPONENTS)}
                   setLoading={setLoading}
                   algorithmName="Strongly Connected Components"
+                  buttonLabel="Strongly Connected (SCC)"
                   desc={[
                     "This algorithm finds the strongly connected components in a graph.",
                     "For undirected graphs, this algorithm will return all connected components."
@@ -545,6 +546,7 @@ function App() {
                   postState={postAlgorithmState.bind(null, Algorithm.WEAKLY_CONNECTED_COMPONENTS)}
                   setLoading={setLoading}
                   algorithmName="Weakly Connected Components"
+                  buttonLabel="Weakly Connected (WCC)"
                   desc={[
                     "This algorithm finds the weakly connected components in a directed graph.",
                     "Note: This algorithm can only be performed on directed graphs."
