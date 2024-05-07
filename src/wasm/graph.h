@@ -60,5 +60,7 @@ val label_propagation(void);
 val local_clustering_coefficient(void);
 val k_core(int k);
 val triangles(void);
+val strongly_connected_components(void);
+val weakly_connected_components(void);
 
 #endif

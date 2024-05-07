@@ -71,6 +71,10 @@ function AlgorithmExplanation({ algorithm }) {
             <>Finds the <b>largest subgraph</b> where each node has at least <code>k</code> connections.</>,
         [Algorithm.TRIANGLE_COUNT]:
             <>Counts the number of <b>triangles</b> (interconnected nodes triples) in the graph.</>,
+        [Algorithm.STRONGLY_CONNECTED_COMPONENTS]:
+            <>Partitions the graph into <b>strongly connected components</b> where each node is reachable from every other node.</>,
+        [Algorithm.WEAKLY_CONNECTED_COMPONENTS]:
+            <>Partitions a directed graph into <b>weakly connected components</b> where each node is reachable from every other node regardless of edge direction.</>,
     };
 
     return (

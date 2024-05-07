@@ -104,6 +104,8 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("local_clustering_coefficient", &local_clustering_coefficient);
   function("k_core", &k_core);
   function("triangle_count", &triangles);
+  function("strongly_connected_components", &strongly_connected_components);
+  function("weakly_connected_components", &weakly_connected_components);
 }
 
 // emcc demo.cpp -O3 -s WASM=1 -s -sEXPORTED_FUNCTIONS=_sum,_subtract --no-entry -o demo.wasm

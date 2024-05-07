@@ -526,12 +526,35 @@ function App() {
                   hoveredAlgorithm={Algorithm.TRIANGLE_COUNT}
                   inputs={[]}
                 />
+                <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.strongly_connected_components}
+                  postState={postAlgorithmState.bind(null, Algorithm.STRONGLY_CONNECTED_COMPONENTS)}
+                  setLoading={setLoading}
+                  algorithmName="Strongly Connected Components"
+                  desc={[
+                    "This algorithm finds the strongly connected components in a graph.",
+                    "For undirected graphs, this algorithm will return all connected components."
+                  ]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.STRONGLY_CONNECTED_COMPONENTS}
+                  inputs={[]}
+                />
+                <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.weakly_connected_components}
+                  postState={postAlgorithmState.bind(null, Algorithm.WEAKLY_CONNECTED_COMPONENTS)}
+                  setLoading={setLoading}
+                  algorithmName="Weakly Connected Components"
+                  desc={[
+                    "This algorithm finds the weakly connected components in a directed graph.",
+                    "Note: This algorithm can only be performed on directed graphs."
+                  ]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.WEAKLY_CONNECTED_COMPONENTS}
+                  inputs={[]}
+                />
               </ButtonGroup>
-              {/*
-                <p>Strongly Connected Components</p>
-                <p>Weakly Connected Components</p>
-              */}
-              
             </AccordionDetails>
           </Accordion>
 

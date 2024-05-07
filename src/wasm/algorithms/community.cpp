@@ -9,6 +9,13 @@ void throw_error_if_directed(const std::string& algorithm) {
     }
 }
 
+void throw_error_if_undirected(const std::string& algorithm) {
+    if (!igraph_is_directed(&globalGraph)) {
+        std::string message = "The " + algorithm + " algorithm does not support undirected graphs";
+        throw std::runtime_error(message);
+    }
+}
+
 val louvain(igraph_real_t resolution) {
     IGraphVectorInt membership;
     IGraphVector modularity;
@@ -282,4 +289,41 @@ val triangles(void) {
     result.set("mode", MODE_COLOR_SHADE_DEFAULT);
     result.set("data", data);
     return result;
+}
+
+val connected_components(igraph_connectedness_t mode) {
+    IGraphVectorInt membership;
+
+    igraph_connected_components(&globalGraph, membership.vec(), NULL, NULL, mode);
+
+    val result = val::object();
+    val colorMap = val::object();
+    val data = val::object();
+
+    std::map<int, std::vector<std::string>> componentMap;
+    for (igraph_integer_t v = 0; v < membership.size(); ++v) {
+        igraph_integer_t component = membership.at(v);
+        colorMap.set(v, component);
+        componentMap[component].push_back(igraph_get_name(v));
+    }
+
+    val components = val::array();
+    for (const auto& [component, vertices] : componentMap) {
+        components.set(component, val::array(vertices));
+    }
+
+    result.set("colorMap", colorMap);
+    result.set("mode", MODE_RAINBOW);
+    data.set("components", components);
+    result.set("data", data);
+    return result;
+}
+
+val strongly_connected_components(void) {
+    return connected_components(IGRAPH_STRONG);
+}
+
+val weakly_connected_components(void) {
+    throw_error_if_undirected("Weakly Connected Components");
+    return connected_components(IGRAPH_WEAK);
 }
