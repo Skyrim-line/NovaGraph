@@ -1,17 +1,12 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableContainer, TableHead, Paper, Box, Typography } from '@mui/material';
+import { Button, Box, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { RTableCell as Cell, RTableRow as Row } from './ResultsTable';
-import InfiniteScroll from 'react-infinite-scroller';
-import { ErasBold, ErasMedium } from '../Eras';
+import { ErasBold } from '../Eras';
+import OutputDialog from './OutputDialog';
 
 const HarmonicCentrality = ({ data }) => {
-    const itemsPerPage = 20;
     const [open, setOpen] = useState(false);
     const [centralities, setCentralities] = useState([]);
-    const [records, setRecords] = useState(itemsPerPage);
-
-    const hasMore = records < centralities.length;
-
     useEffect(() => {
         console.log(data);
         data && setCentralities([...data.centralities].sort((a, b) => b.centrality - a.centrality));
@@ -21,16 +16,7 @@ const HarmonicCentrality = ({ data }) => {
         setOpen(!open);
     }
 
-    const loadMore = () => {
-        if (records === centralities.length) {
-        } else {
-            setTimeout(() => {
-                setRecords(records + itemsPerPage);
-            }, 500);
-        }
-    }
-
-    const loadItems = (centralities) => {
+    const loadItems = (centralities, records) => {
         return centralities.slice(0, records).map((c, index) => (
             <Row key={index}>
                 <Cell>{c.id}</Cell>
@@ -48,39 +34,14 @@ const HarmonicCentrality = ({ data }) => {
                 <Typography fontSize={15}>[{centralities[0] && centralities[0].node}]</Typography>
             </Box>
             <Button variant='contained' color='info' onClick={handleClick}>More Details</Button>
-            <Dialog open={open} onClose={handleClick} fullWidth>
-                <DialogTitle>
-                    <ErasMedium>Harmonic Centrality Details</ErasMedium>
-                </DialogTitle>
-                <DialogContent>
-                    <TableContainer component={Paper} style={{ maxWidth: 'auto', margin: 'auto' }}>
-                        <Table size='small' sx={{ tableLayout: 'auto' }}>
-                            <TableHead>
-                                <Row>
-                                    <Cell>ID</Cell>
-                                    <Cell>Node</Cell>
-                                    <Cell>Centrality</Cell>
-                                </Row>
-                            </TableHead>
-                            <InfiniteScroll
-                                pageStart={0}
-                                element={TableBody}
-                                loadMore={loadMore}
-                                hasMore={hasMore}
-                                loader={<Row key={0}><Cell /><Cell>Loading...</Cell><Cell /></Row>}
-                                useWindow={false}
-                                style={{ width: '100%' }}
-                            >
-                                {loadItems(centralities)}
-                            </InfiniteScroll>
-                        </Table>
-                    </TableContainer>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClick}>Close</Button>
-                </DialogActions>
-            </Dialog>
-        
+            <OutputDialog
+                title='Harmonic Centrality Details'
+                columns={['ID', 'Node', 'Centrality']}
+                open={open}
+                handleClick={handleClick}
+                dataArray={centralities}
+                loadItems={loadItems}
+            />
         </Box>
     </>);
 }

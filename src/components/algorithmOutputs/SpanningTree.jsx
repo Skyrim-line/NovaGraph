@@ -1,7 +1,8 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableContainer, TableHead, Paper, Box, Typography } from '@mui/material';
+import { Button, Box, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { RTableCell, RTableRow } from './ResultsTable';
-import { ErasBold, ErasMedium } from '../Eras';
+import { RTableCell as Cell, RTableRow as Row } from './ResultsTable';
+import { ErasBold } from '../Eras';
+import OutputDialog from './OutputDialog';
 
 const SpanningTree = ({ data }) => {
     const [open, setOpen] = useState(false);
@@ -13,6 +14,16 @@ const SpanningTree = ({ data }) => {
         setOpen(!open);
     }
 
+    const loadItems = (es, records) => {
+        return es.slice(0, records).map((e, index) => (
+            <Row key={index}>
+                <Cell>{e.from}</Cell>
+                <Cell>{e.to}</Cell>
+                {data.weighted && <Cell>{e.weight}</Cell>}
+            </Row>
+        ));
+    }
+
     return (<>
         <ErasBold fontSize={20} mb={1}>Minimum Spanning Tree</ErasBold>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
@@ -22,37 +33,14 @@ const SpanningTree = ({ data }) => {
             </Box>
             {data.weighted && <Typography fontSize={15}>MST Total Weight: {data.totalWeight}</Typography>}
             <Button variant='contained' color='info' onClick={handleClick}>More Details</Button>
-            <Dialog open={open} onClose={handleClick} fullWidth>
-                <DialogTitle>
-                    <ErasMedium>Minimum Spanning Tree Edge Details</ErasMedium>
-                </DialogTitle>
-                <DialogContent>
-                    <TableContainer component={Paper} style={{ maxWidth: 'auto', margin: 'auto' }}>
-                        <Table size='small' sx={{ tableLayout: 'auto' }}>
-                            <TableHead>
-                                <RTableRow>
-                                    <RTableCell>From</RTableCell>
-                                    <RTableCell>To</RTableCell>
-                                    {data.weighted && <RTableCell>Weight</RTableCell>}
-                                </RTableRow>
-                            </TableHead>
-                            <TableBody>
-                                {data && data.edges.map((edge, index) => (
-                                    <RTableRow key={index}>
-                                        <RTableCell>{edge.from}</RTableCell>
-                                        <RTableCell>{edge.to}</RTableCell>
-                                        {data.weighted && <RTableCell>{edge.weight}</RTableCell>}
-                                    </RTableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClick}>Close</Button>
-                </DialogActions>
-            </Dialog>
-        
+            <OutputDialog
+                title='Minimum Spanning Tree Details'
+                columns={data.weighted ? ['From', 'To', 'Weight'] : ['From', 'To']}
+                open={open}
+                handleClick={handleClick}
+                dataArray={data.edges}
+                loadItems={loadItems}
+            />
         </Box>
     </>);
 }
