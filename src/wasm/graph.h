@@ -34,7 +34,6 @@ igraph_vector_t *igraph_weights(void);
 void frequenciesToColorMap(std::unordered_map<int, int> fm, val &colorMap);
 void doublesToColorMap(std::unordered_map<int, double> dm, val &colorMap);
 
-val vertices_are_connected(igraph_integer_t src, igraph_integer_t tar);
 val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar);
 val dijkstra_source_to_all(igraph_integer_t src);
 val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_integer_t k);
@@ -62,5 +61,7 @@ val k_core(int k);
 val triangles(void);
 val strongly_connected_components(void);
 val weakly_connected_components(void);
+
+val vertices_are_adjacent(igraph_integer_t src, igraph_integer_t tar);
 
 #endif

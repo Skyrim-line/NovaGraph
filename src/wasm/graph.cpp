@@ -77,7 +77,6 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("generate_graph_from_gexf", &graph_from_gexf);
   function("generate_graph_from_n_nodes", &graph_from_n_nodes);
 
-  function("vertices_are_connected", &vertices_are_connected);
   function("dijkstra_source_to_target", &dijkstra_source_to_target);
   function("dijkstra_source_to_all", &dijkstra_source_to_all);
   function("yens_algorithm", &yen_source_to_target);
@@ -106,6 +105,8 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("triangle_count", &triangles);
   function("strongly_connected_components", &strongly_connected_components);
   function("weakly_connected_components", &weakly_connected_components);
+
+  function("vertices_are_adjacent", &vertices_are_adjacent);
 }
 
 // emcc demo.cpp -O3 -s WASM=1 -s -sEXPORTED_FUNCTIONS=_sum,_subtract --no-entry -o demo.wasm

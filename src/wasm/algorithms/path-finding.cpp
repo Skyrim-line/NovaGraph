@@ -2,31 +2,6 @@
 #include <iostream>
 #include <string>
 
-// Check connection
-val vertices_are_connected(igraph_integer_t src, igraph_integer_t tar) {
-    val result = val::object();
-    val colorMap = val::object();
-    std::string msg = "[" + std::to_string(src) + "] and [" + std::to_string(tar) + "] are ";
-    igraph_bool_t res;
-    igraph_are_connected(&globalGraph, src, tar, &res);
-    if (res) {
-        msg += "neighbours!";
-        colorMap.set(src, 1);
-        colorMap.set(tar, 1);
-        std::string linkId = std::to_string(src) + '-' + std::to_string(tar);
-        colorMap.set(linkId, 1);
-    } else {
-        msg += "NOT neighbours!";
-        colorMap.set(src, -1);
-        colorMap.set(tar, -1);
-    }
-    result.set("colorMap", colorMap);
-    result.set("message", msg);
-    result.set("mode", MODE_COLOR_IMPORTANT);
-    return result;
-}
-
-
 // DIJKSTRA
 
 val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
