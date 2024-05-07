@@ -17,7 +17,7 @@ const LabelPropagation = ({ data }) => {
     const loadItems = (communities, records) => {
         return communities.slice(0, records).map((community, index) => (
             <Row key={index}>
-                <Cell>{index}</Cell>
+                <Cell>{index + 1}</Cell>
                 <Cell style={{ wordWrap: 'break-word', maxWidth: 400 }}>{community.join(', ')}</Cell>
             </Row>
         ));

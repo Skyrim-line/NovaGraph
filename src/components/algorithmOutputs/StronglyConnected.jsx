@@ -17,7 +17,7 @@ const StronglyConnected = ({ data }) => {
     const loadItems = (components, records) => {
         return components.slice(0, records).map((comp, index) => (
             <Row key={index}>
-                <Cell>{index}</Cell>
+                <Cell>{index + 1}</Cell>
                 <Cell style={{ wordWrap: 'break-word', maxWidth: 400 }}>{comp.join(', ')}</Cell>
             </Row>
         ));
