@@ -567,10 +567,10 @@ function App() {
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
                 <AlgorithmInput
-                  wasmFunction={wasmModule && wasmModule.vertices_are_connected}
+                  wasmFunction={wasmModule && wasmModule.vertices_are_adjacent}
                   postState={postAlgorithmState.bind(null, Algorithm.NEIGHBOR_JOINING)}
                   setLoading={setLoading}
-                  algorithmName="Neighbour Status?"
+                  algorithmName="Check Adjacency"
                   desc={["This algorithm checks to see if two nodes are connected by a single edge."]}
                   nodes={nodes}
                   setHoveredAlgorithm={setHoveredAlgorithm}

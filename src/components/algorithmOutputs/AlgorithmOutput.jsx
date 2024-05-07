@@ -25,6 +25,7 @@ import LabelPropagation from './LabelPropagation';
 import Triangles from './Triangles';
 import StronglyConnected from './StronglyConnected';
 import WeaklyConnected from './WeaklyConnected';
+import AreNeighbouring from './AreNeighbouring';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -52,6 +53,7 @@ const components = {
     [Algorithm.TRIANGLE_COUNT]: Triangles,
     [Algorithm.STRONGLY_CONNECTED_COMPONENTS]: StronglyConnected,
     [Algorithm.WEAKLY_CONNECTED_COMPONENTS]: WeaklyConnected,
+    [Algorithm.NEIGHBOR_JOINING]: AreNeighbouring,
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {
