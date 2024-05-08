@@ -28,4 +28,6 @@ export const Algorithm = {
     JACCARD_SIMILARITY: 27,
     TOPOLOGICAL_SORT: 28,
     DIAMETER: 29,
+    EULERIAN_PATH: 30,
+    EULERIAN_CIRCUIT: 31,
 }

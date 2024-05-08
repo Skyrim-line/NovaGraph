@@ -81,6 +81,10 @@ function AlgorithmExplanation({ algorithm }) {
             <>Arranges the nodes in a directed acyclic graph (DAG) in a <b>linear order</b> based on edge directions.</>,
         [Algorithm.DIAMETER]:
             <>Finds the <b>longest shortest path</b> between any two nodes in the graph.</>,
+        [Algorithm.EULERIAN_PATH]:
+            <>Finds a path that visits every edge <b>exactly once</b> in a graph.</>,
+        [Algorithm.EULERIAN_CIRCUIT]:
+            <>Finds a path that visits every edge <b>exactly once</b> and returns to the starting node in a graph.</>,
     };
 
     return (

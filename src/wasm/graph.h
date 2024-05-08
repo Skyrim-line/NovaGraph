@@ -66,5 +66,7 @@ val vertices_are_adjacent(igraph_integer_t src, igraph_integer_t tar);
 val jaccard_similarity(val js_vs_list);
 val topological_sort(void);
 val diameter(void);
+val eulerian_path(void);
+val eulerian_circuit(void);
 
 #endif

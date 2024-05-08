@@ -29,6 +29,8 @@ import AreNeighbouring from './AreNeighbouring';
 import Jaccard from './Jaccard';
 import TopologicalSort from './TopologicalSort';
 import Diameter from './Diameter';
+import EulerianPath from './EulerianPath';
+import EulerianCircuit from './EulerianCircuit';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -60,6 +62,8 @@ const components = {
     [Algorithm.JACCARD_SIMILARITY]: Jaccard,
     [Algorithm.TOPOLOGICAL_SORT]: TopologicalSort,
     [Algorithm.DIAMETER]: Diameter,
+    [Algorithm.EULERIAN_PATH]: EulerianPath,
+    [Algorithm.EULERIAN_CIRCUIT]: EulerianCircuit,
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {

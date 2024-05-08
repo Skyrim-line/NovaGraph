@@ -613,6 +613,28 @@ function App() {
                   hoveredAlgorithm={Algorithm.DIAMETER}
                   inputs={[]}
                 />
+                <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.eulerian_path}
+                  postState={postAlgorithmState.bind(null, Algorithm.EULERIAN_PATH)}
+                  setLoading={setLoading}
+                  algorithmName="Eulerian Path"
+                  desc={["The Eulerian path algorithm finds a path that visits every edge exactly once."]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.EULERIAN_PATH}
+                  inputs={[]}
+                />
+                <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.eulerian_circuit}
+                  postState={postAlgorithmState.bind(null, Algorithm.EULERIAN_CIRCUIT)}
+                  setLoading={setLoading}
+                  algorithmName="Eulerian Circuit"
+                  desc={["The Eulerian circuit (or Eulerian cycle) algorithm finds a path that visits every edge exactly once and returns to the starting node."]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.EULERIAN_CIRCUIT}
+                  inputs={[]}
+                />
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>

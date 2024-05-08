@@ -165,3 +165,77 @@ val diameter(void) {
     result.set("data", data);
     return result;
 }
+
+val eulerian_path(void) {
+    igraph_bool_t exists;
+    igraph_is_eulerian(&globalGraph, &exists, NULL);
+    if (!exists) throw std::runtime_error("This graph does not have an Eulerian path.");
+    
+    IGraphVectorInt vPath;
+    igraph_eulerian_path(&globalGraph, NULL, vPath.vec());
+
+    val result = val::object();
+    val colorMap = val::object();
+    val data = val::object();
+
+    val path = val::array();
+    for (int i = 0; i < vPath.size() - 1; ++i) {
+        int src = vPath.at(i);
+        int tar = vPath.at(i+1);
+        std::string linkId = std::to_string(src) + '-' + std::to_string(tar);
+        colorMap.set(linkId, 1);
+
+        val link = val::object();
+        link.set("from", igraph_get_name(src));
+        link.set("to", igraph_get_name(tar));
+        path.set(i, link);
+    }
+    colorMap.set(vPath.at(0), 1);
+    colorMap.set(vPath.at(vPath.size()-1), 1);
+    data.set("start", igraph_get_name(vPath.at(0)));
+    data.set("end", igraph_get_name(vPath.at(vPath.size()-1)));
+
+    result.set("colorMap", colorMap);
+    result.set("mode", MODE_COLOR_SHADE_DEFAULT);
+    data.set("path", path);
+    result.set("data", data);
+    return result;
+}
+
+val eulerian_circuit(void) {
+    igraph_bool_t pathExists, circuitExists;
+    igraph_is_eulerian(&globalGraph, &pathExists, &circuitExists);
+    if (!circuitExists) {
+        if (pathExists) {
+            throw std::runtime_error("This graph is does not have an Eulerian circuit BUT it has an Eulerian path.");
+        } else {
+            throw std::runtime_error("This graph does not have an Eulerian circuit.");
+        }
+    }
+    
+    IGraphVectorInt vPath;
+    igraph_eulerian_cycle(&globalGraph, NULL, vPath.vec());
+
+    val result = val::object();
+    val colorMap = val::object();
+    val data = val::object();
+
+    val path = val::array();
+    for (int i = 0; i < vPath.size() - 1; ++i) {
+        int src = vPath.at(i);
+        int tar = vPath.at(i+1);
+        std::string linkId = std::to_string(src) + '-' + std::to_string(tar);
+        colorMap.set(linkId, 1);
+
+        val link = val::object();
+        link.set("from", igraph_get_name(src));
+        link.set("to", igraph_get_name(tar));
+        path.set(i, link);
+    }
+
+    result.set("colorMap", colorMap);
+    result.set("mode", MODE_COLOR_SHADE_DEFAULT);
+    data.set("path", path);
+    result.set("data", data);
+    return result;
+}
