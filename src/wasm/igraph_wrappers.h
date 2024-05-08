@@ -131,5 +131,36 @@ private:
     igraph_vector_int_list_t v;
 };
 
+// RAII wrapper for igraph_matrix_t
+class IGraphMatrix {
+public:
+    IGraphMatrix() {
+        igraph_matrix_init(&m, 0, 0);
+    }
+
+    ~IGraphMatrix() {
+        igraph_matrix_destroy(&m);
+    }
+
+    igraph_matrix_t* mat() {
+        return &m;
+    }
+
+    int nrows() {
+        return igraph_matrix_nrow(&m);
+    }
+
+    int ncols() {
+        return igraph_matrix_ncol(&m);
+    }
+
+    igraph_real_t get(int i, int j) {
+        return MATRIX(m, i, j);
+    }
+
+private:
+    igraph_matrix_t m;
+};
+
 
 #endif

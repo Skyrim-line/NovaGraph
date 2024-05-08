@@ -107,6 +107,7 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("weakly_connected_components", &weakly_connected_components);
 
   function("vertices_are_adjacent", &vertices_are_adjacent);
+  function("jaccard_similarity", &jaccard_similarity);
 }
 
 // emcc demo.cpp -O3 -s WASM=1 -s -sEXPORTED_FUNCTIONS=_sum,_subtract --no-entry -o demo.wasm

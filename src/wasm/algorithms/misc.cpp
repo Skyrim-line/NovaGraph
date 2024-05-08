@@ -33,3 +33,42 @@ val vertices_are_adjacent(igraph_integer_t src, igraph_integer_t tar) {
     result.set("data", data);
     return result;
 }
+
+val jaccard_similarity(val js_vs_list) {
+    IGraphVectorInt vs_list;
+    IGraphMatrix m;
+    igraph_vs_t vs;
+
+    val result = val::object();
+    val colorMap = val::object();
+    val data = val::object();
+    val nodes = val::array();
+    for (size_t i = 0; i < js_vs_list["length"].as<size_t>(); i++) {
+        igraph_integer_t nodeId = js_vs_list[i].as<igraph_integer_t>();
+        nodes.set(i, igraph_get_name(nodeId));
+        colorMap.set(nodeId, 1);
+        vs_list.push_back(nodeId);
+    }
+
+    igraph_vs_vector(&vs, vs_list.vec());
+    igraph_similarity_jaccard(&globalGraph, m.mat(), vs, IGRAPH_OUT, false);
+    igraph_matrix_printf(m.mat(), "%.2f");
+
+    val rows = val::array();
+    for (long int i = 0; i < m.nrows(); i++) {
+        val row = val::array();
+        for (long int j = 0; j < m.ncols(); j++) {
+            std::stringstream stream;
+            stream << std::fixed << std::setprecision(2) << m.get(i, j);
+            row.set(j, atof(stream.str().c_str()));
+        }
+        rows.set(i, row);
+    }
+
+    result.set("colorMap", colorMap);
+    result.set("mode", MODE_COLOR_SHADE_DEFAULT);
+    data.set("similarityMatrix", rows);
+    data.set("nodes", nodes);
+    result.set("data", data);
+    return result;    
+}

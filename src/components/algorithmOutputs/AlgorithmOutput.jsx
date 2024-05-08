@@ -26,6 +26,7 @@ import Triangles from './Triangles';
 import StronglyConnected from './StronglyConnected';
 import WeaklyConnected from './WeaklyConnected';
 import AreNeighbouring from './AreNeighbouring';
+import Jaccard from './Jaccard';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -54,6 +55,7 @@ const components = {
     [Algorithm.STRONGLY_CONNECTED_COMPONENTS]: StronglyConnected,
     [Algorithm.WEAKLY_CONNECTED_COMPONENTS]: WeaklyConnected,
     [Algorithm.NEIGHBOR_JOINING]: AreNeighbouring,
+    [Algorithm.JACCARD_SIMILARITY]: Jaccard,
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {

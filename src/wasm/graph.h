@@ -63,5 +63,6 @@ val strongly_connected_components(void);
 val weakly_connected_components(void);
 
 val vertices_are_adjacent(igraph_integer_t src, igraph_integer_t tar);
+val jaccard_similarity(val js_vs_list);
 
 #endif

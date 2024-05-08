@@ -16,6 +16,7 @@ import { ErasBold, ErasMedium } from './components/Eras';
 import AlgorithmOutput from './components/algorithmOutputs/AlgorithmOutput';
 import AlgorithmInput from './components/AlgorithmInput';
 import { SpinnerDotted } from 'spinners-react';
+import AlgorithmMultiInput from './components/AlgorithmMultiInput';
 
 const darkTheme = createTheme({
   palette: {
@@ -578,6 +579,19 @@ function App() {
                   inputs={[
                     { label: 'Enter source vertex', explanation: 'Select the source vertex', type: 'text' },
                     { label: 'Enter target vertex', explanation: 'Select the target vertex', type: 'text' }
+                  ]}
+                />
+                <AlgorithmMultiInput
+                  wasmFunction={wasmModule && wasmModule.jaccard_similarity}
+                  postState={postAlgorithmState.bind(null, Algorithm.JACCARD_SIMILARITY)}
+                  setLoading={setLoading}
+                  algorithmName="Jaccard Similarity"
+                  desc={["The Jaccard similarity algorithm measures the similarity between two sets of nodes."]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.JACCARD_SIMILARITY}
+                  inputs={[
+                    { label: 'Enter vertices to compare', explanation: 'Select the vertices to compare', type: 'multi-text' }
                   ]}
                 />
               </ButtonGroup>
