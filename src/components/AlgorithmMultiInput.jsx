@@ -105,7 +105,7 @@ const AlgorithmMultiInput = ({ wasmFunction, postState, setLoading, algorithmNam
           <Button onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="info" variant='contained' disabled={errors.includes(true) || selectedValues.length < 2}>
+          <Button onClick={handleSubmit} color="info" variant='contained' disabled={errors.includes(true) || selectedValues.length < 3}>
             Submit
           </Button>
         </DialogActions>
