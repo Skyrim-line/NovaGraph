@@ -591,6 +591,17 @@ function App() {
                   setHoveredAlgorithm={setHoveredAlgorithm}
                   hoveredAlgorithm={Algorithm.JACCARD_SIMILARITY}
                 />
+                <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.topological_sort}
+                  postState={postAlgorithmState.bind(null, Algorithm.TOPOLOGICAL_SORT)}
+                  setLoading={setLoading}
+                  algorithmName="Topological Sort"
+                  desc={["The topological sort algorithm arranges the nodes in a directed acyclic graph in a linear order."]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.TOPOLOGICAL_SORT}
+                  inputs={[]}
+                />
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>

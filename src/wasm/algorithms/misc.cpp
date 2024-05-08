@@ -85,3 +85,36 @@ val jaccard_similarity(val js_vs_list) {
     result.set("data", data);
     return result;    
 }
+
+val topological_sort(void) {
+    igraph_bool_t isDAG;
+    igraph_is_dag(&globalGraph, &isDAG);
+    if (!isDAG) throw std::runtime_error("This graph is not a Directed Acyclic Graph (DAG) and cannot be topologically sorted.");
+
+    IGraphVectorInt order;
+    igraph_topological_sorting(&globalGraph, order.vec(), IGRAPH_OUT);
+
+    val result = val::object();
+    val colorMap = val::object();
+    val data = val::object();
+    val nodeOrder = val::array();
+
+    // Node colors will get lighter colours (lower freq values) which will be scaled
+    std::unordered_map<int, int> fm;
+    int current_fm_value = order.size();
+    for (igraph_integer_t v = 0; v < order.size(); v++) {
+        val n = val::object();
+        igraph_integer_t nodeId = order.at(v);
+        n.set("id", nodeId);
+        n.set("node", igraph_get_name(nodeId));
+        nodeOrder.set(v, n);
+        fm[nodeId] = current_fm_value--;
+    }
+    frequenciesToColorMap(fm, colorMap);
+
+    result.set("colorMap", colorMap);
+    result.set("mode", MODE_COLOR_SHADE_DEFAULT);
+    data.set("order", nodeOrder);
+    result.set("data", data);
+    return result;
+}

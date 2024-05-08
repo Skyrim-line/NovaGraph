@@ -27,6 +27,7 @@ import StronglyConnected from './StronglyConnected';
 import WeaklyConnected from './WeaklyConnected';
 import AreNeighbouring from './AreNeighbouring';
 import Jaccard from './Jaccard';
+import TopologicalSort from './TopologicalSort';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -56,6 +57,7 @@ const components = {
     [Algorithm.WEAKLY_CONNECTED_COMPONENTS]: WeaklyConnected,
     [Algorithm.NEIGHBOR_JOINING]: AreNeighbouring,
     [Algorithm.JACCARD_SIMILARITY]: Jaccard,
+    [Algorithm.TOPOLOGICAL_SORT]: TopologicalSort,
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {
