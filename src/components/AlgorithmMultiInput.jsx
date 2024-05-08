@@ -3,7 +3,7 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, A
 import { ErasBold } from './Eras';
 import ListboxComponent from './Listbox';
 
-const AlgorithmMultiInput = ({ wasmFunction, postState, setLoading, algorithmName, buttonLabel, desc, inputs, nodes, setHoveredAlgorithm, hoveredAlgorithm }) => {
+const AlgorithmMultiInput = ({ wasmFunction, postState, setLoading, algorithmName, buttonLabel, desc, nodes, setHoveredAlgorithm, hoveredAlgorithm }) => {
   const [open, setOpen] = useState(false);
   const [selectedValues, setSelectedValues] = useState([null]);
   const [errors, setErrors] = useState([false]);
@@ -98,7 +98,7 @@ const AlgorithmMultiInput = ({ wasmFunction, postState, setLoading, algorithmNam
             ))}
           </Grid>
           {selectedValues.length > 1 &&
-            <Button onClick={() => handleReset()} color='secondary' variant='contained'>Reset</Button>
+            <Button onClick={() => handleReset()} color='warning' variant='contained'>Reset</Button>
           }
         </DialogContent>
         <DialogActions>

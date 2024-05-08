@@ -55,12 +55,24 @@ val jaccard_similarity(val js_vs_list) {
     igraph_matrix_printf(m.mat(), "%.2f");
 
     val rows = val::array();
+    double max_similarity = -1.0;
+    val max_pair = val::object();
     for (long int i = 0; i < m.nrows(); i++) {
         val row = val::array();
         for (long int j = 0; j < m.ncols(); j++) {
             std::stringstream stream;
             stream << std::fixed << std::setprecision(2) << m.get(i, j);
-            row.set(j, atof(stream.str().c_str()));
+            double similarity = atof(stream.str().c_str());
+            row.set(j, similarity);
+
+            if (similarity > max_similarity && i != j) {
+                max_similarity = similarity;
+                int nodeId1 = vs_list.at(i);
+                int nodeId2 = vs_list.at(j);
+                max_pair.set("node1", igraph_get_name(nodeId1));
+                max_pair.set("node2", igraph_get_name(nodeId2));
+                max_pair.set("similarity", similarity);
+            }
         }
         rows.set(i, row);
     }
@@ -68,6 +80,7 @@ val jaccard_similarity(val js_vs_list) {
     result.set("colorMap", colorMap);
     result.set("mode", MODE_COLOR_SHADE_DEFAULT);
     data.set("similarityMatrix", rows);
+    data.set("maxSimilarity", max_pair);
     data.set("nodes", nodes);
     result.set("data", data);
     return result;    

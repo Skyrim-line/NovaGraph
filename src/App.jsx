@@ -586,13 +586,10 @@ function App() {
                   postState={postAlgorithmState.bind(null, Algorithm.JACCARD_SIMILARITY)}
                   setLoading={setLoading}
                   algorithmName="Jaccard Similarity"
-                  desc={["The Jaccard similarity algorithm measures the similarity between two sets of nodes."]}
+                  desc={["The Jaccard similarity algorithm measures the similarity between two sets of nodes. Enter at least 2 nodes to compare."]}
                   nodes={nodes}
                   setHoveredAlgorithm={setHoveredAlgorithm}
                   hoveredAlgorithm={Algorithm.JACCARD_SIMILARITY}
-                  inputs={[
-                    { label: 'Enter vertices to compare', explanation: 'Select the vertices to compare', type: 'multi-text' }
-                  ]}
                 />
               </ButtonGroup>
             </AccordionDetails>

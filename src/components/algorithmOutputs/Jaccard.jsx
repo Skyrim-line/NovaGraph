@@ -28,10 +28,16 @@ const Jaccard = ({ data }) => {
     return (<>
         <ErasBold fontSize={20} mb={1}>Jaccard Similarity</ErasBold>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
-            <Button variant='contained' color='info' onClick={handleClick}>Details</Button>
+            <Box>
+                <Typography fontSize={15}>[{data.maxSimilarity.node1}] and [{data.maxSimilarity.node2}] are the most similar</Typography>
+                <Typography fontSize={15}>
+                    Similarity: {data.maxSimilarity.similarity ? Math.round(data.maxSimilarity.similarity * 100) : 0}%
+                </Typography>
+            </Box>
+            <Button variant='contained' color='info' onClick={handleClick}>More Details</Button>
             <OutputDialog
                 title='Jaccard Similarity Matrix'
-                columns={['', ...data.nodes]}
+                columns={['', ...data.nodes]} // top left cell is empty
                 open={open}
                 handleClick={handleClick}
                 dataArray={data.similarityMatrix}
