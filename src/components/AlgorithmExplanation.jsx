@@ -79,6 +79,8 @@ function AlgorithmExplanation({ algorithm }) {
             <>Measures the <b>similarity</b> between pairs of nodes based on the number of shared neighbours.</>,
         [Algorithm.TOPOLOGICAL_SORT]:
             <>Arranges the nodes in a directed acyclic graph (DAG) in a <b>linear order</b> based on edge directions.</>,
+        [Algorithm.DIAMETER]:
+            <>Finds the <b>longest shortest path</b> between any two nodes in the graph.</>,
     };
 
     return (

@@ -602,6 +602,17 @@ function App() {
                   hoveredAlgorithm={Algorithm.TOPOLOGICAL_SORT}
                   inputs={[]}
                 />
+                <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.diameter}
+                  postState={postAlgorithmState.bind(null, Algorithm.DIAMETER)}
+                  setLoading={setLoading}
+                  algorithmName="Graph Diameter"
+                  desc={["The graph diameter algorithm calculates the longest shortest path between any two nodes."]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.DIAMETER}
+                  inputs={[]}
+                />
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>

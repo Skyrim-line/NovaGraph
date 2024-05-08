@@ -27,4 +27,5 @@ export const Algorithm = {
     WEAKLY_CONNECTED_COMPONENTS: 26,
     JACCARD_SIMILARITY: 27,
     TOPOLOGICAL_SORT: 28,
+    DIAMETER: 29,
 }

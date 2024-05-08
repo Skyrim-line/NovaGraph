@@ -28,6 +28,7 @@ import WeaklyConnected from './WeaklyConnected';
 import AreNeighbouring from './AreNeighbouring';
 import Jaccard from './Jaccard';
 import TopologicalSort from './TopologicalSort';
+import Diameter from './Diameter';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -58,6 +59,7 @@ const components = {
     [Algorithm.NEIGHBOR_JOINING]: AreNeighbouring,
     [Algorithm.JACCARD_SIMILARITY]: Jaccard,
     [Algorithm.TOPOLOGICAL_SORT]: TopologicalSort,
+    [Algorithm.DIAMETER]: Diameter,
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {

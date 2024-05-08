@@ -109,6 +109,7 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("vertices_are_adjacent", &vertices_are_adjacent);
   function("jaccard_similarity", &jaccard_similarity);
   function("topological_sort", &topological_sort);
+  function("diameter", &diameter);
 }
 
 // emcc demo.cpp -O3 -s WASM=1 -s -sEXPORTED_FUNCTIONS=_sum,_subtract --no-entry -o demo.wasm

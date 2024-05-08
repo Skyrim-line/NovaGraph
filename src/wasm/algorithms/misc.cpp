@@ -118,3 +118,50 @@ val topological_sort(void) {
     result.set("data", data);
     return result;
 }
+
+val diameter(void) {
+    igraph_real_t diameter;
+    igraph_integer_t src, tar;
+    IGraphVectorInt vPath, ePath;
+    bool hasWeights = VECTOR(globalWeights) != NULL;
+    igraph_diameter_dijkstra(&globalGraph, igraph_weights(), &diameter, &src, &tar, vPath.vec(), ePath.vec(), true, true);
+
+    val result = val::object();
+    val colorMap = val::object();
+    val data = val::object();
+
+    data.set("source", igraph_get_name(src));
+    data.set("target", igraph_get_name(tar));
+    data.set("weighted", hasWeights);
+    data.set("diameter", diameter);
+
+    val path = val::array();
+    for (int i = 0; i < vPath.size(); ++i) {
+        int node = vPath.at(i);
+        std::string nodeId = std::to_string(node);
+        colorMap.set(nodeId, 0.5);
+
+        if (i > 0) {
+            std::string linkId = std::to_string(vPath.at(i-1)) + '-' + nodeId;
+            colorMap.set(linkId, 1);
+
+            val link = val::object();
+            link.set("from", igraph_get_name(vPath.at(i-1)));
+            link.set("to", igraph_get_name(node));
+
+            int weight_index = ePath.at(i-1);
+            if (hasWeights) {
+                link.set("weight", VECTOR(globalWeights)[weight_index]);
+            };
+            path.set(i-1, link);
+        }
+    }
+    colorMap.set(src, 1);
+    colorMap.set(tar, 1);
+
+    result.set("colorMap", colorMap);
+    result.set("mode", MODE_COLOR_SHADE_DEFAULT);
+    data.set("path", path);
+    result.set("data", data);
+    return result;
+}
