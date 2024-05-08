@@ -83,6 +83,7 @@ val jaccard_similarity(val js_vs_list) {
     data.set("maxSimilarity", max_pair);
     data.set("nodes", nodes);
     result.set("data", data);
+    igraph_vs_destroy(&vs);
     return result;    
 }
 
