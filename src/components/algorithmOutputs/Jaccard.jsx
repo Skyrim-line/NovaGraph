@@ -42,6 +42,7 @@ const Jaccard = ({ data }) => {
                 handleClick={handleClick}
                 dataArray={data.similarityMatrix}
                 loadItems={loadItems}
+                explanation="This matrix shows the Jaccard similarity between each pair of nodes. Similarity values range from 0 to 1, with 1 indicating the highest similarity."
             />
         </Box>
     </>);

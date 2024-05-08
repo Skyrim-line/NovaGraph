@@ -75,6 +75,8 @@ function AlgorithmExplanation({ algorithm }) {
             <>Partitions the graph into <b>strongly connected components</b> where each node is reachable from every other node.</>,
         [Algorithm.WEAKLY_CONNECTED_COMPONENTS]:
             <>Partitions a directed graph into <b>weakly connected components</b> where each node is reachable from every other node regardless of edge direction.</>,
+        [Algorithm.JACCARD_SIMILARITY]:
+            <>Measures the <b>similarity</b> between pairs of nodes based on the number of shared neighbours.</>,
     };
 
     return (
