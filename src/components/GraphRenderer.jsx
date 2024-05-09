@@ -111,9 +111,9 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     }
 
     const getLinkWidth = link => {
-        if (colors[`${link.source}-${link.target}`] > 0) {
+        if (colors[`${link.source}-${link.target}`] >= 0) {
             return 3
-        } else if (colors[`${link.target}-${link.source}`] > 0) {
+        } else if (!directed && colors[`${link.target}-${link.source}`] >= 0) {
             return 3
         } else {
             return 0.1
