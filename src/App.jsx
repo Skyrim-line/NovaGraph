@@ -55,12 +55,16 @@ function App() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
 
+  const [missingEdgeDefaults, setMissingEdgeDefaults] = useState({});
+
   useEffect(() => {
     createModule().then(mod => {
       setWasmModule(mod)
       const graph = mod.initGraph(); // initialize the graph in C++
       setNodes(graph.nodes)
       setEdges(graph.edges)
+
+      setMissingEdgeDefaults(mod.missing_edge_prediction_default_values());
 
       window.onerror = (message, source, lineno, colno, error) => {
         if (typeof error != 'number') return;
@@ -78,7 +82,10 @@ function App() {
   }, []);
 
   useEffect(() => {
+    console.log("colors")
     console.log(colorMap)
+    console.log("missing edge defaults")
+    console.log(missingEdgeDefaults)
   }, [colorMap])
 
   const updateGraph = (nodes, edges, directed) => {
@@ -90,6 +97,7 @@ function App() {
     setDirected(directed);
     setRenderMode(1);
     setLoading(null);
+    setMissingEdgeDefaults(wasmModule.missing_edge_prediction_default_values());
   }
 
   const handleAccordianChange = (panel) => (event, newExpanded) => {
@@ -106,6 +114,9 @@ function App() {
     } else {
       setColorMap({})
       setSizeMap({})
+    }
+    if (response.edges) {
+      setEdges([...edges, ...response.edges])
     }
     setText(response.message)
     setRenderMode(response.mode)
@@ -634,6 +645,23 @@ function App() {
                   setHoveredAlgorithm={setHoveredAlgorithm}
                   hoveredAlgorithm={Algorithm.EULERIAN_CIRCUIT}
                   inputs={[]}
+                />
+                <AlgorithmInput
+                  wasmFunction={wasmModule && wasmModule.missing_edge_prediction}
+                  postState={postAlgorithmState.bind(null, Algorithm.MISSING_EDGE_PREDICTION)}
+                  setLoading={setLoading}
+                  algorithmName="Missing Edge Prediction"
+                  desc={[
+                    "TODO",
+                    `For a ${missingEdgeDefaults.graphSize} sized graph, this uses the default values of ${missingEdgeDefaults.numSamples} samples and ${missingEdgeDefaults.numBins} bins.`
+                  ]}
+                  nodes={nodes}
+                  setHoveredAlgorithm={setHoveredAlgorithm}
+                  hoveredAlgorithm={Algorithm.MISSING_EDGE_PREDICTION}
+                  inputs={[
+                    { label: 'Enter Sample Size', explanation: 'How many times missing edges are predicted (accuracy)', type: 'number', step: '1', defaultValue: missingEdgeDefaults.numSamples },
+                    { label: 'Enter Bin Size', explanation: 'Number of bins for the histogram model (precision)', type: 'number', step: '1', defaultValue: missingEdgeDefaults.numBins },
+                  ]}
                 />
               </ButtonGroup>
             </AccordionDetails>

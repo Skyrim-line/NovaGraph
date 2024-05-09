@@ -30,4 +30,5 @@ export const Algorithm = {
     DIAMETER: 29,
     EULERIAN_PATH: 30,
     EULERIAN_CIRCUIT: 31,
+    MISSING_EDGE_PREDICTION: 32,
 }

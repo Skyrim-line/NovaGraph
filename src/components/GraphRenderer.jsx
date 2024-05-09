@@ -99,8 +99,12 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     const getLinkColor = link => {
         if (colors[`${link.source}-${link.target}`] > 0) {
             return contrast_green
-        } else if (colors[`${link.target}-${link.source}`] > 0) {
+        } else if (!directed && colors[`${link.target}-${link.source}`] > 0) {
             return contrast_green
+        } else if (colors[`${link.target}-${link.source}`] === 0) {
+            return scale(1).hex()
+        } else if (!directed && colors[`${link.source}-${link.target}`] === 0) {
+            return scale(1).hex()
         } else {
             return null
         }
