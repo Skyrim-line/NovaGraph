@@ -68,5 +68,7 @@ val topological_sort(void);
 val diameter(void);
 val eulerian_path(void);
 val eulerian_circuit(void);
+val missing_edge_prediction_default_values(void);
+val missing_edge_prediction(int numSamples, int numBins);
 
 #endif

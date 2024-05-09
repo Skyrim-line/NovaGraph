@@ -112,6 +112,8 @@ EMSCRIPTEN_BINDINGS(graph) {
   function("diameter", &diameter);
   function("eulerian_path", &eulerian_path);
   function("eulerian_circuit", &eulerian_circuit);
+  function("missing_edge_prediction_default_values", &missing_edge_prediction_default_values);
+  function("missing_edge_prediction", &missing_edge_prediction);
 }
 
 // emcc demo.cpp -O3 -s WASM=1 -s -sEXPORTED_FUNCTIONS=_sum,_subtract --no-entry -o demo.wasm

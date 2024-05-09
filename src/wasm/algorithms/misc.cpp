@@ -240,3 +240,73 @@ val eulerian_circuit(void) {
     result.set("data", data);
     return result;
 }
+
+val missing_edge_prediction_default_values(void) {
+    int num_nodes = igraph_vcount(&globalGraph);
+    int num_edges = igraph_ecount(&globalGraph);
+    int num_samples, num_bins;
+    val result = val::object();
+
+    if (num_nodes < 100) {
+        num_samples = 500;
+        num_bins = 10;
+        result.set("graphSize", "small");
+    } else if (num_nodes <= 1000) {
+        num_samples = 1000 + (num_edges / 100); // slightly increase based on edge size
+        num_bins = 25;
+        result.set("graphSize", "medium");
+    } else {
+        num_samples = 5000 + (num_edges / 50);
+        num_bins = 50 + (num_edges / 200);
+        result.set("graphSize", "large");
+    }
+
+    result.set("numSamples", num_samples);
+    result.set("numBins", num_bins);
+    return result;
+}
+
+val missing_edge_prediction(int numSamples, int numBins) {
+    igraph_hrg_t hrg;
+    IGraphVectorInt predicted_edges;
+    IGraphVector probabilties;
+
+    // fit the hrg model to the global graph
+    igraph_hrg_fit(&globalGraph, &hrg, false, 0);
+
+    // predict missing edges
+    igraph_hrg_predict(&globalGraph, predicted_edges.vec(), probabilties.vec(), &hrg, false, numSamples, numBins);
+
+    val result = val::object();
+    val colorMap = val::object();
+    val data = val::object();
+    val edges = val::array();
+    val edgesData = val::array();
+    int edgeIndex = 0;
+    for (int i = 0; i < predicted_edges.size(); i++ ) {
+        int src = predicted_edges.at(i);
+        int tar = predicted_edges.at(++i);
+        std::string linkId = std::to_string(src) + '-' + std::to_string(tar);
+        colorMap.set(linkId, 0);
+        
+        // add to graph render object (used by Cosmograph)
+        val e = val::object();
+        e.set("source", src);
+        e.set("target", tar);
+        edges.set(edgeIndex, e);
+
+        // add to data object
+        val link = val::object();
+        link.set("from", igraph_get_name(src));
+        link.set("to", igraph_get_name(tar));
+        link.set("probability", probabilties.at(edgeIndex));
+        edgesData.set(edgeIndex++, link);
+    }
+
+    result.set("colorMap", colorMap);
+    result.set("mode", MODE_COLOR_SHADE_DEFAULT);
+    data.set("predictedEdges", edgesData);
+    result.set("data", data);
+    result.set("edges", edges);
+    return result;
+}
