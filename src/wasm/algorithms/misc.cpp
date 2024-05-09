@@ -272,6 +272,7 @@ val missing_edge_prediction(int numSamples, int numBins) {
     IGraphVector probabilties;
 
     // fit the hrg model to the global graph
+    igraph_hrg_init(&hrg, 0);
     igraph_hrg_fit(&globalGraph, &hrg, false, 0);
 
     // predict missing edges
@@ -283,10 +284,17 @@ val missing_edge_prediction(int numSamples, int numBins) {
     val edges = val::array();
     val edgesData = val::array();
     int edgeIndex = 0;
-    for (int i = 0; i < predicted_edges.size(); i++ ) {
+    for (int i = 0; i < predicted_edges.size(); ++i) {
         int src = predicted_edges.at(i);
-        int tar = predicted_edges.at(++i);
+        int tar = predicted_edges.at(i + 1);
         std::string linkId = std::to_string(src) + '-' + std::to_string(tar);
+        igraph_real_t prob = probabilties.at(edgeIndex);
+
+        // Only record edges with probability > 0.5
+        if (prob < 0.5) break;
+
+        colorMap.set(src, 0.5);
+        colorMap.set(tar, 0.5);
         colorMap.set(linkId, 0);
         
         // add to graph render object (used by Cosmograph)
@@ -299,7 +307,7 @@ val missing_edge_prediction(int numSamples, int numBins) {
         val link = val::object();
         link.set("from", igraph_get_name(src));
         link.set("to", igraph_get_name(tar));
-        link.set("probability", probabilties.at(edgeIndex));
+        link.set("probability", prob);
         edgesData.set(edgeIndex++, link);
     }
 
@@ -308,5 +316,6 @@ val missing_edge_prediction(int numSamples, int numBins) {
     data.set("predictedEdges", edgesData);
     result.set("data", data);
     result.set("edges", edges);
+    igraph_hrg_destroy(&hrg);
     return result;
 }
