@@ -42,6 +42,8 @@ function App() {
 
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
+  const [existingEdges, setExistingEdges] = useState([]); // for missing edge prediction
+  const [tempEdges, setTempEdges] = useState([]); // for adding edges
   const [directed, setDirected] = useState(false);
   const [colorMap, setColorMap] = useState({});
   const [sizeMap, setSizeMap] = useState({});
@@ -63,7 +65,7 @@ function App() {
       const graph = mod.initGraph(); // initialize the graph in C++
       setNodes(graph.nodes)
       setEdges(graph.edges)
-
+      setExistingEdges(graph.edges)
       setMissingEdgeDefaults(mod.missing_edge_prediction_default_values());
 
       window.onerror = (message, source, lineno, colno, error) => {
@@ -88,12 +90,21 @@ function App() {
     console.log(missingEdgeDefaults)
   }, [colorMap])
 
+  useEffect(() => {
+    if (tempEdges.length > 0) {
+      setEdges([...edges, ...tempEdges])
+    } else {
+      setEdges(existingEdges)
+    }
+  }, [tempEdges])
+
   const updateGraph = (nodes, edges, directed) => {
     setColorMap({});
     setSizeMap({});
     setActiveAlgorithm(null);
     setNodes(nodes);
     setEdges(edges);
+    setExistingEdges(edges);
     setDirected(directed);
     setRenderMode(1);
     setLoading(null);
@@ -115,9 +126,7 @@ function App() {
       setColorMap({})
       setSizeMap({})
     }
-    if (response.edges) {
-      setEdges([...edges, ...response.edges])
-    }
+    setTempEdges(response.edges ? response.edges : [])
     setText(response.message)
     setRenderMode(response.mode)
     setActiveAlgorithm(alg)
