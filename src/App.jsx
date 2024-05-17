@@ -210,7 +210,7 @@ function App() {
             <ExportMenu
               open={exportOpen}
               setOpen={setExportOpen}
-              data={activeResponse.data}
+              data={activeResponse && activeResponse.data}
             />
           </Box>
           <Accordion expanded={expanded === 'panel1'} onChange={handleAccordianChange('panel1')}>
