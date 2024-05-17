@@ -661,7 +661,8 @@ function App() {
                   setLoading={setLoading}
                   algorithmName="Missing Edge Prediction"
                   desc={[
-                    "TODO",
+                    "The missing edge prediction algorithm predicts missing edges in a graph. It fits a Hierarchical Random Graph (HRG) model to the graph and predicts missing edges based on the model.",
+                    "A. Clauset, C. Moore, and M.E.J. Newman. Hierarchical structure and the prediction of missing links in networks. Nature 453, 98 - 101 (2008)", 
                     `For a ${missingEdgeDefaults.graphSize} sized graph, this uses the default values of ${missingEdgeDefaults.numSamples} samples and ${missingEdgeDefaults.numBins} bins.`
                   ]}
                   nodes={nodes}

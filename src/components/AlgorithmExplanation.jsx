@@ -85,6 +85,8 @@ function AlgorithmExplanation({ algorithm }) {
             <>Finds a path that visits every edge <b>exactly once</b> in a graph.</>,
         [Algorithm.EULERIAN_CIRCUIT]:
             <>Finds a path that visits every edge <b>exactly once</b> and returns to the starting node in a graph.</>,
+        [Algorithm.MISSING_EDGE_PREDICTION]:
+            <><b>Predicts</b> the likelihood of a <b>missing edge</b> between two nodes based on their shared neighbours.</>,
     };
 
     return (

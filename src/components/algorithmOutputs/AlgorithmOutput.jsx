@@ -31,6 +31,7 @@ import TopologicalSort from './TopologicalSort';
 import Diameter from './Diameter';
 import EulerianPath from './EulerianPath';
 import EulerianCircuit from './EulerianCircuit';
+import MissingEdgePrediction from './MissingEdgePrediction';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -64,6 +65,7 @@ const components = {
     [Algorithm.DIAMETER]: Diameter,
     [Algorithm.EULERIAN_PATH]: EulerianPath,
     [Algorithm.EULERIAN_CIRCUIT]: EulerianCircuit,
+    [Algorithm.MISSING_EDGE_PREDICTION]: MissingEdgePrediction,
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {
