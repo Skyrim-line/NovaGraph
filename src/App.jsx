@@ -17,6 +17,7 @@ import AlgorithmOutput from './components/algorithmOutputs/AlgorithmOutput';
 import AlgorithmInput from './components/AlgorithmInput';
 import { SpinnerDotted } from 'spinners-react';
 import AlgorithmMultiInput from './components/AlgorithmMultiInput';
+import ExportMenu from './components/ExportMenu';
 
 const darkTheme = createTheme({
   palette: {
@@ -48,11 +49,11 @@ function App() {
   const [colorMap, setColorMap] = useState({});
   const [sizeMap, setSizeMap] = useState({});
   const [renderMode, setRenderMode] = useState(1);
-  const [text, setText] = useState("");
   const [activeAlgorithm, setActiveAlgorithm] = useState(null);
   const [activeResponse, setActiveResponse] = useState(null);
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [exportOpen, setExportOpen] = useState(false);
   const [hoveredAlgorithm, setHoveredAlgorithm] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
@@ -127,7 +128,6 @@ function App() {
       setSizeMap({})
     }
     setTempEdges(response.edges ? response.edges : [])
-    setText(response.message)
     setRenderMode(response.mode)
     setActiveAlgorithm(alg)
     setActiveResponse(response)
@@ -166,8 +166,6 @@ function App() {
             mode={renderMode}
           />
           <AlgorithmOutput algorithm={activeAlgorithm} response={activeResponse} />
-
-          <pre>{text}</pre>
         </Box>
 
         <Box width={{ xs: '15rem', sm: '20rem' }}>
@@ -185,18 +183,18 @@ function App() {
                 Import
               </Button>
             </Tooltip>
-            {/*<Tooltip title='Export Graph'>*/}
-            <Button
-              aria-controls='export-menu'
-              aria-haspopup='true'
-              startIcon={<FileDownloadIcon />}
-              variant='text'
-              color='secondary'
-              size='small'
-              disabled
-            >
-              Export
-            </Button>
+            <Tooltip title='Export Algorithm Data'>
+              <Button
+                onClick={() => setExportOpen(true)}
+                startIcon={<FileDownloadIcon />}
+                variant='text'
+                color='secondary'
+                size='small'
+                disabled={activeResponse === null}
+              >
+                Export
+              </Button>
+            </Tooltip>
             {/*<Tooltip title='Help'>*/}
             <IconButton color='info' disabled>
               <HelpOutlineIcon />
@@ -208,6 +206,11 @@ function App() {
               module={wasmModule}
               updateGraph={updateGraph}
               setLoading={setLoading}
+            />
+            <ExportMenu
+              open={exportOpen}
+              setOpen={setExportOpen}
+              data={activeResponse.data}
             />
           </Box>
           <Accordion expanded={expanded === 'panel1'} onChange={handleAccordianChange('panel1')}>
