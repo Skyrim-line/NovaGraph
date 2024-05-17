@@ -304,10 +304,13 @@ val missing_edge_prediction(int numSamples, int numBins) {
         edges.set(edgeIndex, e);
 
         // add to data object
+        std::stringstream stream;
         val link = val::object();
         link.set("from", igraph_get_name(src));
         link.set("to", igraph_get_name(tar));
-        link.set("probability", prob);
+
+        stream << std::fixed << std::setprecision(3) << prob * 100;
+        link.set("probability", stream.str() + "%");
         edgesData.set(edgeIndex++, link);
     }
 
