@@ -15,6 +15,7 @@ val dijkstra_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Dijkstra Single Path");
 
     data.set("source", igraph_get_name(src));
     data.set("target", igraph_get_name(tar));
@@ -63,6 +64,7 @@ val dijkstra_source_to_all(igraph_integer_t src) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Dijkstra Single Source");
 
     data.set("source", igraph_get_name(src));
     data.set("weighted", hasWeights);
@@ -128,6 +130,7 @@ val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_inte
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Yen's k Shortest Paths");
     
     igraph_get_k_shortest_paths(&globalGraph, igraph_weights(), paths.vec(), edges.vec(), k, src, tar, IGRAPH_OUT);
 
@@ -189,6 +192,7 @@ val bf_source_to_target(igraph_integer_t src, igraph_integer_t tar) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Bellman-Ford Single Path");
 
     data.set("source", igraph_get_name(src));
     data.set("target", igraph_get_name(tar));
@@ -237,6 +241,7 @@ val bf_source_to_all(igraph_integer_t src) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Bellman-Ford Single Source");
 
     data.set("source", igraph_get_name(src));
     data.set("weighted", hasWeights);
@@ -299,6 +304,7 @@ val bfs(igraph_integer_t src) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Breadth-First Search");
 
     data.set("source", igraph_get_name(src));
 
@@ -352,6 +358,8 @@ val dfs(igraph_integer_t src) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Depth-First Search");
+
 
     data.set("source", igraph_get_name(src));
 
@@ -403,6 +411,7 @@ val randomWalk(igraph_integer_t start, int steps) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Random Walk");
 
     data.set("source", igraph_get_name(start));
     data.set("steps", steps);
@@ -458,6 +467,7 @@ val min_spanning_tree(void) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Minimum Spanning Tree");
 
     data.set("weighted", hasWeights);
     data.set("maxEdges", igraph_ecount(&globalGraph));

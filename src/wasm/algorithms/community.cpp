@@ -29,6 +29,8 @@ val louvain(igraph_real_t resolution) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Louvain Community Detection");
+
 
     stream << std::fixed << std::setprecision(2) << modularity_metric;
     data.set("modularity", std::stod(stream.str()));
@@ -65,6 +67,8 @@ val leiden(igraph_real_t resolution) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Leiden Community Detection");
+
 
     stream << std::fixed << std::setprecision(2) << modularity_metric;
     data.set("modularity", std::stod(stream.str()));
@@ -102,6 +106,7 @@ val fast_greedy(void) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Fast-Greedy Community Detection");
 
     stream << std::fixed << std::setprecision(2) << modularity.max();
     data.set("modularity", std::stod(stream.str()));
@@ -133,6 +138,7 @@ val label_propagation(void) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Label Propagation");
 
     std::map<int, std::vector<std::string>> communityMap;
     for (igraph_integer_t v = 0; v < membership.size(); ++v) {
@@ -163,6 +169,7 @@ val local_clustering_coefficient(void) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Local Clustering Coefficient");
 
     std::stringstream s;
     s << std::fixed << std::setprecision(4) << global_transitivity;
@@ -218,6 +225,7 @@ val k_core(int k) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "K-Core Detection");
 
     for (igraph_integer_t e = 0; e < igraph_ecount(&subgraph); ++e) {
         igraph_integer_t from, to;
@@ -261,6 +269,7 @@ val triangles(void) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Triangle Count");
 
     val triangles = val::array();
     int id = 1;
@@ -299,6 +308,11 @@ val connected_components(igraph_connectedness_t mode) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    if (mode == IGRAPH_STRONG) {
+        data.set("algorithm", "Strongly Connected Components");
+    } else {
+        data.set("algorithm", "Weakly Connected Components");
+    }
 
     std::map<int, std::vector<std::string>> componentMap;
     for (igraph_integer_t v = 0; v < membership.size(); ++v) {

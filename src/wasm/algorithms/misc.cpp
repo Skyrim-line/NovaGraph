@@ -10,6 +10,7 @@ val vertices_are_adjacent(igraph_integer_t src, igraph_integer_t tar) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Check Adjacency");
 
     data.set("source", igraph_get_name(src));
     data.set("target", igraph_get_name(tar));
@@ -42,6 +43,8 @@ val jaccard_similarity(val js_vs_list) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Jaccard Similarity");
+
     val nodes = val::array();
     for (size_t i = 0; i < js_vs_list["length"].as<size_t>(); i++) {
         igraph_integer_t nodeId = js_vs_list[i].as<igraph_integer_t>();
@@ -98,6 +101,8 @@ val topological_sort(void) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Topological Sort");
+
     val nodeOrder = val::array();
 
     // Node colors will get lighter colours (lower freq values) which will be scaled
@@ -130,6 +135,7 @@ val diameter(void) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Diameter");
 
     data.set("source", igraph_get_name(src));
     data.set("target", igraph_get_name(tar));
@@ -178,6 +184,7 @@ val eulerian_path(void) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Eulerian Path");
 
     val path = val::array();
     for (int i = 0; i < vPath.size() - 1; ++i) {
@@ -220,6 +227,7 @@ val eulerian_circuit(void) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Eulerian Circuit");
 
     val path = val::array();
     for (int i = 0; i < vPath.size() - 1; ++i) {
@@ -281,6 +289,8 @@ val missing_edge_prediction(int numSamples, int numBins) {
     val result = val::object();
     val colorMap = val::object();
     val data = val::object();
+    data.set("algorithm", "HRG Missing Edge Prediction");
+
     val edges = val::array();
     val edgesData = val::array();
     int edgeIndex = 0;

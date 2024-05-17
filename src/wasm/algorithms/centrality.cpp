@@ -21,6 +21,7 @@ val betweenness_centrality(void) {
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Betweenness Centrality");
 
     val centralities = val::array();
     for (igraph_integer_t v = 0; v < igraph_vcount(&globalGraph); ++v) {
@@ -54,6 +55,7 @@ val closeness_centrality(void) {
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Closeness Centrality");
 
     val centralities = val::array();
     for (igraph_integer_t v = 0; v < igraph_vcount(&globalGraph); ++v) {
@@ -87,6 +89,7 @@ val degree_centrality(void) {
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Degree Centrality");
 
     val centralities = val::array();
 
@@ -122,6 +125,8 @@ val eigenvector_centrality(void) {
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Eigenvector Centrality");
+
 
     std::stringstream stream;
     stream << std::fixed << std::setprecision(2) << value;
@@ -159,6 +164,8 @@ val harmonic_centrality(void) {
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Harmonic Centrality");
+
 
     val centralities = val::array();
     for (igraph_integer_t v = 0; v < igraph_vcount(&globalGraph); ++v) {
@@ -192,6 +199,7 @@ val strength(void) {
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
+    data.set("algorithm", "Strength Centrality");
 
     val centralities = val::array();
     for (igraph_integer_t v = 0; v < strengths.size(); ++v) {
@@ -229,6 +237,7 @@ val pagerank(igraph_real_t damping) {
     val result = val::object();
     val sizeMap = val::object();
     val data = val::object();
+    data.set("algorithm", "PageRank");
 
     data.set("damping", stream.str());
 
