@@ -18,6 +18,7 @@ import AlgorithmInput from './components/AlgorithmInput';
 import { SpinnerDotted } from 'spinners-react';
 import AlgorithmMultiInput from './components/AlgorithmMultiInput';
 import ExportMenu from './components/ExportMenu';
+import HelperCarousel from './components/HelperCarousel';
 
 const darkTheme = createTheme({
   palette: {
@@ -54,6 +55,7 @@ function App() {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [exportOpen, setExportOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const [hoveredAlgorithm, setHoveredAlgorithm] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
@@ -195,10 +197,14 @@ function App() {
                 Export
               </Button>
             </Tooltip>
-            {/*<Tooltip title='Help'>*/}
-            <IconButton color='info' disabled>
-              <HelpOutlineIcon />
-            </IconButton>
+            <Tooltip title='Help'>
+              <IconButton
+                onClick={() => setHelpOpen(!helpOpen)}
+                color='secondary'
+              >
+                <HelpOutlineIcon />
+              </IconButton>
+            </Tooltip>
             <ImportMenu
               id='import-menu'
               anchorEl={anchorEl}
@@ -211,6 +217,10 @@ function App() {
               open={exportOpen}
               setOpen={setExportOpen}
               data={activeResponse && activeResponse.data}
+            />
+            <HelperCarousel
+              open={helpOpen}
+              handleClose={() => setHelpOpen(false)}
             />
           </Box>
           <Accordion expanded={expanded === 'panel1'} onChange={handleAccordianChange('panel1')}>
