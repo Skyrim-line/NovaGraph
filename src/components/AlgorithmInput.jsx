@@ -50,7 +50,11 @@ const AlgorithmInput = ({ wasmFunction, postState, setLoading, algorithmName, bu
 
     setTimeout(() => {
       const args = inputs.map(input => values[input.label])
+
+      const startTime = performance.now();
       const response = wasmFunction(...args);
+      const endTime = performance.now();
+      console.log(`Time taken for ${algorithmName}: ${endTime - startTime}ms`);
       postState(response);      
     }, 0);
   };
