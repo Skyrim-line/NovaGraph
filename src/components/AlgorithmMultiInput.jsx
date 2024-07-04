@@ -60,7 +60,14 @@ const AlgorithmMultiInput = ({ wasmFunction, postState, setLoading, algorithmNam
       const values = selectedValues.slice(0, -1);
 
       const startTime = performance.now();
-      const response = wasmFunction(values);
+      let response;
+      try {
+        response = wasmFunction(values);
+      } catch (e) {
+        const endTime = performance.now();
+        console.log(`Time taken for ${algorithmName}: ${endTime - startTime}ms`);
+        throw e;  
+      }
       const endTime = performance.now();
       console.log(`Time taken for ${algorithmName}: ${endTime - startTime}ms`);
       

@@ -377,7 +377,7 @@ val dfs(igraph_integer_t src) {
             tree_index = 0;
             for (igraph_integer_t j; j < order.size(); ++j) {
                 int orderNode = order.at(j);
-                std::cout << " " << std::endl; // TODO: removing this causes errors???
+                //std::cout << " " << std::endl; // TODO: removing this causes errors???
                 if (visited.find(orderNode) != visited.end()) continue;
                 visited.insert(orderNode);
                 fm[orderNode] = subtree_index;
