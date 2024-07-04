@@ -38,8 +38,11 @@ const ImportAutoRandom = ({ open, onClose, module, updateGraph, setLoading }) =>
     if (!validateInput()) return;
     
     setLoading("Loading graph...");
-    console.log(n, p, directed)
+    
+    const startTime = performance.now();
     const response = module.generate_graph_from_n_nodes(n, p, directed);
+    const endTime = performance.now();
+    console.log(`Time taken for generate_graph_from_n_nodes: ${endTime - startTime}ms`);
     if (response && response.nodes) updateGraph(response.nodes, response.edges, response.directed);
   }
 
