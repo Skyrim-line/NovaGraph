@@ -11,15 +11,10 @@ double scaleCentrality(double centrality, double max_centrality) {
     return scaled;
 }
 
-#include <chrono>
 
 val betweenness_centrality(void) {
     IGraphVector betweenness;
-
-    auto start = std::chrono::high_resolution_clock::now();
     igraph_betweenness(&globalGraph, betweenness.vec(), igraph_vss_all(), true, igraph_weights());
-    auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "Betweenness Centrality: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
 
     double max_centrality = betweenness.max();
     val result = val::object();
@@ -27,7 +22,6 @@ val betweenness_centrality(void) {
     val data = val::object();
     data.set("algorithm", "Betweenness Centrality");
 
-    start = std::chrono::high_resolution_clock::now();
     val centralities = val::array();
     for (igraph_integer_t v = 0; v < igraph_vcount(&globalGraph); ++v) {
         val c = val::object();
@@ -43,8 +37,6 @@ val betweenness_centrality(void) {
         c.set("centrality", std::stod(stream.str()));
         centralities.set(v, c);
     }
-    end = std::chrono::high_resolution_clock::now();
-    std::cout << "Step 2: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
     data.set("centralities", centralities);
 
     result.set("sizeMap", sizeMap);

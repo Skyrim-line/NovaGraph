@@ -28,7 +28,10 @@ const ImportGML = ({ open, onClose, module, updateGraph, setLoading }) => {
     reader.onload = e => {
       const data = new Uint8Array(e.target.result);
       module.FS.writeFile(filename, data);
+      const startTime = performance.now();
       const response = module.generate_graph_from_gml(filename);
+      const endTime = performance.now();
+      console.log(`Time taken for generate_graph_from_gml: ${endTime - startTime}ms`);
       if (response && response.nodes) updateGraph(response.nodes, response.edges, response.directed);
       setFile(null);
     }
