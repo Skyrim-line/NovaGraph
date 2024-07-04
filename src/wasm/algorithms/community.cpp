@@ -204,7 +204,6 @@ val k_core(int k) {
     igraph_coreness(&globalGraph, coreness.vec(), IGRAPH_OUT);
 
     for (igraph_integer_t v = 0; v < coreness.size(); ++v) {
-        std::cout << "Coreness of " << igraph_get_name(v) << " is " << coreness.at(v) << std::endl;
         if (coreness.at(v) >= k) {
             vertices_to_keep.push_back(v);
         }

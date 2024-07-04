@@ -55,7 +55,6 @@ val jaccard_similarity(val js_vs_list) {
 
     igraph_vs_vector(&vs, vs_list.vec());
     igraph_similarity_jaccard(&globalGraph, m.mat(), vs, IGRAPH_OUT, false);
-    igraph_matrix_printf(m.mat(), "%.2f");
 
     val rows = val::array();
     double max_similarity = -1.0;
