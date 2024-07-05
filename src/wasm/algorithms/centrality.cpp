@@ -48,7 +48,7 @@ val betweenness_centrality(void) {
 val closeness_centrality(void) {
     IGraphVector closeness;
 
-    igraph_closeness(&globalGraph, closeness.vec(), NULL, NULL, igraph_vss_all(), IGRAPH_OUT, igraph_weights(), true);
+    igraph_closeness(&globalGraph, closeness.vec(), NULL, NULL, igraph_vss_all(), IGRAPH_OUT, NULL, true);
 
     double max_centrality = closeness.max_nonan();
     val result = val::object();
