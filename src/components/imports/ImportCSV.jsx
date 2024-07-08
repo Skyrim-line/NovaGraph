@@ -39,8 +39,10 @@ const ImportCSV = ({ open, onClose, module, updateGraph, setLoading }) => {
         
         module.FS.writeFile(nodesFilename, nodesData);
         module.FS.writeFile(edgesFilename, edgesData);
-
+        const startTime = performance.now();
         const response = module.generate_graph_from_csv(nodesFilename, edgesFilename, directed);
+        const endTime = performance.now();
+        console.log(`Time taken for generate_graph_from_csv: ${endTime - startTime}ms`);
         if (response && response.nodes) updateGraph(response.nodes, response.edges, directed);
         setNodesFile(null);
         setEdgesFile(null);
