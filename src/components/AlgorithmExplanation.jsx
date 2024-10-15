@@ -2,7 +2,7 @@ import React from 'react';
 import { Algorithm } from '../algorithms';
 import { Box, Paper, Typography } from '@mui/material';
 
-function AlgorithmExplanation({ algorithm }) {
+function AlgorithmExplanation({ text }) {
     const hoverText = {
         [Algorithm.DIJKSTRA_A_TO_B]:
             <>The shortest path (or smallest sum of weights) from one node to another using 
@@ -90,7 +90,7 @@ function AlgorithmExplanation({ algorithm }) {
     };
 
     return (
-        algorithm && hoverText[algorithm] && (
+        text && (
             <Paper elevation={0}
                 sx={{
                     wordWrap: 'break-word',
@@ -102,9 +102,7 @@ function AlgorithmExplanation({ algorithm }) {
                     textAlign: 'left',
                 }}
             >
-                <Typography variant='subtitle2'>
-                    {hoverText[algorithm]}
-                </Typography>
+                <Typography variant='subtitle2'>{text}</Typography>
             </Paper>
         )
     );

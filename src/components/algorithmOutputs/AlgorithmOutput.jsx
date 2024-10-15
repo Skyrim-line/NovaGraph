@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Algorithm } from '../../algorithms';
 import DijkstraSinglePath from './DijkstraSinglePath';
 import DijkstraSingleSource from './DijkstraSingleSource';
@@ -69,6 +69,11 @@ const components = {
 }
 
 const AlgorithmOutput = ({ algorithm, response }) => {
+
+    useEffect(() => {
+        console.log(algorithm);
+    }, [algorithm]);
+    
     const Component = response && response.data && components[algorithm];
     return (
         <>

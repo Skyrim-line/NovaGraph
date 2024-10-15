@@ -11,6 +11,7 @@ import { Accordion, AccordionDetails, AccordionSummary } from './components/Acco
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ImportMenu from './components/imports/ImportMenu';
 import { Algorithm } from './algorithms';
+import { algorithmConfig } from './algorithm-config';
 import AlgorithmExplanation from './components/AlgorithmExplanation';
 import { ErasBold, ErasMedium } from './components/Eras';
 import AlgorithmOutput from './components/algorithmOutputs/AlgorithmOutput';
@@ -229,6 +230,23 @@ function App() {
             </AccordionSummary>
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
+                {
+                  Object.values(algorithmConfig).map(alg => (
+                    alg.category === "pfs" && (
+                      <AlgorithmInput
+                        key={alg.id}
+                        wasmFunction={wasmModule && wasmModule[alg.wasm_function_name]}
+                        postState={postAlgorithmState.bind(null, alg)}
+                        setLoading={setLoading}
+                        algorithmName={alg.button_text}
+                        desc={alg.long_description}
+                        nodes={nodes}
+                        setHoveredAlgorithm={setHoveredAlgorithm}
+                        hoveredAlgorithm={alg.hover_text_html}
+                        inputs={alg.inputs_fields}
+                      />
+                  ))
+                )}
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.dijkstra_source_to_target}
                   postState={postAlgorithmState.bind(null, Algorithm.DIJKSTRA_A_TO_B)}
@@ -689,7 +707,7 @@ function App() {
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>
-          <AlgorithmExplanation algorithm={hoveredAlgorithm} />
+          <AlgorithmExplanation text={hoveredAlgorithm} />
         </Box>
 
       </Box>
