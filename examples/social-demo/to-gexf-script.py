@@ -6,7 +6,7 @@ nodes_df = pd.read_csv('musae_git_target.csv')
 edges_df = pd.read_csv('musae_git_edges.csv')
 
 # filter only first 15000 nodes
-nodes_df = nodes_df.head(15000)
+#nodes_df = nodes_df.head(15000)
 
 # filter edges to only include when both nodes are in the nodes df
 edges_df = edges_df[edges_df['id_1'].isin(nodes_df['id']) & edges_df['id_2'].isin(nodes_df['id'])]

@@ -57,12 +57,6 @@ NodeMap process_nodes_csv(const std::string& filename) {
 
     if (nodes.empty()) throw std::runtime_error("No nodes found in the file");
 
-    // print nodes
-    std::cout << "Nodes:" << std::endl;
-    for (auto &pair : nodes) {
-        std::cout << pair.first << " -> " << pair.second << std::endl;
-    }
-
     return nodes;
 }
 
@@ -74,12 +68,9 @@ void process_edges_csv(const std::string &edgesFilename, std::unordered_map<std:
     bool weighted = false;
 
     // check if file is open
-    std::cout << "checking file..." << std::endl;
     if (!file.is_open()) throw std::runtime_error("Could not open file " + edgesFilename);
 
     // read the csv file and check columns
-    std::cout << "reading csv..." << std::endl;
-
     if (std::getline(file, line)) {
         std::vector<std::string> tokens = split(trim(line), ',');
         if (tokens.size() < 2 || tokens[0] != "source" || tokens[1] != "target") {
@@ -92,8 +83,6 @@ void process_edges_csv(const std::string &edgesFilename, std::unordered_map<std:
     }
 
     // read the edges
-    std::cout << "reading edges..." << std::endl;
-
     while (std::getline(file, line)) {
         std::vector<std::string> tokens = split(trim(line), ',');
         if (tokens.size() < 2) continue; // skip lines with less than 2 columns
@@ -126,8 +115,6 @@ void process_edges_csv(const std::string &edgesFilename, std::unordered_map<std:
     igraph_create(&globalGraph, edges.vec(), nodeMap.size(), directed);   
 
     // add node names as attributes
-    std::cout << "reading node names..." << std::endl;
-
     for (auto &pair : nodeMap) {
         SETVAS(&globalGraph, "name", pair.second, pair.first.c_str());
     }
