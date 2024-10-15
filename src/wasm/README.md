@@ -12,6 +12,10 @@ emcmake cmake ..
 cmake --build .
 ```
 
+One of the problems I ran into was the "TestEndianess" check. To fix this, I had to add the line `SET(CMAKE_16BIT_TYPE "unsigned short")` in the file "/usr/share/cmake-3.28/Modules/TestBigEndian.cmake".
+
+Other problems may also pop up during the build which may require certain programs to be installed or small file modifications like the above to bypass. These will depend on what has been written in the library's `CMakeLists.txt` file.
+
 ## RapidJSON
 Make sure the RapidJSON git repository is cloned.
 ```bash
