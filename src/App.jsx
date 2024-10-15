@@ -73,11 +73,11 @@ function App() {
       setMissingEdgeDefaults(mod.missing_edge_prediction_default_values());
 
       window.onerror = (message, source, lineno, colno, error) => {
+        setLoading(null);
         if (typeof error != 'number') return;
         const pointer = error;
         const error_message = mod.what_to_stderr(pointer);
         setError(error_message);
-        setLoading(null);
       }
 
       window.onunload = () => {
@@ -231,8 +231,8 @@ function App() {
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
                 {
-                  Object.values(algorithmConfig).map(alg => (
-                    alg.category === "pfs" && (
+                  Object.values(algorithmConfig).filter(alg => alg.category === "pfs").map(alg => (
+                    alg.input_type === "default" && (
                       <AlgorithmInput
                         key={alg.id}
                         wasmFunction={wasmModule && wasmModule[alg.wasm_function_name]}
