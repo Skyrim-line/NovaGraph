@@ -75,9 +75,7 @@ const AlgorithmInput = ({ wasmFunction, postState, setLoading, algorithmName, bu
           <ErasBold>{algorithmName}</ErasBold>
         </DialogTitle>
         <DialogContent>
-          {desc.map((line, index) => (
-            <Typography key={index} variant='body2' mb={4}>{line}</Typography>
-          ))}
+          <Typography variant='body2' mb={4}>{desc}</Typography>
           {inputs.map((input, index) => (
             <Box key={index} mt={2}>
               {input.type === 'number' ? (

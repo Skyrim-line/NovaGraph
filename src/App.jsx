@@ -239,7 +239,7 @@ function App() {
                         postState={postAlgorithmState.bind(null, alg)}
                         setLoading={setLoading}
                         algorithmName={alg.button_text}
-                        desc={alg.long_description}
+                        desc={alg.long_description_html}
                         nodes={nodes}
                         setHoveredAlgorithm={setHoveredAlgorithm}
                         hoveredAlgorithm={alg.hover_text_html}
@@ -247,20 +247,6 @@ function App() {
                       />
                   ))
                 )}
-                <AlgorithmInput
-                  wasmFunction={wasmModule && wasmModule.dijkstra_source_to_target}
-                  postState={postAlgorithmState.bind(null, Algorithm.DIJKSTRA_A_TO_B)}
-                  setLoading={setLoading}
-                  algorithmName="Dijkstra (A to B)"
-                  desc={["Dijkstra's algorithm finds the shortest path from one node to another."]}
-                  nodes={nodes}
-                  setHoveredAlgorithm={setHoveredAlgorithm}
-                  hoveredAlgorithm={Algorithm.DIJKSTRA_A_TO_B}
-                  inputs={[
-                    { label: 'Enter source vertex', explanation: 'Select the source vertex', type: 'text' },
-                    { label: 'Enter target vertex', explanation: 'Select the target vertex', type: 'text' }
-                  ]}
-                />
                 <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.dijkstra_source_to_all}
                   postState={postAlgorithmState.bind(null, Algorithm.DIJKSTRA_ALL)}
