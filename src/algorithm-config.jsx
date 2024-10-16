@@ -2,7 +2,6 @@ import React from 'react';
 
 export const algorithmConfig = {
     DIJKSTRA_A_TO_B: {
-        "id": 1,
         "category": "pfs",
         "button_text": "Dijkstra (A to B)",
         "hover_text_html": (
@@ -14,7 +13,7 @@ export const algorithmConfig = {
         ],
         "wasm_function_name": "dijkstra_source_to_target",
         "input_type": "default",
-        "inputs_fields": [
+        "input_fields": [
             {
                 "label": "Enter source vertex",
                 "type": "text"
@@ -32,11 +31,12 @@ export const algorithmConfig = {
             },
             {
                 "label": "Path Weight",
-                "value": (data) => data.weighted ? data.totalWeight : null
+                "value": (data) => data.weighted ? data.totalWeight : "N/A"
             }
         ],
         "modal_title": "Dijkstra Path Details",
         "modal_columns": (data) => data.weighted ? ['From', 'To', 'Weight'] : ['From', 'To'],
-        "modal_data": (data) => data.path,
+        "data_array": (data) => data.path,
+        "data_array_keys": (data) => data.weighted ? ['from', 'to', 'weight'] : ['from', 'to']
     }
 }

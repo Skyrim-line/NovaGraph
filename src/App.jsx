@@ -231,10 +231,10 @@ function App() {
             <AccordionDetails>
               <ButtonGroup orientation='vertical' variant='text'>
                 {
-                  Object.values(algorithmConfig).filter(alg => alg.category === "pfs").map(alg => (
+                  Object.values(algorithmConfig).filter(alg => alg.category === "pfs").map((alg, key) => (
                     alg.input_type === "default" && (
                       <AlgorithmInput
-                        key={alg.id}
+                        key={key}
                         wasmFunction={wasmModule && wasmModule[alg.wasm_function_name]}
                         postState={postAlgorithmState.bind(null, alg)}
                         setLoading={setLoading}
@@ -243,7 +243,7 @@ function App() {
                         nodes={nodes}
                         setHoveredAlgorithm={setHoveredAlgorithm}
                         hoveredAlgorithm={alg.hover_text_html}
-                        inputs={alg.inputs_fields}
+                        inputs={alg.input_fields}
                       />
                   ))
                 )}

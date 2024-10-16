@@ -32,6 +32,7 @@ import Diameter from './Diameter';
 import EulerianPath from './EulerianPath';
 import EulerianCircuit from './EulerianCircuit';
 import MissingEdgePrediction from './MissingEdgePrediction';
+import GenericAlgorithmOutput from './GenericAlgorithmOutput';
 
 const components = {
     [Algorithm.DIJKSTRA_A_TO_B]: DijkstraSinglePath,
@@ -71,13 +72,19 @@ const components = {
 const AlgorithmOutput = ({ algorithm, response }) => {
 
     useEffect(() => {
+        console.log("algorithm output");
         console.log(algorithm);
     }, [algorithm]);
-    
+
     const Component = response && response.data && components[algorithm];
+    const genericComponent = response && response.data;
     return (
         <>
-            { Component ? <Component data={response.data} /> : null }
+            {
+                Component ? <Component data={response.data} /> :
+                genericComponent ? <GenericAlgorithmOutput algorithm={algorithm} data={response.data} /> :
+                null
+            }
         </>
     );
 };
