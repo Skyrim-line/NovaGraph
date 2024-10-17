@@ -248,32 +248,6 @@ function App() {
                   ))
                 )}
                 <AlgorithmInput
-                  wasmFunction={wasmModule && wasmModule.bfs}
-                  postState={postAlgorithmState.bind(null, Algorithm.BFS)}
-                  setLoading={setLoading}
-                  algorithmName="Breadth First Search"
-                  desc={["Breadth First Search algorithm traverses the graph from a source by exploring all neighbors before moving on to the next level. It continues until all nodes are visited."]}
-                  nodes={nodes}
-                  setHoveredAlgorithm={setHoveredAlgorithm}
-                  hoveredAlgorithm={Algorithm.BFS}
-                  inputs={[
-                    { label: 'Enter source vertex', explanation: 'Select the source vertex', type: 'text' }
-                  ]}
-                />
-                <AlgorithmInput
-                  wasmFunction={wasmModule && wasmModule.dfs}
-                  postState={postAlgorithmState.bind(null, Algorithm.DFS)}
-                  setLoading={setLoading}
-                  algorithmName="Depth First Search"
-                  desc={["Depth First Search algorithm traverses the graph from a source by exploring as far as possible along each branch before backtracking. It continues until all nodes are visited."]}
-                  nodes={nodes}
-                  setHoveredAlgorithm={setHoveredAlgorithm}
-                  hoveredAlgorithm={Algorithm.DFS}
-                  inputs={[
-                    { label: 'Enter source vertex', explanation: 'Select the source vertex', type: 'text' }
-                  ]}
-                />
-                <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.random_walk}
                   postState={postAlgorithmState.bind(null, Algorithm.RANDOM_WALK)}
                   setLoading={setLoading}

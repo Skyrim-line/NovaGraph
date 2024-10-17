@@ -335,7 +335,11 @@ val bfs(igraph_integer_t src) {
 
         int layer = layers.at(current_layer + 1);    
         if (i + 1 == layer || i + 1 == orderLength) {
-            layersArray.set(current_layer++, layerArray);
+            val l = val::object();
+            l.set("layer", layerArray);
+            l.set("index", current_layer);
+            layersArray.set(current_layer++, l);
+
             nodes_remaining = N - i - 1;
             new_iteration = true;
         }
@@ -361,7 +365,6 @@ val dfs(igraph_integer_t src) {
     val data = val::object();
     data.set("algorithm", "Depth-First Search");
 
-
     data.set("source", igraph_get_name(src));
 
     val subtrees = val::array();
@@ -378,14 +381,21 @@ val dfs(igraph_integer_t src) {
             tree_index = 0;
             for (igraph_integer_t j; j < order.size(); ++j) {
                 int orderNode = order.at(j);
-                //std::cout << " " << std::endl; // TODO: removing this causes errors???
+                //std::cout << " " << std::endl;
                 if (visited.find(orderNode) != visited.end()) continue;
+                
                 visited.insert(orderNode);
                 fm[orderNode] = subtree_index;
                 tree.set(tree_index++, igraph_get_name(orderNode));
                 if (orderNode == node) break;
             }
-            if (tree_index > 0) subtrees.set(subtree_index++, tree);
+
+            if (tree_index > 0) {
+                val t = val::object();
+                t.set("num", subtree_index + 1);
+                t.set("tree", tree);
+                subtrees.set(subtree_index++, t);
+            }
         }
     }
 

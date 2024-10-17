@@ -55,6 +55,7 @@ const GenericAlgorithmOutput = ({ algorithm, data }) => {
                 handleClick={handleClick}
                 dataArray={algorithm.data_array(data)}
                 loadItems={loadItems}
+                explanation={algorithm.modal_explanation}
             />
         </Box>
     </>);

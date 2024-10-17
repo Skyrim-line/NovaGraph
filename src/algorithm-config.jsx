@@ -187,4 +187,116 @@ export const algorithmConfig = {
             data.weighted ? {'key': "weight"} : {'key': "path", 'fn': "length"}
         ]
     },
+    BFS: {
+        "category": "pfs",
+        "button_text": "Breadth-First Search",
+        "hover_text_html": <>
+            Traverses the graph from a source by exploring its neighbours (1st layer) <i>first </i>
+            followed by the next layer. The result will segment each layer based on node shades.
+        </>,
+        "long_description_html": <>
+            Breadth First Search algorithm traverses the graph from a source by exploring all neighbors before moving on to the next level.
+            It continues until all nodes are visited.
+        </>,
+        "wasm_function_name": "bfs",
+        "input_type": "default",
+        "input_fields": [
+            {
+                "label": "Enter source vertex",
+                "type": "text"
+            }
+        ],
+        "result_heading": (data) => `BFS Traversal from [${data.source}]`,
+        "result_summary": [
+            {
+                "label": "Number of layers",
+                "value": (data) => data.layers.length - 1
+            },
+            {
+                "label": "Nodes Found",
+                "value": (data) => data.nodesFound
+            }
+        ],
+        "modal_title": () => `BFS Details`,
+        "modal_explanation": 'Each row contains the list of nodes found at the corresponding depth in the breadth-first search.',
+        "modal_columns": () => ['Depth', 'Nodes'],
+        "data_array": (data) => data.layers,
+        "data_array_keys": () => [
+            {'key': "index"},
+            {'key': "layer", 'fn': "join", 'args': [', ']}
+        ]
+    },
+    DFS: {
+        "category": "pfs",
+        "button_text": "Depth-First Search",
+        "hover_text_html": <>
+            Traverses the graph from a source by exploring as far as possible along each branch 
+            before <i>backtracking</i>. Node shades represent the "depth" of each node from the source.
+        </>,
+        "long_description_html": <>
+            Depth First Search algorithm traverses the graph from a source by exploring as far as possible along each branch before backtracking.
+            It continues until all nodes are visited.
+        </>,
+        "wasm_function_name": "dfs",
+        "input_type": "default",
+        "input_fields": [
+            {
+                "label": "Enter source vertex",
+                "type": "text"
+            }
+        ],
+        "result_heading": (data) => `DFS Traversal from [${data.source}]`,
+        "result_summary": [
+            {
+                "label": "Number of subtrees",
+                "value": (data) => data.subtrees.length
+            },
+            {
+                "label": "Nodes Found",
+                "value": (data) => data.nodesFound
+            }
+        ],
+        "modal_title": () => `DFS Details`,
+        "modal_explanation": 'Each row contains the list of nodes found during each subtree. Each time the search needs to "backtrack" to recurse over a node at a previous depth, a new subtree will begin.',
+        "modal_columns": () => ['Subtree', 'Nodes'],
+        "data_array": (data) => data.subtrees,
+        "data_array_keys": () => [
+            {'key': "num"},
+            {'key': "tree", 'fn': "join", 'args': [' → ']}
+        ]
+    },
+    RANDOM_WALK: {
+        "category": "pfs",
+        "button_text": "Random Walk",
+        "hover_text_html": <>
+            Traverses along a random path from a source node while considering edge directions.
+        </>,
+        "long_description_html": <>
+            Random Walk algorithm traverses the graph by randomly selecting a neighbor to visit next.
+            It continues for the specified number of steps.
+        </>,
+        "wasm_function_name": "random_walk",
+        "input_type": "default",
+        "input_fields": [
+            {
+                "label": "Enter source vertex",
+                "type": "text"
+            }
+        ],
+        "result_heading": (data) => `Random Walk from [${data.source}]`,
+        "result_summary": [
+            {
+                "label": "Number of steps",
+                "value": (data) => data.steps
+            }
+        ],
+        "modal_title": () => `Random Walk Details`,
+        "modal_explanation": 'Each row contains the list of nodes visited during the random walk.',
+        "modal_columns": () => ['Step', 'Node'],
+        "data_array": (data) => data.walk,
+        "data_array_keys": () => [
+            {'key': "step"},
+            {'key': "node"}
+        ]
+    },
 }
