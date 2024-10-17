@@ -33,7 +33,7 @@ Currently, adding another algorithm requires a lot of file modification. The ste
 6. Create the algorithm output file in `src/components/algorithmOutputs/NewAlgorithm.jsx`
 7. Add to `src/components/algorithmOutputs/AlgorithmOutput.jsx` in the `components` list
 
-> Future work may be done to reduce this number of steps. It is **not a high priority task** at the moment
+> Work is currently being done to make this easier with the new `algorithm-config.jsx` file. As of October 2024, this has been completed for Path Finding & Search algorithms. These steps will be updated once finished with all algorithms.
 
 <!---
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

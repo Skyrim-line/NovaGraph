@@ -447,6 +447,7 @@ val randomWalk(igraph_integer_t start, int steps) {
             colorMap.set(linkId, 1);
             
             val link = val::object();
+            link.set("step", i);
             link.set("from", igraph_get_name(vertices.at(i-1)));
             link.set("to", igraph_get_name(node));
             if (hasWeights) {
@@ -496,6 +497,7 @@ val min_spanning_tree(void) {
         colorMap.set(to, 0.5);
         colorMap.set(linkId, 1);
 
+        link.set("num", i + 1);
         link.set("from", igraph_get_name(from));
         link.set("to", igraph_get_name(to));
         if (hasWeights) {

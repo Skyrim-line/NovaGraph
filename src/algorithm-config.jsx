@@ -281,22 +281,72 @@ export const algorithmConfig = {
             {
                 "label": "Enter source vertex",
                 "type": "text"
+            },
+            {
+                "label": "Enter number of steps",
+                "type": "number",
+                "step": 1,
+                "defaultValue": 10
             }
         ],
         "result_heading": (data) => `Random Walk from [${data.source}]`,
         "result_summary": [
             {
-                "label": "Number of steps",
-                "value": (data) => data.steps
+                "label": "Most frequented node",
+                "value": (data) => data.maxFrequencyNode
+            },
+            {
+                "label": "This was visited",
+                "value": (data) => `${data.maxFrequency} times`
             }
         ],
         "modal_title": () => `Random Walk Details`,
         "modal_explanation": 'Each row contains the list of nodes visited during the random walk.',
-        "modal_columns": () => ['Step', 'Node'],
-        "data_array": (data) => data.walk,
-        "data_array_keys": () => [
+        "modal_columns": (data) => data.weighted ? ['Step', 'From', 'To', 'Weight'] : ['Step', 'From', 'To'],
+        "data_array": (data) => data.path,
+        "data_array_keys": (data) => [
             {'key': "step"},
-            {'key': "node"}
+            {'key': "from"},
+            {'key': "to"},
+            ...(data.weighted ? [{ 'key': "weight" }] : [])
+        ]
+    },
+    MINIMAL_SPANNING_TREE: {
+        "category": "pfs",
+        "button_text": "Minimal Spanning Tree",
+        "hover_text_html": <>
+            Find the subset of edges that connects all nodes in the graph with the minimum possible total edge weight (ignoring edge directions).
+            The result may show multiple trees.
+        </>,
+        "long_description_html": <>
+            Minimal Spanning Tree algorithm finds the subset of edges that connects all nodes in the graph with the minimum possible total edge weight.
+        </>,
+        "wasm_function_name": "min_spanning_tree",
+        "input_type": "default",
+        "input_fields": [],
+        "result_heading": () => `Minimal Spanning Tree`,
+        "result_summary": [
+            {
+                "label": "Edges in MST",
+                "value": (data) => data.edges.length
+            },
+            {
+                "label": "Total edges",
+                "value": (data) => data.maxEdges
+            },
+            {
+                "label": "MST Total Weight",
+                "value": (data) => data.weighted ? data.totalWeight : "N/A"
+            }
+        ],
+        "modal_title": () => `Minimum Spanning Tree Details`,
+        "modal_columns": (data) => data.weighted ? ['#', 'From', 'To', 'Weight'] : ['#', 'From', 'To'],
+        "data_array": (data) => data.edges,
+        "data_array_keys": (data) => [
+            {'key': "num"},
+            {'key': "from"},
+            {'key': "to"},
+            ...(data.weighted ? [{ 'key': "weight" }] : [])
         ]
     },
 }

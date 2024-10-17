@@ -224,6 +224,8 @@ function App() {
               handleClose={() => setHelpOpen(false)}
             />
           </Box>
+
+          {/* PATH FINDING AND SEARCH ALGORITHMS (category: pfs) */}
           <Accordion expanded={expanded === 'panel1'} onChange={handleAccordianChange('panel1')}>
             <AccordionSummary aria-controls="panel1-content" id="panel1-header">
               <Typography variant='body2' pl='5px'>Path Finding & Search</Typography>
@@ -247,31 +249,6 @@ function App() {
                       />
                   ))
                 )}
-                <AlgorithmInput
-                  wasmFunction={wasmModule && wasmModule.random_walk}
-                  postState={postAlgorithmState.bind(null, Algorithm.RANDOM_WALK)}
-                  setLoading={setLoading}
-                  algorithmName="Random Walk"
-                  desc={["The algorithm will randomly walk through the graph starting from a source node for a specified number of steps."]}
-                  nodes={nodes}
-                  setHoveredAlgorithm={setHoveredAlgorithm}
-                  hoveredAlgorithm={Algorithm.RANDOM_WALK}
-                  inputs={[
-                    { label: 'Enter starting vertex', explanation: 'Select the starting vertex', type: 'text' },
-                    { label: 'Enter step count', explanation: 'Number of steps to take', type: 'number', step: '1', defaultValue: 1 }
-                  ]}
-                />
-                <AlgorithmInput
-                  wasmFunction={wasmModule && wasmModule.min_spanning_tree}
-                  postState={postAlgorithmState.bind(null, Algorithm.MINIMAL_SPANNING_TREE)}
-                  setLoading={setLoading}
-                  algorithmName="Minimum Spanning Tree"
-                  desc={["The algorithm finds the minimum spanning tree of the graph."]}
-                  nodes={nodes}
-                  setHoveredAlgorithm={setHoveredAlgorithm}
-                  hoveredAlgorithm={Algorithm.MINIMAL_SPANNING_TREE}
-                  inputs={[]}
-                />
               </ButtonGroup>
             </AccordionDetails>
           </Accordion>
