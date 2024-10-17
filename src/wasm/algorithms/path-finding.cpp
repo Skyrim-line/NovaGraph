@@ -146,6 +146,7 @@ val yen_source_to_target(igraph_integer_t src, igraph_integer_t tar, igraph_inte
         int path_weight = 0;
 
         val pathDetails = val::object();
+        pathDetails.set("num", i + 1);
         val pathArray = val::array();
         for (long j = 0; j < igraph_vector_int_size(&p); ++j) {
             int node = VECTOR(p)[j];
