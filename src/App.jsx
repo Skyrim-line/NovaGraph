@@ -248,61 +248,6 @@ function App() {
                   ))
                 )}
                 <AlgorithmInput
-                  wasmFunction={wasmModule && wasmModule.dijkstra_source_to_all}
-                  postState={postAlgorithmState.bind(null, Algorithm.DIJKSTRA_ALL)}
-                  setLoading={setLoading}
-                  algorithmName="Dijkstra (A to all)"
-                  desc={["Dijkstra's algorithm finds the shortest path from one node to all other nodes."]}
-                  nodes={nodes}
-                  setHoveredAlgorithm={setHoveredAlgorithm}
-                  hoveredAlgorithm={Algorithm.DIJKSTRA_ALL}
-                  inputs={[
-                    { label: 'Enter source vertex', explanation: 'Select the source vertex', type: 'text' }
-                  ]}
-                />
-                <AlgorithmInput
-                  wasmFunction={wasmModule && wasmModule.yens_algorithm}
-                  postState={postAlgorithmState.bind(null, Algorithm.YEN)}
-                  setLoading={setLoading}
-                  algorithmName="Yen's Shortest Path"
-                  desc={["Yen's algorithm finds the top 'k' shortest paths between two nodes."]}
-                  nodes={nodes}
-                  setHoveredAlgorithm={setHoveredAlgorithm}
-                  hoveredAlgorithm={Algorithm.YEN}
-                  inputs={[
-                    { label: 'Enter source vertex', explanation: 'Select the source vertex', type: 'text' },
-                    { label: 'Enter target vertex', explanation: 'Select the target vertex', type: 'text' },
-                    { label: 'Enter k', explanation: 'Number of paths to find', type: 'number', step: '1', defaultValue: 3 }
-                  ]}
-                />
-                <AlgorithmInput
-                  wasmFunction={wasmModule && wasmModule.bellman_ford_source_to_target}
-                  postState={postAlgorithmState.bind(null, Algorithm.BELLMAN_FORD_A_TO_B)}
-                  setLoading={setLoading}
-                  algorithmName="Bellman-Ford (A to B)"
-                  desc={["Bellman-Ford algorithm finds the shortest path from one node to another. It works similarly to Dijkstra's algorithm."]}
-                  nodes={nodes}
-                  setHoveredAlgorithm={setHoveredAlgorithm}
-                  hoveredAlgorithm={Algorithm.BELLMAN_FORD_A_TO_B}
-                  inputs={[
-                    { label: 'Enter source vertex', explanation: 'Select the source vertex', type: 'text' },
-                    { label: 'Enter target vertex', explanation: 'Select the target vertex', type: 'text' }
-                  ]}
-                />
-                <AlgorithmInput
-                  wasmFunction={wasmModule && wasmModule.bellman_ford_source_to_all}
-                  postState={postAlgorithmState.bind(null, Algorithm.BELLMAN_FORD_ALL)}
-                  setLoading={setLoading}
-                  algorithmName="Bellman-Ford (A to all)"
-                  desc={["Bellman-Ford algorithm finds the shortest path from one node to all other nodes."]}
-                  nodes={nodes}
-                  setHoveredAlgorithm={setHoveredAlgorithm}
-                  hoveredAlgorithm={Algorithm.BELLMAN_FORD_ALL}
-                  inputs={[
-                    { label: 'Enter source vertex', explanation: 'Select the source vertex', type: 'text' }
-                  ]}
-                />
-                <AlgorithmInput
                   wasmFunction={wasmModule && wasmModule.bfs}
                   postState={postAlgorithmState.bind(null, Algorithm.BFS)}
                   setLoading={setLoading}
