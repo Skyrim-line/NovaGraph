@@ -16,5 +16,5 @@ em++ src/wasm/*.cpp src/wasm/algorithms/*.cpp src/wasm/generators/*.cpp -o src/g
     -lembind --no-entry \
     -O3 \
     ./src/wasm/igraph/build/src/libigraph.a \
-    ./src/wasm/pugixml/build/libpugixml.a \
-    && echo "Finished with no errors!"
+    ./src/wasm/pugixml/build/libpugixml.a &&
+    echo "Finished with no errors!"
