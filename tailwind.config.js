@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"], // 监控 src 文件夹下的所有相关文件
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}", // 监控 src 文件夹
+    "./public/index.html", // 监控 HTML 文件
+  ],
+
   theme: {
     extend: {
       colors: {
@@ -20,5 +24,5 @@ module.exports = {
     },
   },
   darkMode: "class", // 启用 class 模式切换
-  plugins: [import("@tailwindcss/typography")], // 引入 typography 插件
+  plugins: [], // 在这里使用插件
 };

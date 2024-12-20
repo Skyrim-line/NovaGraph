@@ -11,12 +11,19 @@ function Footer() {
       sx={{
         mt: "auto",
         py: 2,
-        backgroundColor: theme === "light" ? "#3f51b5" : "#333333",
+        backgroundColor: theme === "light" ? "#37729C" : "#333333",
         color: "white",
         textAlign: "center",
       }}
     >
-      <Typography variant="body2" sx={{ fontSize: " 20px" }}>
+      <Typography
+        sx={{
+          color: theme === "light" ? "#ffffff" : "#ffffff",
+          fontSize: "16px",
+          fontWeight: "bold",
+          textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+        }}
+      >
         © {new Date().getFullYear()} NovaGraph. All rights reserved.
       </Typography>
     </Box>

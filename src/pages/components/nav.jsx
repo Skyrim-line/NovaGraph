@@ -12,7 +12,6 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemText,
   Divider,
 } from "@mui/material";
 import {
@@ -21,9 +20,15 @@ import {
   Brightness7,
 } from "@mui/icons-material";
 import { ThemeContext } from "../../context/theme";
+import LOGO from "./Novagraph.png";
+import { Link } from "react-router-dom"; // 引入 Link
 
 const drawerWidth = 240;
-const navItems = ["Home", "About", "Contact"];
+const navItems = [
+  { label: "Home", path: "/" },
+  { label: "Demo", path: "/demo" },
+  { label: "Contact", path: "/contact" },
+];
 
 function DrawerAppBar(props) {
   const { theme, toggleTheme } = React.useContext(ThemeContext);
@@ -36,15 +41,31 @@ function DrawerAppBar(props) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        NovaGraph
-      </Typography>
+      <Box sx={{ my: 2 }}>
+        <Link to="/home">
+          <img
+            src={LOGO}
+            alt="NovaGraph"
+            style={{ height: "90px", width: "auto" }}
+          />
+        </Link>
+      </Box>
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item} />
+          <ListItem key={item.label} disablePadding>
+            <ListItemButton>
+              <Link
+                to={item.path}
+                style={{
+                  textDecoration: "none",
+                  color: theme === "light" ? "#000000" : "#ffffff",
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
+                {item.label}
+              </Link>
             </ListItemButton>
           </ListItem>
         ))}
@@ -63,8 +84,8 @@ function DrawerAppBar(props) {
         position="static"
         color="primary"
         sx={{
-          backgroundColor: theme === "light" ? "#3f51b5" : "#333333",
-          height: { xs: "80px", sm: "100px" }, // 调整移动端和桌面端高度
+          backgroundColor: theme === "light" ? "#EFBF6A" : "#333333",
+          height: { xs: "80px", sm: "140px" }, // 调整移动端和桌面端高度
           px: 2, // 增加左右内边距
         }}
       >
@@ -74,33 +95,90 @@ function DrawerAppBar(props) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            sx={{
+              justifyContent: "space-between",
+              alignItems: "center",
+              mr: 2,
+              display: { sm: "none" },
+            }}
           >
             <MenuIcon />
           </IconButton>
           <Typography
-            variant="h6"
-            component="div"
             sx={{
               flexGrow: 1,
               display: { xs: "none", sm: "block" },
               py: 4,
-              ml: 10,
+              ml: "auto",
               lineHeight: 1.5, // 控制行高
-              fontSize: "1.25rem", // 确定字体大小
             }}
           >
-            NovaGraph
+            <Link to="/home">
+              <img
+                src={LOGO} // 引入LOGO
+                alt="NovaGraph"
+                style={{ height: "90px", width: "auto" }}
+              />
+            </Link>
           </Typography>
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+          <Box
+            sx={{
+              display: { xs: "none", sm: "flex" },
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: "#fff" }}>
-                {item}
-              </Button>
+              <Link
+                key={item.label}
+                to={item.path}
+                style={{
+                  textDecoration: "none",
+                }}
+              >
+                <Button
+                  sx={{
+                    color: theme === "light" ? "#ffffff" : "#ffffff",
+                    px: 3,
+                    fontSize: "1.25rem", // 字体大小
+                    fontWeight: "bold", // 加粗
+                    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                  }}
+                >
+                  {item.label}
+                </Button>
+              </Link>
             ))}
+            <IconButton
+              onClick={toggleTheme}
+              color="inherit"
+              sx={{
+                mr: 4,
+                color: theme === "light" ? "#ffffff" : "#ffffff",
+              }}
+            >
+              {theme === "light" ? (
+                <Brightness4 sx={{ fontSize: "30px" }} />
+              ) : (
+                <Brightness7 sx={{ fontSize: "30px" }} />
+              )}
+            </IconButton>
           </Box>
-          <IconButton onClick={toggleTheme} color="inherit">
-            {theme === "light" ? <Brightness4 /> : <Brightness7 />}
+
+          <IconButton
+            onClick={toggleTheme}
+            color="inherit"
+            sx={{
+              display: { xs: "block", sm: "none" }, // 小屏显示
+              ml: "auto",
+              color: theme === "light" ? "#000000" : "#ffffff",
+            }}
+          >
+            {theme === "light" ? (
+              <Brightness4 sx={{ fontSize: "30px" }} />
+            ) : (
+              <Brightness7 sx={{ fontSize: "30px" }} />
+            )}
           </IconButton>
         </Toolbar>
       </AppBar>
