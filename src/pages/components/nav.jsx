@@ -22,6 +22,7 @@ import {
 import { ThemeContext } from "../../context/theme";
 import LOGO from "./Novagraph.png";
 import { Link } from "react-router-dom"; // 引入 Link
+import "../../App.css";
 
 const drawerWidth = 240;
 const navItems = [
@@ -113,12 +114,13 @@ function DrawerAppBar(props) {
               lineHeight: 1.5, // 控制行高
             }}
           >
-            <Link to="/home">
-              <img
-                src={LOGO} // 引入LOGO
-                alt="NovaGraph"
-                style={{ height: "90px", width: "auto" }}
-              />
+            <Link to="/" className="logo-link">
+              <p
+                className="logo-text"
+                style={{ color: theme === "light" ? "#000000" : "#ffffff" }}
+              >
+                NovaGraph
+              </p>
             </Link>
           </Typography>
           <Box
@@ -138,7 +140,7 @@ function DrawerAppBar(props) {
               >
                 <Button
                   sx={{
-                    color: theme === "light" ? "#ffffff" : "#ffffff",
+                    color: theme === "light" ? "#000000" : "#ffffff",
                     px: 3,
                     fontSize: "1.25rem", // 字体大小
                     fontWeight: "bold", // 加粗
@@ -154,7 +156,7 @@ function DrawerAppBar(props) {
               color="inherit"
               sx={{
                 mr: 4,
-                color: theme === "light" ? "#ffffff" : "#ffffff",
+                color: theme === "light" ? "#000000" : "#ffffff",
               }}
             >
               {theme === "light" ? (

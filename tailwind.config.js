@@ -7,6 +7,9 @@ module.exports = {
 
   theme: {
     extend: {
+      fontFamily: {
+        fugaz: ["Fugaz One", "sans-serif"],
+      },
       colors: {
         primary: {
           light: "#3b82f6", // 亮色主题主要颜色

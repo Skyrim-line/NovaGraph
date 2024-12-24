@@ -18,7 +18,7 @@ function Footer() {
     >
       <Typography
         sx={{
-          color: theme === "light" ? "#ffffff" : "#ffffff",
+          color: theme === "light" ? "#000000" : "#ffffff",
           fontSize: "16px",
           fontWeight: "bold",
           textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",

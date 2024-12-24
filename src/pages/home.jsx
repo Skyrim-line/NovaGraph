@@ -1,8 +1,10 @@
 import React from "react";
 import Navbar from "./components/nav";
 import Footer from "./components/footer";
-import { Box, Toolbar, Typography } from "@mui/material";
+import { Box, Toolbar } from "@mui/material";
 import { ThemeContext } from "../context/theme";
+import "../App.css";
+import System from "./components/Frame3.svg";
 
 function Home() {
   const { theme, toggleTheme } = React.useContext(ThemeContext);
@@ -26,12 +28,18 @@ function Home() {
         }}
       >
         <Toolbar /> {/* Push content below the AppBar */}
-        <Typography variant="h4" gutterBottom>
-          Welcome to NovaGraph
-        </Typography>
-        <Typography variant="body1">
-          Explore modern MUI and React app development.
-        </Typography>
+        <div className="title">
+          <div>
+            <h1>Welcome to NovaGraph</h1>
+            <div>
+              Inspired by DuckDB-WASM, Novagraph is a web application to perform
+              graph analytics written using WebAssembly. Novagraph uses C++ and
+              the igraph library to perform analytical processing of graphs
+              before it is rendered on the frontend.
+            </div>
+          </div>
+          <img src={System} alt="Graph Illustration" />
+        </div>
       </Box>
       <Footer />
     </Box>

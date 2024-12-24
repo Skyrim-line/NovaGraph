@@ -2,3 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@import url('https://fonts.googleapis.com/css2?family=Fugaz+One&family=Trade+Winds&display=swap');
+
+
+.logo-link {
+  text-decoration: none; /* 去除下划线 */
+}
+
+.logo-text {
+  font-family: 'Poppins', sans-serif; /* 使用适合 Logo 的字体 */
+  font-weight: bold; /* 加粗 */
+  font-size: 36px; /* 调整字体大小 */
+  margin-left: 20px;
+
+  
+}
+
+.logo-text:hover {
+  color: #37729C; /* 鼠标悬停时改变颜色 */  
+  transition: all 0.3s ease; /* 增加平滑过渡效果 */
+}
+
+
+.title {
+  display: block; /* 使用 block 布局 */
+  padding: 20px; /* 添加内边距 */
+}
+
+.title h1 {
+  font-size: 100px; /* 标题大小 */
+  margin-bottom: 10px; /* 标题和描述之间的间距 */
+}
+
+.title div {
+  font-size: 30px; /* 描述文字大小 */
+  color: white; /* 描述文字颜色 */
+  margin-bottom: 5px; /* 与图片之间的间距 */
+  text-align: left;
+}
+
+.title img {
+  max-width: 100%; /* 确保图片不超出容器宽度 */
+  height: auto; /* 保持图片比例 */
+  display: block; /* 将图片作为块元素 */
+  margin: 0 auto; /* 居中图片 */
+}
+
+@media (max-width: 768px) {
+  .title {
+    text-align: center; /* 小屏幕内容居中 */
+  }
+
+  .title h1 {
+    font-size: 1.5rem; /* 小屏幕标题大小 */
+  }
+
+  .title div {
+    font-size: 0.9rem; /* 小屏幕描述文字稍小 */
+  }
+
+  .title img {
+    max-width: 80%; /* 小屏幕缩小图片宽度 */
+    margin-top: 20px; /* 添加顶部间距 */
+  }
+}
