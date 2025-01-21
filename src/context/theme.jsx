@@ -3,7 +3,7 @@ import React, { createContext, useState } from "react";
 export const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
@@ -15,9 +15,9 @@ export function ThemeProvider({ children }) {
         style={{
           backgroundColor: theme === "light" ? "#fff" : "#333333",
           color: theme === "light" ? "#000" : "#fff",
-          minHeight: "100vh",
+          
         }}
-      >
+      > 
         {children}
       </div>
     </ThemeContext.Provider>

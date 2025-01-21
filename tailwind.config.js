@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        fugaz: ["Fugaz One", "sans-serif"],
+        eras: ['"ITC Eras Book"', 'sans-serif'], // 定义字体
       },
       colors: {
         primary: {
