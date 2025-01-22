@@ -24,19 +24,35 @@ html, body {
 }
 
 .header {  
-  padding: 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   padding-right: 16px;
+  height: 80px;
 }
 
 .header-light {
-  background: #EEEEEE; /* 亮模式背景 */
-  color: var(--light-text-color);    /* 亮模式字体颜色 */
+  background: #EEEEEE; 
+  color: var(--light-text-color);    
 }
 
 .header-dark {
-  background: 222831; /* 暗黑模式背景 */
+  background: 222831; 
+  color: #fff;         
+}
+
+
+.content {  
+  padding: 24px;
+  height: 80px;
+}
+
+.content-light {
+  background: #000000; 
+  color: var(--light-text-color);    
+}
+
+.content-dark {
+  background: 222831; 
   color: #fff;         /* 暗黑模式字体颜色 */
 }
