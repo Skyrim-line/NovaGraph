@@ -16,11 +16,13 @@ html, body {
   --dark-text-color: #fff; 
 }
 
-.font{
+.font-logo{
   font-family: 'ITC Eras Book', sans-serif;
   font-size: x-large;
+  font-weight: bold;
   color: #FFFFFF;
- 
+  text-align: center;
+  margin: 10px;
 }
 
 .header {  
@@ -44,7 +46,7 @@ html, body {
 
 .content {  
   padding: 24px;
-  height: 80px;
+  height: 600px;
 }
 
 .content-light {
@@ -53,6 +55,6 @@ html, body {
 }
 
 .content-dark {
-  background: 222831; 
+  background: #001529; 
   color: #fff;         /* 暗黑模式字体颜色 */
 }
