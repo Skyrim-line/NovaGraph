@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ConfigProvider, Layout, Menu, theme } from 'antd';
+import { ConfigProvider, Layout, Menu, Typography, Breadcrumb } from 'antd';
 import { DarkMode, Brightness7 } from "@mui/icons-material";
 import { IconButton } from '@mui/material';
 import { DesktopOutlined, PieChartOutlined, MailOutlined } from '@ant-design/icons';
@@ -8,6 +8,7 @@ import "../App.css";
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
+const { Title } = Typography;
 
 const Demo = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -41,6 +42,16 @@ const Demo = () => {
     <ConfigProvider
       theme={{
         token: currentThemeToken, // 使用自定义主题
+        components: {
+          Breadcrumb: {
+            /* 这里是你的组件 token */
+            separatorMargin: '20px',
+            linkColor: currentThemeToken.colorText,
+            linkHoverColor: currentThemeToken.colorPrimary,
+            lastItemColor: currentThemeToken.colorPrimary,
+            separatorColor: currentThemeToken.colorText,
+          },
+        }
       }}
     >
       <Layout style={{ minHeight: '100vh' }}>
@@ -58,19 +69,39 @@ const Demo = () => {
         </Sider>
         <Layout style={{ minHeight: '100vh' }}>
           <Header
-            className={`header ${isDarkMode ? 'header-dark' : 'header-light'}`}
+            className='header'
+            style={{
+              background: currentThemeToken.color3,
+            }}
           >
-            {/* 添加切换主题按钮 */}
-            <IconButton
-              sx={{
-                color: isDarkMode ? "#FFD700" : "#000", // 设置图标颜色
-                mx: 2,
-              }}
-              onClick={() => setIsDarkMode((prev) => !prev)}
-              aria-label="toggle dark mode"
-            >
-              {isDarkMode ? <Brightness7 /> : <DarkMode />}
-            </IconButton>
+            <Breadcrumb
+              className="title"
+              items={[
+                {
+                  title: <a href="/">Home</a>,
+                },
+                {
+                  title: 'Algorithm Demo',
+                },
+              ]}
+            />
+            <div className="user-guide">
+              <a href="/user-guide" className="user-guide">User Guide</a>
+              <IconButton
+                sx={{
+                  color: isDarkMode ? "#FFD700" : "#000", // 设置图标颜色
+                  transition: "color 0.3s, transform 0.3s",
+                  "&:hover": {
+                    color: isDarkMode ? "#FFF" : "#555",
+                    transform: "scale(1.1)",
+                  },
+                }}
+                onClick={() => setIsDarkMode((prev) => !prev)}
+                aria-label="toggle dark mode"
+              >
+                {isDarkMode ? <Brightness7 sx={{ fontSize: "30px" }} /> : <DarkMode sx={{ fontSize: "30px" }} />}
+              </IconButton>
+            </div>
           </Header>
           {/* 内容区域 */}
           <Layout>

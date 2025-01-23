@@ -12,7 +12,7 @@ export const lightModeToken = {
   color2: "#D9D9D9",
   color3:"#EEEEEE",
   colorText: '#000000', // 文本颜色
-  colorPrimary: '#1890ff', // 主色
+  colorPrimary: '#76ABAE', // 主色
   borderRadiusLG: '8px', // 圆角
   itemHoverBg: '#FFFFFF', // hover 颜色
 };

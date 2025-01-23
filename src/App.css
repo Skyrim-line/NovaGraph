@@ -25,24 +25,13 @@ html, body {
   margin: 10px;
 }
 
-.header {  
+.header{
+  height: 90px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  padding-right: 16px;
-  height: 80px;
+  padding: 0 20px;
 }
-
-.header-light {
-  background: #EEEEEE; 
-  color: var(--light-text-color);    
-}
-
-.header-dark {
-  background: 222831; 
-  color: #fff;         
-}
-
 
 .content {  
   padding: 24px;
@@ -58,3 +47,30 @@ html, body {
   background: #001529; 
   color: #fff;         /* 暗黑模式字体颜色 */
 }
+
+
+.title{
+  margin-left: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  font-weight: medium;
+}
+
+
+
+.user-guide {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 20px;
+  font-size: 24px;
+  font-weight: medium;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--link-color);
+}
+
+.user-guide:hover {
+  color: var(--link-hover-color);
+}
+
+
