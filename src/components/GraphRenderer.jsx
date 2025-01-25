@@ -71,9 +71,9 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
         cosmograph.current?.setZoomLevel(zoomLevel + 1, 500);
     }
 
-    
+
     const getColor = value => {
-        switch(mode) {
+        switch (mode) {
             case Mode.COLOR_IMPORTANT:
                 return value > 0 ? scale(1).hex() : (value < 0 ? error : neutral);
             case Mode.COLOR_SHADE_DEFAULT:
@@ -120,199 +120,199 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
         }
     }
 
-    return(
-    <Box sx={{ display:'flex', flexDirection: 'column', height: '75vh' }}>
-        
-        <CosmographProvider nodes={nodes} links={links}>
-            <CosmographSearch
-                onSelectResult={n => cosmograph.current?.selectNode(n)}
-                accessors={[
-                    { label: 'Name', accessor: n => n.name },
-                    { label: 'ID', accessor: n => n.id }
-                ]}
-            />
-            
-            <Cosmograph
-                ref={cosmograph}
-                initialZoomLevel={1}
-                disableSimulation={false}
+    return (
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '75vh' }}>
 
-                nodeSize={(_node, id) => getSize(id)}
-                nodeColor={(_node, id) => getColor(colors[id])}
-                linkColor={link => getLinkColor(link)}
-                nodeGreyoutOpacity={0.1}
-                linkWidth={link => getLinkWidth(link)}
+            <CosmographProvider nodes={nodes} links={links}>
+                <CosmographSearch
+                    onSelectResult={n => cosmograph.current?.selectNode(n)}
+                    accessors={[
+                        { label: 'Name', accessor: n => n.name },
+                        { label: 'ID', accessor: n => n.id }
+                    ]}
+                />
 
-                nodeLabelAccessor={(node) => node.name ? node.name : node.id}
-                linkArrows={directed}
-                showDynamicLabels={dynamicLabels}
-                
-                renderHoveredNodeRing={true}
-                hoveredNodeRingColor={contrast_green}
+                <Cosmograph
+                    ref={cosmograph}
+                    initialZoomLevel={1}
+                    disableSimulation={false}
 
-                linkGreyoutOpacity={0}
-                simulationLinkSpring={0.01}
-                simulationDecay={100000}
+                    nodeSize={(_node, id) => getSize(id)}
+                    nodeColor={(_node, id) => getColor(colors[id])}
+                    linkColor={link => getLinkColor(link)}
+                    nodeGreyoutOpacity={0.1}
+                    linkWidth={link => getLinkWidth(link)}
 
-                nodeSizeScale={nodeSizeScale}
-                simulationRepulsion={2}
-                simulationGravity={gravity}
-                simulationLinkDistance={20}
+                    nodeLabelAccessor={(node) => node.name ? node.name : node.id}
+                    linkArrows={directed}
+                    showDynamicLabels={dynamicLabels}
 
-                onClick={zoomToNode}
-            />
+                    renderHoveredNodeRing={true}
+                    hoveredNodeRingColor={contrast_green}
 
-        </CosmographProvider>
+                    linkGreyoutOpacity={0}
+                    simulationLinkSpring={0.01}
+                    simulationDecay={100000}
 
-        <Box display='flex'>
-            <Tooltip title="Play Simulation">
-                <IconButton aria-label='play-simulation' onClick={() => cosmograph.current?.start()}>
-                    <PlayArrowIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Pause Simulation">
-                <IconButton aria-label='pause-simulation' onClick={() => cosmograph.current?.pause()}>
-                    <PauseIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Restart Simulation">
-                <IconButton aria-label='restart-simulation' onClick={() => cosmograph.current?.create()}>
-                    <ReplayIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Fit All">
-                <IconButton aria-label='fit-view' onClick={zoomOut}>
-                    <ZoomOutMapIcon />
-                </IconButton>
-            </Tooltip>
-            
-            <Box flexGrow={1} />
+                    nodeSizeScale={nodeSizeScale}
+                    simulationRepulsion={2}
+                    simulationGravity={gravity}
+                    simulationLinkDistance={20}
 
-            <Tooltip title="Zoom Out">
-                <IconButton aria-label='zoom-out' onClick={zoomGraphOut}>
-                    <ZoomOutIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Zoom In">
-                <IconButton aria-label='zoom-in' onClick={zoomGraphIn}>
-                    <ZoomInIcon />
-                </IconButton>
-            </Tooltip>
-            <Divider orientation="vertical" variant='middle' flexItem />
-            {
-                dynamicLabels ?
-                <Tooltip title="Hide Dynamic Labels">
-                    <IconButton aria-label='hide-labels' onClick={() => setDynamicLabels(false)}>
-                        <LabelOutlinedIcon />
+                    onClick={zoomToNode}
+                />
+
+            </CosmographProvider>
+
+            <Box display='flex'>
+                <Tooltip title="Play Simulation">
+                    <IconButton aria-label='play-simulation' onClick={() => cosmograph.current?.start()}>
+                        <PlayArrowIcon />
                     </IconButton>
                 </Tooltip>
-                :
-                <Tooltip title="Show Dynamic Labels">
-                    <IconButton aria-label='show-labels' onClick={() => setDynamicLabels(true)}>
-                        <LabelOffIcon />
+                <Tooltip title="Pause Simulation">
+                    <IconButton aria-label='pause-simulation' onClick={() => cosmograph.current?.pause()}>
+                        <PauseIcon />
                     </IconButton>
                 </Tooltip>
-            
-            }
-            
-            <Tooltip title="Graph Options">
-                <IconButton aria-label='graph-options' onClick={() => setOptionsDrawer(true)}>
-                    <SettingsIcon />
-                </IconButton>
-            </Tooltip>
+                <Tooltip title="Restart Simulation">
+                    <IconButton aria-label='restart-simulation' onClick={() => cosmograph.current?.create()}>
+                        <ReplayIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Fit All">
+                    <IconButton aria-label='fit-view' onClick={zoomOut}>
+                        <ZoomOutMapIcon />
+                    </IconButton>
+                </Tooltip>
 
-            <Drawer
-                anchor='right'
-                open={optionsDrawer}
-                onClose={() => setOptionsDrawer(false)}
-                slotProps={{ backdrop: {sx: { backgroundColor: 'transparent' }} }}
-                elevation={0}
-            >
-                <div
-                    onMouseLeave={() => setOptionsDrawer(false)}
-                    style={{ height: '100%' }}
+                <Box flexGrow={1} />
+
+                <Tooltip title="Zoom Out">
+                    <IconButton aria-label='zoom-out' onClick={zoomGraphOut}>
+                        <ZoomOutIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Zoom In">
+                    <IconButton aria-label='zoom-in' onClick={zoomGraphIn}>
+                        <ZoomInIcon />
+                    </IconButton>
+                </Tooltip>
+                <Divider orientation="vertical" variant='middle' flexItem />
+                {
+                    dynamicLabels ?
+                        <Tooltip title="Hide Dynamic Labels">
+                            <IconButton aria-label='hide-labels' onClick={() => setDynamicLabels(false)}>
+                                <LabelOutlinedIcon />
+                            </IconButton>
+                        </Tooltip>
+                        :
+                        <Tooltip title="Show Dynamic Labels">
+                            <IconButton aria-label='show-labels' onClick={() => setDynamicLabels(true)}>
+                                <LabelOffIcon />
+                            </IconButton>
+                        </Tooltip>
+
+                }
+
+                <Tooltip title="Graph Options">
+                    <IconButton aria-label='graph-options' onClick={() => setOptionsDrawer(true)}>
+                        <SettingsIcon />
+                    </IconButton>
+                </Tooltip>
+
+                <Drawer
+                    anchor='right'
+                    open={optionsDrawer}
+                    onClose={() => setOptionsDrawer(false)}
+                    slotProps={{ backdrop: { sx: { backgroundColor: 'transparent' } } }}
+                    elevation={0}
                 >
-                <Box
-                    width={{ xs: '10rem', sm: '15rem'}}
-                    p={3}
-                >
-                    <ErasBold pb={2} align='center' fontSize={24}>Graph Options</ErasBold>
-                    <Divider />
+                    <div
+                        onMouseLeave={() => setOptionsDrawer(false)}
+                        style={{ height: '100%' }}
+                    >
+                        <Box
+                            width={{ xs: '10rem', sm: '15rem' }}
+                            p={3}
+                        >
+                            <ErasBold pb={2} align='center' fontSize={24}>Graph Options</ErasBold>
+                            <Divider />
 
-                    <Box pt={3} sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                        <Box>
-                            <ErasMedium align='center'>Gravity Strength</ErasMedium>
-                            <RadioGroup
-                                value={gravity}
-                                onChange={(event) => setGravity(parseFloat(event.target.value))}
-                            >
-                                <FormControlLabel
-                                    value={0}
-                                    control={<Radio color='info' />}
-                                    label={<Typography variant='body2'>Zero Gravity (default)</Typography>}
-                                />
-                                <FormControlLabel
-                                    value={0.1}
-                                    control={<Radio color='info' />}
-                                    label={<Typography variant='body2'>Low Gravity</Typography>}
-                                />
-                                <FormControlLabel
-                                    value={0.5}
-                                    control={<Radio color='info' />}
-                                    label={<Typography variant='body2'>High Gravity</Typography>}
-                                />
-                            </RadioGroup>
-                            <Typography variant='body2'>
-                                Modifies the gravitational strength of the center of the graph.
-                            </Typography>
-                        </Box>
-                        <Box>
-                            <ErasMedium align='center'>Node Scalar Size</ErasMedium>
-                            <RadioGroup
-                                value={nodeSizeScale}
-                                onChange={(event) => setNodeSizeScale(parseFloat(event.target.value))}
-                            >
-                                <FormControlLabel
-                                    value={0}
-                                    control={<Radio color='info' />}
-                                    label={<Typography variant='body2'>Invisible</Typography>}
-                                />
-                                <FormControlLabel
-                                    value={0.25}
-                                    control={<Radio color='info' />}
-                                    label={<Typography variant='body2'>Extra Small</Typography>}
-                                />
-                                <FormControlLabel
-                                    value={0.5}
-                                    control={<Radio color='info' />}
-                                    label={<Typography variant='body2'>Small</Typography>}
-                                />
-                                <FormControlLabel
-                                    value={1}
-                                    control={<Radio color='info' />}
-                                    label={<Typography variant='body2'>Medium (default)</Typography>}
-                                />
-                                <FormControlLabel
-                                    value={1.5}
-                                    control={<Radio color='info' />}
-                                    label={<Typography variant='body2'>Large</Typography>}
-                                />
-                                <FormControlLabel
-                                    value={2}
-                                    control={<Radio color='info' />}
-                                    label={<Typography variant='body2'>Extra Large</Typography>}
-                                />
-                            </RadioGroup>
-                            <Typography variant='body2'>Modify the sizes for all nodes.</Typography>
-                        </Box>
+                            <Box pt={3} sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                                <Box>
+                                    <ErasMedium align='center'>Gravity Strength</ErasMedium>
+                                    <RadioGroup
+                                        value={gravity}
+                                        onChange={(event) => setGravity(parseFloat(event.target.value))}
+                                    >
+                                        <FormControlLabel
+                                            value={0}
+                                            control={<Radio color='info' />}
+                                            label={<Typography variant='body2'>Zero Gravity (default)</Typography>}
+                                        />
+                                        <FormControlLabel
+                                            value={0.1}
+                                            control={<Radio color='info' />}
+                                            label={<Typography variant='body2'>Low Gravity</Typography>}
+                                        />
+                                        <FormControlLabel
+                                            value={0.5}
+                                            control={<Radio color='info' />}
+                                            label={<Typography variant='body2'>High Gravity</Typography>}
+                                        />
+                                    </RadioGroup>
+                                    <Typography variant='body2'>
+                                        Modifies the gravitational strength of the center of the graph.
+                                    </Typography>
+                                </Box>
+                                <Box>
+                                    <ErasMedium align='center'>Node Scalar Size</ErasMedium>
+                                    <RadioGroup
+                                        value={nodeSizeScale}
+                                        onChange={(event) => setNodeSizeScale(parseFloat(event.target.value))}
+                                    >
+                                        <FormControlLabel
+                                            value={0}
+                                            control={<Radio color='info' />}
+                                            label={<Typography variant='body2'>Invisible</Typography>}
+                                        />
+                                        <FormControlLabel
+                                            value={0.25}
+                                            control={<Radio color='info' />}
+                                            label={<Typography variant='body2'>Extra Small</Typography>}
+                                        />
+                                        <FormControlLabel
+                                            value={0.5}
+                                            control={<Radio color='info' />}
+                                            label={<Typography variant='body2'>Small</Typography>}
+                                        />
+                                        <FormControlLabel
+                                            value={1}
+                                            control={<Radio color='info' />}
+                                            label={<Typography variant='body2'>Medium (default)</Typography>}
+                                        />
+                                        <FormControlLabel
+                                            value={1.5}
+                                            control={<Radio color='info' />}
+                                            label={<Typography variant='body2'>Large</Typography>}
+                                        />
+                                        <FormControlLabel
+                                            value={2}
+                                            control={<Radio color='info' />}
+                                            label={<Typography variant='body2'>Extra Large</Typography>}
+                                        />
+                                    </RadioGroup>
+                                    <Typography variant='body2'>Modify the sizes for all nodes.</Typography>
+                                </Box>
 
-                    </Box>
-                    
-                </Box>
-                </div>
-            </Drawer>
+                            </Box>
+
+                        </Box>
+                    </div>
+                </Drawer>
+            </Box>
+
         </Box>
-        
-    </Box>
     )
 }

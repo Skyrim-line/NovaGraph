@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { ConfigProvider, Layout, Menu, Typography, Breadcrumb } from 'antd';
+import { ConfigProvider, Layout, Breadcrumb } from 'antd';
 import { DarkMode, Brightness7 } from "@mui/icons-material";
 import { IconButton } from '@mui/material';
-import { DesktopOutlined, PieChartOutlined, MailOutlined } from '@ant-design/icons';
 import { darkModeToken, lightModeToken } from './components/themeConfig'; // 引入主题配置
 import "../App.css";
+import LeftSider from './components/sider';
 
-const { Header, Content, Sider } = Layout;
-const { SubMenu } = Menu;
-const { Title } = Typography;
+
+const { Header, Content } = Layout;
 
 const Demo = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -16,27 +15,7 @@ const Demo = () => {
 
   const currentThemeToken = isDarkMode ? darkModeToken : lightModeToken;
 
-  {/* 左侧菜单栏组件 */ }
-  const SideMenu = () => {
-    return (
-      <Menu
-        theme={isDarkMode ? "dark" : "light"} // 根据主题模式设置菜单样式
-        mode="inline"
-      >
-        <Menu.Item key="1" icon={<PieChartOutlined />}>
-          Option 1
-        </Menu.Item>
-        <SubMenu key="sub1" icon={<MailOutlined />} title="SubMenu">
-          <Menu.Item key="3">Option 3</Menu.Item>
-          <Menu.Item key="4">Option 4</Menu.Item>
-          <Menu.Item key="5">Option 5</Menu.Item>
-        </SubMenu>
-        <Menu.Item key="2" icon={<DesktopOutlined />}>
-          Option 2
-        </Menu.Item>
-      </Menu>
-    );
-  };
+
 
   return (
     <ConfigProvider
@@ -55,18 +34,11 @@ const Demo = () => {
       }}
     >
       <Layout style={{ minHeight: '100vh' }}>
-        <Sider
-          width={350}
-          collapsible
+        <LeftSider
           collapsed={collapsed}
-          onCollapse={(value) => setCollapsed(value)}
-          theme={isDarkMode ? "dark" : "light"} // 根据主题模式设置菜单样式
-        >
-          <div className="font-logo" style={{ color: isDarkMode ? '#fff' : '#000' }}>
-            Novagraph
-          </div>
-          <SideMenu />
-        </Sider>
+          setCollapsed={setCollapsed}
+          isDarkMode={isDarkMode}
+        />
         <Layout style={{ minHeight: '100vh' }}>
           <Header
             className='header'

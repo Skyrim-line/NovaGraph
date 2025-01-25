@@ -17,12 +17,10 @@ html, body {
 }
 
 .font-logo{
-  font-family: 'ITC Eras Book', sans-serif;
-  font-size: x-large;
+  font-size: 40px;
   font-weight: bold;
-  color: #FFFFFF;
   text-align: center;
-  margin: 10px;
+  margin: 16px;
 }
 
 .header{
