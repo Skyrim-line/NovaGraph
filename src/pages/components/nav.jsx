@@ -20,7 +20,7 @@ import {
   Brightness7,
 } from "@mui/icons-material";
 import { ThemeContext } from "../../context/theme";
-import LOGO from "./Novagraph.png";
+import LOGO from "../image/Novagraph.png";
 import { Link } from "react-router-dom";
 import "../../App.css";
 

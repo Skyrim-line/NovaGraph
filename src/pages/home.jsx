@@ -4,7 +4,7 @@ import Footer from "./components/footer";
 import { Box, Toolbar } from "@mui/material";
 import { ThemeContext } from "../context/theme"; // 从这里获取主题上下文
 import "../App.css";
-import System from "./components/Frame3.svg";
+import System from "./image/Frame3.svg";
 
 function Home() {
   // 从 ThemeContext 中获取当前的主题信息

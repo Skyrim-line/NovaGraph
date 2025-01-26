@@ -1,24 +1,22 @@
 // Demo.js
-import React, { useContext, useState } from 'react';
+import { useState, useContext } from 'react';
 import { ConfigProvider, Layout, Breadcrumb } from 'antd';
 import { DarkMode, Brightness7 } from "@mui/icons-material";
 import { IconButton } from '@mui/material';
-
 import { ThemeContext } from '../context/theme';  // 引入创建好的上下文
-import "../App.css";
 import LeftSider from './components/sider';
-import { GraphRenderer } from '../components/GraphRenderer';
-
-const { Header, Content } = Layout;
+import CosmoGraph from '../components/Cosmograph';
+import "../App.css";
+const { Header } = Layout;
 
 const Demo = () => {
   // 侧边栏折叠等其他状态维持不变
   const [collapsed, setCollapsed] = useState(false);
-  const [nodes, setNodes] = useState([]);
-  const [edges, setEdges] = useState([]);
-  const [colorMap, setColorMap] = useState({});
-  const [directed, setDirected] = useState(false);
-  const [renderMode, setRenderMode] = useState(1);
+  // const [nodes, setNodes] = useState([]);
+  // const [edges, setEdges] = useState([]);
+  // const [colorMap, setColorMap] = useState({});
+  // const [directed, setDirected] = useState(false);
+  // const [renderMode, setRenderMode] = useState(1);
 
   // 从 ThemeContext 中获取主题状态和 token
   const { isDarkMode, setIsDarkMode, currentThemeToken } = useContext(ThemeContext);
@@ -84,49 +82,7 @@ const Demo = () => {
             </div>
           </Header>
           {/* 内容区域 */}
-          <Layout>
-            <Content >
-              <div style={{ padding: 24, background: currentThemeToken.color2 }}>
-                Search Box
-              </div>
-              {/* 主内容区域和右侧 Sider 使用 flex 布局 */}
-              <div
-                style={{
-                  display: 'flex',
-                  background: currentThemeToken.colorBgContainer,
-                  minHeight: '100vh',
-                }}
-              >
-                {/* 左侧主内容区域 */}
-                <div
-                  style={{
-                    flex: 1,
-                    padding: '24px',
-                    background: currentThemeToken.color3,
-                  }}
-                >
-                  Bill is a cat.
-                  <GraphRenderer
-                    nodes={nodes}
-                    links={edges}
-                    directed={directed}
-                    colors={colorMap}
-                    mode={renderMode}
-                  />
-                </div>
-                {/* 右侧 Sider 区域 */}
-                <div
-                  style={{
-                    width: '200px',
-                    padding: '24px',
-                    background: currentThemeToken.color2,
-                  }}
-                >
-                  Right Sider Content
-                </div>
-              </div>
-            </Content>
-          </Layout>
+          <CosmoGraph />
         </Layout>
       </Layout>
     </ConfigProvider>

@@ -68,7 +68,7 @@ html, body {
 }
 
 .user-guide:hover {
-  color: var(--link-hover-color);
+  color: #FFD700;
 }
 
 

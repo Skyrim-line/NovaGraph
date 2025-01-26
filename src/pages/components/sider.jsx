@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Layout, Menu, Input } from 'antd';
 import { NodeIndexOutlined, MoreOutlined, TeamOutlined, PicCenterOutlined, SearchOutlined } from '@ant-design/icons';
-import './components.css';
+import '../pages.css';
 import { set } from 'lodash';
 
 const { Sider } = Layout;
