@@ -1,29 +1,34 @@
-import { useState } from 'react';
+// Demo.js
+import React, { useContext, useState } from 'react';
 import { ConfigProvider, Layout, Breadcrumb } from 'antd';
 import { DarkMode, Brightness7 } from "@mui/icons-material";
 import { IconButton } from '@mui/material';
-import { darkModeToken, lightModeToken } from './components/themeConfig'; // 引入主题配置
+
+import { ThemeContext } from '../context/theme';  // 引入创建好的上下文
 import "../App.css";
 import LeftSider from './components/sider';
-
+import { GraphRenderer } from '../components/GraphRenderer';
 
 const { Header, Content } = Layout;
 
 const Demo = () => {
+  // 侧边栏折叠等其他状态维持不变
   const [collapsed, setCollapsed] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false); // 管理主题模式
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
+  const [colorMap, setColorMap] = useState({});
+  const [directed, setDirected] = useState(false);
+  const [renderMode, setRenderMode] = useState(1);
 
-  const currentThemeToken = isDarkMode ? darkModeToken : lightModeToken;
-
-
+  // 从 ThemeContext 中获取主题状态和 token
+  const { isDarkMode, setIsDarkMode, currentThemeToken } = useContext(ThemeContext);
 
   return (
     <ConfigProvider
       theme={{
-        token: currentThemeToken, // 使用自定义主题
+        token: currentThemeToken, // 使用自定义主题 token
         components: {
           Breadcrumb: {
-            /* 这里是你的组件 token */
             separatorMargin: '20px',
             linkColor: currentThemeToken.colorText,
             linkHoverColor: currentThemeToken.colorPrimary,
@@ -38,6 +43,7 @@ const Demo = () => {
           collapsed={collapsed}
           setCollapsed={setCollapsed}
           isDarkMode={isDarkMode}
+        // 这里如果 LeftSider 需要知道是否 Dark Mode，可以通过 props 传递，也可以在 LeftSider 内自行 useContext
         />
         <Layout style={{ minHeight: '100vh' }}>
           <Header
@@ -58,7 +64,7 @@ const Demo = () => {
               ]}
             />
             <div className="user-guide">
-              <a href="/user-guide" className="user-guide">User Guide</a>
+              <a href="/user-guide" className="user-guide" >User Guide</a>
               <IconButton
                 sx={{
                   color: isDarkMode ? "#FFD700" : "#000", // 设置图标颜色
@@ -68,10 +74,12 @@ const Demo = () => {
                     transform: "scale(1.1)",
                   },
                 }}
-                onClick={() => setIsDarkMode((prev) => !prev)}
+                onClick={() => setIsDarkMode(prev => !prev)}
                 aria-label="toggle dark mode"
               >
-                {isDarkMode ? <Brightness7 sx={{ fontSize: "30px" }} /> : <DarkMode sx={{ fontSize: "30px" }} />}
+                {isDarkMode
+                  ? <Brightness7 sx={{ fontSize: "30px" }} />
+                  : <DarkMode sx={{ fontSize: "30px" }} />}
               </IconButton>
             </div>
           </Header>
@@ -98,6 +106,13 @@ const Demo = () => {
                   }}
                 >
                   Bill is a cat.
+                  <GraphRenderer
+                    nodes={nodes}
+                    links={edges}
+                    directed={directed}
+                    colors={colorMap}
+                    mode={renderMode}
+                  />
                 </div>
                 {/* 右侧 Sider 区域 */}
                 <div

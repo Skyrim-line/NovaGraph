@@ -18,19 +18,18 @@ const SideMenu = ({ isDarkMode, searchTerm }) => {
 
     // 定义菜单数据
     const menuData = [
-        { key: "1", icon: <NodeIndexOutlined />, title: "Path Finding & Search" },
+        { icon: <NodeIndexOutlined />, title: "Path Finding & Search" },
         {
-            key: "sub1",
             icon: <PicCenterOutlined />,
             title: "Centrality",
             children: [
-                { key: "3", title: "Option 3" },
-                { key: "4", title: "Option 4" },
-                { key: "5", title: "Option 5" },
+                { title: "Option 3" },
+                { title: "Option 4" },
+                { title: "Option 5" },
             ],
         },
-        { key: "2", icon: <TeamOutlined />, title: "Community Detection" },
-        { key: "3", icon: <MoreOutlined />, title: "Other Algorithms" },
+        { icon: <TeamOutlined />, title: "Community Detection" },
+        { icon: <MoreOutlined />, title: "Other Algorithms" },
     ];
 
     // 根据搜索框过滤菜单项
@@ -46,16 +45,16 @@ const SideMenu = ({ isDarkMode, searchTerm }) => {
 
     // 渲染菜单
     const renderMenuItems = (menu) =>
-        menu.map((item) => {
+        menu.map((item, index) => {
             if (item.children) {
                 return (
-                    <Menu.SubMenu key={item.key} icon={item.icon} title={item.title}>
+                    <Menu.SubMenu key={index} icon={item.icon} title={item.title}>
                         {renderMenuItems(item.children)}
                     </Menu.SubMenu>
                 );
             }
             return (
-                <Menu.Item key={item.key} icon={item.icon}>
+                <Menu.Item key={index} icon={item.icon}>
                     {item.title}
                 </Menu.Item>
             );
@@ -106,10 +105,12 @@ const LeftSider = ({ collapsed = false, setCollapsed = () => { }, isDarkMode = f
                     <SearchOutlined
                         onClick={() => setCollapsed(false)} // 点击图标展开搜索框
                         style={{
-                            fontSize: "24px",
+                            fontSize: "20px",
                             cursor: "pointer",
-                            marginLeft: "18px",
+                            marginLeft: "20px",
+                            color: isDarkMode ? "#EEEEEE" : "#000",
                         }}
+
                     />
                 ) : (
                     // 展开状态下显示完整的搜索框
