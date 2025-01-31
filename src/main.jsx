@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 // import App from "./App.jsx";
+import { GraphProvider } from "./context/GraphUpdate";
 import NewAPP from "./new-app.jsx";
 // import "./index.css";
 
@@ -8,6 +9,8 @@ import NewAPP from "./new-app.jsx";
 // document.documentElement.classList.add("light");
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <NewAPP />
+    <GraphProvider>
+      <NewAPP />
+    </GraphProvider>
   </React.StrictMode>
 );

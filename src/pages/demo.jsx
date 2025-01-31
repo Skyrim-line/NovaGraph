@@ -1,22 +1,39 @@
-// Demo.js
+// Demo page for the algorithm demo
+/* eslint-disable no-unused-vars */
 import { useState, useContext } from 'react';
 import { ConfigProvider, Layout, Breadcrumb } from 'antd';
 import { DarkMode, Brightness7 } from "@mui/icons-material";
 import { IconButton } from '@mui/material';
 import { ThemeContext } from '../context/theme';  // 引入创建好的上下文
 import LeftSider from './components/sider';
-import CosmoGraph from '../components/Cosmograph';
+import Graph2 from '../components/Graph2';
+
 import "../App.css";
+import createModule from "../graph";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+} from "../components/Accordion";
+import ImportMenu from "../components/imports/ImportMenu";
+import { Algorithm } from "../algorithms";
+import { algorithmConfig } from "../algorithm-config";
+import AlgorithmExplanation from "../components/AlgorithmExplanation";
+import { ErasBold, ErasMedium } from "../components/Eras";
+import AlgorithmOutput from "../components/algorithmOutputs/AlgorithmOutput";
+import AlgorithmInput from "../components/AlgorithmInput";
+import { SpinnerDotted } from "spinners-react";
+import AlgorithmMultiInput from "../components/AlgorithmMultiInput";
+import ExportMenu from "../components/ExportMenu";
+import HelperCarousel from "../components/HelperCarousel";
 const { Header } = Layout;
 
 const Demo = () => {
   // 侧边栏折叠等其他状态维持不变
   const [collapsed, setCollapsed] = useState(false);
-  // const [nodes, setNodes] = useState([]);
-  // const [edges, setEdges] = useState([]);
-  // const [colorMap, setColorMap] = useState({});
-  // const [directed, setDirected] = useState(false);
-  // const [renderMode, setRenderMode] = useState(1);
+  const [wasmModule, setWasmModule] = useState();
+  const [expanded, setExpanded] = useState("panel1");
+
 
   // 从 ThemeContext 中获取主题状态和 token
   const { isDarkMode, setIsDarkMode, currentThemeToken } = useContext(ThemeContext);
@@ -81,8 +98,8 @@ const Demo = () => {
               </IconButton>
             </div>
           </Header>
-          {/* 内容区域 */}
-          <CosmoGraph />
+          {/* 图内容区域 */}
+          <Graph2 />
         </Layout>
       </Layout>
     </ConfigProvider>

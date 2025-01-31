@@ -13,6 +13,7 @@ import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import LabelOffIcon from '@mui/icons-material/LabelOff';
 import { Mode } from '../renderModes';
 import { ErasBold, ErasMedium } from './Eras';
+import { Margin } from '@mui/icons-material';
 
 export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     const cosmograph = useRef()
@@ -130,9 +131,12 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                         { label: 'Name', accessor: n => n.name },
                         { label: 'ID', accessor: n => n.id }
                     ]}
+
+
                 />
 
                 <Cosmograph
+
                     ref={cosmograph}
                     initialZoomLevel={1}
                     disableSimulation={false}
