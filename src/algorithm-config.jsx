@@ -1,6 +1,6 @@
 import React from 'react';
 
-const exampleConfig = { /* ... */ }
+
 
 export const algorithmConfig = {
     DIJKSTRA_A_TO_B: {
@@ -39,8 +39,8 @@ export const algorithmConfig = {
         "modal_columns": (data) => data.weighted ? ['From', 'To', 'Weight'] : ['From', 'To'],
         "data_array": (data) => data.path,
         "data_array_keys": (data) => [
-            {'key': "from"},
-            {'key': "to"},
+            { 'key': "from" },
+            { 'key': "to" },
             ...(data.weighted ? [{ 'key': "weight" }] : [])
         ]
     },
@@ -48,7 +48,7 @@ export const algorithmConfig = {
         "category": "pfs",
         "button_text": "Dijkstra (A to All)",
         "hover_text_html": <>
-            The shortest path from one node to <strong>all other nodes</strong> using Dijkstra's Algorithm. 
+            The shortest path from one node to <strong>all other nodes</strong> using Dijkstra's Algorithm.
             Node shades are based their frequency of being visited.
         </>,
         "long_description_html": <>
@@ -68,9 +68,9 @@ export const algorithmConfig = {
         "modal_columns": (data) => ['To', 'Path', data.weighted ? 'Weight' : 'Length'],
         "data_array": (data) => data.paths,
         "data_array_keys": (data) => [
-            {'key': "target"},
-            {'key': "path", 'fn': "join", 'args': [" → "]},
-            data.weighted ? {'key': "weight"} : {'key': "path", 'fn': "length"}
+            { 'key': "target" },
+            { 'key': "path", 'fn': "join", 'args': [" → "] },
+            data.weighted ? { 'key': "weight" } : { 'key': "path", 'fn': "length" }
         ]
     },
     YEN: {
@@ -111,16 +111,16 @@ export const algorithmConfig = {
         "modal_columns": (data) => ['#', 'Path', data.weighted ? 'Weight' : 'Length'],
         "data_array": (data) => data.paths,
         "data_array_keys": (data) => [
-            {'key': "num"},
-            {'key': "path", 'fn': "join", 'args': [" → "]},
-            data.weighted ? {'key': "weight"} : {'key': "path", 'fn': "length"}
+            { 'key': "num" },
+            { 'key': "path", 'fn': "join", 'args': [" → "] },
+            data.weighted ? { 'key': "weight" } : { 'key': "path", 'fn': "length" }
         ]
     },
     BELLMAN_FORD_A_TO_B: {
         "category": "pfs",
         "button_text": "Bellman-Ford (A to B)",
         "hover_text_html": <>
-            The shortest path (or smallest sum of weights) from one node to another using 
+            The shortest path (or smallest sum of weights) from one node to another using
             the <strong>Bellman-Ford Algorithm</strong>.
         </>,
         "long_description_html": <>
@@ -153,8 +153,8 @@ export const algorithmConfig = {
         "modal_columns": (data) => data.weighted ? ['From', 'To', 'Weight'] : ['From', 'To'],
         "data_array": (data) => data.path,
         "data_array_keys": (data) => [
-            {'key': "from"},
-            {'key': "to"},
+            { 'key': "from" },
+            { 'key': "to" },
             ...(data.weighted ? [{ 'key': "weight" }] : [])
         ]
     },
@@ -182,9 +182,9 @@ export const algorithmConfig = {
         "modal_columns": (data) => ['To', 'Path', data.weighted ? 'Weight' : 'Length'],
         "data_array": (data) => data.paths,
         "data_array_keys": (data) => [
-            {'key': "target"},
-            {'key': "path", 'fn': "join", 'args': [" → "]},
-            data.weighted ? {'key': "weight"} : {'key': "path", 'fn': "length"}
+            { 'key': "target" },
+            { 'key': "path", 'fn': "join", 'args': [" → "] },
+            data.weighted ? { 'key': "weight" } : { 'key': "path", 'fn': "length" }
         ]
     },
     BFS: {
@@ -222,15 +222,15 @@ export const algorithmConfig = {
         "modal_columns": () => ['Depth', 'Nodes'],
         "data_array": (data) => data.layers,
         "data_array_keys": () => [
-            {'key': "index"},
-            {'key': "layer", 'fn': "join", 'args': [', ']}
+            { 'key': "index" },
+            { 'key': "layer", 'fn': "join", 'args': [', '] }
         ]
     },
     DFS: {
         "category": "pfs",
         "button_text": "Depth-First Search",
         "hover_text_html": <>
-            Traverses the graph from a source by exploring as far as possible along each branch 
+            Traverses the graph from a source by exploring as far as possible along each branch
             before <i>backtracking</i>. Node shades represent the "depth" of each node from the source.
         </>,
         "long_description_html": <>
@@ -261,8 +261,8 @@ export const algorithmConfig = {
         "modal_columns": () => ['Subtree', 'Nodes'],
         "data_array": (data) => data.subtrees,
         "data_array_keys": () => [
-            {'key': "num"},
-            {'key': "tree", 'fn': "join", 'args': [' → ']}
+            { 'key': "num" },
+            { 'key': "tree", 'fn': "join", 'args': [' → '] }
         ]
     },
     RANDOM_WALK: {
@@ -305,9 +305,9 @@ export const algorithmConfig = {
         "modal_columns": (data) => data.weighted ? ['Step', 'From', 'To', 'Weight'] : ['Step', 'From', 'To'],
         "data_array": (data) => data.path,
         "data_array_keys": (data) => [
-            {'key': "step"},
-            {'key': "from"},
-            {'key': "to"},
+            { 'key': "step" },
+            { 'key': "from" },
+            { 'key': "to" },
             ...(data.weighted ? [{ 'key': "weight" }] : [])
         ]
     },
@@ -343,9 +343,9 @@ export const algorithmConfig = {
         "modal_columns": (data) => data.weighted ? ['#', 'From', 'To', 'Weight'] : ['#', 'From', 'To'],
         "data_array": (data) => data.edges,
         "data_array_keys": (data) => [
-            {'key': "num"},
-            {'key': "from"},
-            {'key': "to"},
+            { 'key': "num" },
+            { 'key': "from" },
+            { 'key': "to" },
             ...(data.weighted ? [{ 'key': "weight" }] : [])
         ]
     },

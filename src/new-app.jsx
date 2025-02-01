@@ -3,6 +3,7 @@ import Home from "./pages/home";
 import Guide from "./pages/guide";
 import { ThemeProvider } from "./context/theme";
 import Demo from "./pages/demo";
+import App from "./App";
 import "./App.css";
 function NewApp() {
   return (
@@ -10,8 +11,9 @@ function NewApp() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="demo" element={<Demo/>} />
+          <Route path="demo" element={<Demo />} />
           <Route path="guide" element={<Guide />} />
+          <Route path="app" element={<App />} />
         </Routes>
       </Router>
     </ThemeProvider>

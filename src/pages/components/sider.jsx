@@ -88,16 +88,18 @@ const LeftSider = ({ collapsed = false, setCollapsed = () => { }, isDarkMode = f
         >
 
             {/* Logo */}
-            <div className="font-logo" style={{ color: isDarkMode ? '#fff' : '#000', padding: "10px" }}>
-                {collapsed ? (
-                    <span style={{ fontFamily: 'ITC Eras Demi' }}>N</span>
-                ) : (
-                    <>
-                        <span style={{ fontFamily: 'ITC Eras Book' }}>Nova</span>
-                        <span style={{ fontFamily: 'ITC Eras Demi' }}>graph</span>
-                    </>
-                )}
-            </div>
+            <a href='/app'>
+                <div className="font-logo" style={{ color: isDarkMode ? '#fff' : '#000', padding: "10px" }}>
+                    {collapsed ? (
+                        <span style={{ fontFamily: 'ITC Eras Demi' }}>N</span>
+                    ) : (
+                        <>
+                            <span style={{ fontFamily: 'ITC Eras Book' }}>Nova</span>
+                            <span style={{ fontFamily: 'ITC Eras Demi' }}>graph</span>
+                        </>
+                    )}
+                </div>
+            </a>
             {/* 搜索框 */}
             <div style={{ padding: "10px" }}>
                 {collapsed ? (

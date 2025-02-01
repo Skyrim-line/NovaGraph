@@ -48,7 +48,7 @@ const AlgorithmMultiInput = ({ wasmFunction, postState, setLoading, algorithmNam
     setSelectedValues([]);
     // yes this needs to be done to completely remove all the values...
     setTimeout(() => {
-      setSelectedValues([null]);   
+      setSelectedValues([null]);
     }, 0);
   };
 
@@ -66,18 +66,18 @@ const AlgorithmMultiInput = ({ wasmFunction, postState, setLoading, algorithmNam
       } catch (e) {
         const endTime = performance.now();
         console.log(`Time taken for ${algorithmName}: ${endTime - startTime}ms`);
-        throw e;  
+        throw e;
       }
       const endTime = performance.now();
       console.log(`Time taken for ${algorithmName}: ${endTime - startTime}ms`);
-      
-      postState(response);      
+
+      postState(response);
     }, 0);
   };
 
   return (
     <>
-      <Button 
+      <Button
         size='small'
         onClick={handleClickOpen}
         onMouseEnter={() => setHoveredAlgorithm(hoveredAlgorithm)}
@@ -99,7 +99,7 @@ const AlgorithmMultiInput = ({ wasmFunction, postState, setLoading, algorithmNam
                 <Autocomplete
                   options={nodes}
                   color='info'
-                  getOptionLabel={(option) => option.name ? option.name : String(option.id) }
+                  getOptionLabel={(option) => option.name ? option.name : String(option.id)}
                   fullWidth
                   renderInput={(params) => <TextField {...params} label={`Select Node ${index + 1}`} variant="outlined" color='secondary' error={errors[index]} helperText={errors[index] && 'This node has already been selected'} />}
                   onChange={(event, newValue) => handleSelect(newValue, index)}
