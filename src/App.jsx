@@ -26,7 +26,7 @@ import {
   AccordionSummary,
 } from "./components/Accordion";
 
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+
 import ImportMenu from "./components/imports/ImportMenu";
 import { Algorithm } from "./algorithms";
 import { algorithmConfig } from "./algorithm-config";
@@ -47,8 +47,9 @@ import { ThemeContext } from './context/theme';  // 引入创建好的上下文
 // import LeftSider from './pages/components/sider';
 import { NodeIndexOutlined, MoreOutlined, TeamOutlined, PicCenterOutlined, SearchOutlined } from '@ant-design/icons';
 import './pages/pages.css';
-const { Sider } = Layout;
 const { Search } = Input;
+const { Header, Sider } = Layout;
+
 import "./App.css";
 
 // TODO: 左侧菜单栏算法输入
@@ -138,6 +139,7 @@ const LeftSider = ({ collapsed = false, setCollapsed = () => { }, isDarkMode = f
   const [drawerVisible, setDrawerVisible] = useState(false); // 控制Drawer可见性
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(null); // 选中的算法信息
 
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -196,13 +198,16 @@ const LeftSider = ({ collapsed = false, setCollapsed = () => { }, isDarkMode = f
       {/* 侧边菜单 */}
       <SideMenu isDarkMode={isDarkMode} searchTerm={searchTerm} onAlgorithmClick={handleAlgorithmClick} />
 
-      {/* Drawer：算法详情 */}
+      {/* Drawer：算法详情 
+      // TODO: Drawer for algorithm details
+      */}
       <Drawer
         title={selectedAlgorithm?.title || "Algorithm Details"}
         placement="left"
         onClose={() => setDrawerVisible(false)}
         visible={drawerVisible}
         width={400}
+
       >
         {selectedAlgorithm ? (
           <div>
@@ -322,9 +327,10 @@ function App() {
     setLoading(null);
   };
   // 下面是demo 界面的主体代码和结构
-  const { Header } = Layout;
+  // TODO: Demo 界面原先layout
   const [collapsed, setCollapsed] = useState(false);
   const { isDarkMode, setIsDarkMode, currentThemeToken } = useContext(ThemeContext);
+
 
   return (
     <ConfigProvider
@@ -355,7 +361,7 @@ function App() {
         <Alert severity="error" variant="filled" onClose={() => setError(null)}>
           {error}
         </Alert>
-        //TODO: To Add Navbar here
+    
       </Snackbar> */}
       <Layout style={{ minHeight: '100vh' }}>
         <LeftSider
