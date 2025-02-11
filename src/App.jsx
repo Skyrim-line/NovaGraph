@@ -7,10 +7,9 @@ import { GraphRenderer } from "./components/GraphRenderer";
 import {
   Alert,
   Box,
-  Button,
-  ButtonGroup,
   Collapse,
   Divider,
+  ButtonGroup,
   IconButton,
   MenuItem,
   Snackbar,
@@ -41,16 +40,16 @@ import HelperCarousel from "./components/HelperCarousel";
 
 // 下面的是demo界面的主体代码
 import { useContext } from 'react';
-import { ConfigProvider, Layout, Breadcrumb, Menu, Input, Drawer } from 'antd';
+import { ConfigProvider, Layout, Breadcrumb, Menu, Input, Drawer, Space, Form, Button, Row, Col, Select } from 'antd';
 import { DarkMode, Brightness7 } from "@mui/icons-material";
 import { ThemeContext } from './context/theme';  // 引入创建好的上下文
 // import LeftSider from './pages/components/sider';
-import { NodeIndexOutlined, MoreOutlined, TeamOutlined, PicCenterOutlined, SearchOutlined } from '@ant-design/icons';
-import './pages/pages.css';
+import { NodeIndexOutlined, MoreOutlined, TeamOutlined, PicCenterOutlined, SearchOutlined, CloseOutlined } from '@ant-design/icons';
 const { Search } = Input;
 const { Header, Sider } = Layout;
+const { Option } = Select;
 
-import "./App.css";
+
 
 // TODO: 左侧菜单栏算法输入
 const SideMenu = ({ isDarkMode, searchTerm, onAlgorithmClick }) => {
@@ -138,6 +137,7 @@ const LeftSider = ({ collapsed = false, setCollapsed = () => { }, isDarkMode = f
   const [searchTerm, setSearchTerm] = useState(""); // 搜索框输入状态
   const [drawerVisible, setDrawerVisible] = useState(false); // 控制Drawer可见性
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(null); // 选中的算法信息
+  const { currentThemeToken } = useContext(ThemeContext); // 获取当前主题 token
 
 
   const handleSearch = (e) => {
@@ -180,7 +180,7 @@ const LeftSider = ({ collapsed = false, setCollapsed = () => { }, isDarkMode = f
               fontSize: "20px",
               cursor: "pointer",
               marginLeft: "20px",
-              color: isDarkMode ? "#EEEEEE" : "#000",
+
             }}
           />
         ) : (
@@ -189,8 +189,10 @@ const LeftSider = ({ collapsed = false, setCollapsed = () => { }, isDarkMode = f
             onChange={handleSearch}
             allowClear
             enterButton
-            className="custom-search"
-            style={{ width: "100%" }}
+
+            style={{
+              width: "100%",
+            }}
           />
         )}
       </div>
@@ -207,17 +209,68 @@ const LeftSider = ({ collapsed = false, setCollapsed = () => { }, isDarkMode = f
         onClose={() => setDrawerVisible(false)}
         visible={drawerVisible}
         width={400}
+        drawerStyle={{
+          background: currentThemeToken.colorBgContainer,
+        }}
+        closeIcon={
+          <span
+            style={{
+              color: currentThemeToken.colorText,
+              fontSize: "18px",
+            }}
+          >
+            <CloseOutlined />
+          </span>
+        }
+        extra={
+          <Space>
+            <Button onClose={() => setDrawerVisible(false)} color="white" variant="solid">Cancel</Button>
+            <Button onClose={() => setDrawerVisible(false)} color="default" variant="solid">
+              Submit
+            </Button>
+          </Space>
+        }
 
       >
         {selectedAlgorithm ? (
-          <div>
-            <p><strong>Algorithm Name:</strong> {selectedAlgorithm.title}</p>
-            <p><strong>Description:</strong> Here will be the algorithm details...</p>
+          <Form layout="vertical" hideRequiredMark>
+            <p><strong>Description:</strong> Here will be the algorithm details...sss ssss sssss </p>
             {/* 可以在这里添加算法参数配置，例如输入框、选择框等 */}
-            <Button type="primary" style={{ marginTop: "10px" }}>
-              Run Algorithm
-            </Button>
-          </div>
+            <Form.Item
+              name="owner"
+              label="Source Vertex"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter source vertex',
+                },
+              ]}
+            >
+              <Select placeholder="Please select an owner">
+                <Option value="xiao">Xiaoxiao Fu</Option>
+                <Option value="mao">Maomao Zhou</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              name="owner"
+              label="Target Vertex"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter target vertex',
+                },
+              ]}
+            >
+              <Select placeholder="Please select an owner">
+                <Option value="xiao">Xiaoxiao Fu</Option>
+                <Option value="mao">Maomao Zhou</Option>
+              </Select>
+            </Form.Item>
+
+
+          </Form>
+
         ) : (
           <p>No Algorithm Selected</p>
         )}
@@ -344,6 +397,7 @@ function App() {
             lastItemColor: currentThemeToken.colorPrimary,
             separatorColor: currentThemeToken.colorText,
           },
+
         }
       }}
     >

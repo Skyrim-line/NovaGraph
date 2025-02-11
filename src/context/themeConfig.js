@@ -4,6 +4,7 @@ export const darkModeToken = {
   color2: "#222831",
   colorText: '#ffffff', // 文本颜色
   colorPrimary: '#FFD700', // 主色
+  colorTextPlaceholder: '#EEEEEE', // placeholder 颜色
   borderRadiusLG: '8px', // 圆角
 };
 
@@ -13,6 +14,7 @@ export const lightModeToken = {
   color3:"#EEEEEE",
   colorText: '#000000', // 文本颜色
   colorPrimary: '#76ABAE', // 主色
+  colorTextPlaceholder: '#424242', // placeholder 颜色
   borderRadiusLG: '8px', // 圆角
   itemHoverBg: '#FFFFFF', // hover 颜色
 };
