@@ -56,13 +56,13 @@ const AlgorithmInput = ({ wasmFunction, postState, setLoading, algorithmName, bu
       const endTime = performance.now();
       console.log(`Time taken for ${algorithmName}: ${endTime - startTime}ms`);
 
-      postState(response);      
+      postState(response);
     }, 0);
   };
 
   return (
     <>
-      <Button 
+      <Button
         size='small'
         onClick={handleClickOpen}
         onMouseEnter={() => setHoveredAlgorithm(hoveredAlgorithm)}
@@ -101,7 +101,7 @@ const AlgorithmInput = ({ wasmFunction, postState, setLoading, algorithmName, bu
                   id={input.label}
                   options={nodes}
                   color='info'
-                  getOptionLabel={(option) => option.name ? option.name : String(option.id) }                  style={{ width: 300 }}
+                  getOptionLabel={(option) => option.name ? option.name : String(option.id)} style={{ width: 300 }}
                   renderInput={(params) => <TextField {...params} label={input.label} variant="outlined" color='secondary' />}
                   onChange={handleChange(input.label, input.type)}
                   ListboxComponent={ListboxComponent}

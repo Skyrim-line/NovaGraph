@@ -66,8 +66,8 @@ const SideMenu = ({ isDarkMode, searchTerm, onAlgorithmClick }) => {
       icon: <NodeIndexOutlined />,
       title: "Path Finding & Search",
       children: [
-        { key: "astar", title: "Dijkstra(A to B)" },
-        { key: "dijkstra", title: "Dijkstra(A to ALl)" },
+        { key: "AtoB", title: "Dijkstra(A to B)" },
+        { key: "AtoAll", title: "Dijkstra(A to ALl)" },
         { key: "bfs", title: "Breadth-First Search" },
       ],
     },
@@ -132,152 +132,7 @@ const SideMenu = ({ isDarkMode, searchTerm, onAlgorithmClick }) => {
   );
 };
 
-// TODO: Left Sider Algorithm input
-const LeftSider = ({ collapsed = false, setCollapsed = () => { }, isDarkMode = false }) => {
-  const [searchTerm, setSearchTerm] = useState(""); // 搜索框输入状态
-  const [drawerVisible, setDrawerVisible] = useState(false); // 控制Drawer可见性
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState(null); // 选中的算法信息
-  const { currentThemeToken } = useContext(ThemeContext); // 获取当前主题 token
 
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleAlgorithmClick = (algorithm) => {
-    setSelectedAlgorithm(algorithm);
-    setDrawerVisible(true);
-  };
-
-  return (
-    <Sider
-      width={350}
-      collapsible
-      collapsed={collapsed}
-      onCollapse={(value) => setCollapsed(value)}
-      theme={isDarkMode ? "dark" : "light"}
-    >
-      {/* Logo */}
-      <a href="/app">
-        <div className="font-logo" style={{ color: isDarkMode ? "#fff" : "#000", padding: "10px" }}>
-          {collapsed ? (
-            <span style={{ fontFamily: "ITC Eras Demi" }}>N</span>
-          ) : (
-            <>
-              <span style={{ fontFamily: "ITC Eras Book" }}>Nova</span>
-              <span style={{ fontFamily: "ITC Eras Demi" }}>graph</span>
-            </>
-          )}
-        </div>
-      </a>
-
-      {/* 搜索框 */}
-      <div style={{ padding: "10px" }}>
-        {collapsed ? (
-          <SearchOutlined
-            onClick={() => setCollapsed(false)}
-            style={{
-              fontSize: "20px",
-              cursor: "pointer",
-              marginLeft: "20px",
-
-            }}
-          />
-        ) : (
-          <Search
-            placeholder="Search Algorithms Here"
-            onChange={handleSearch}
-            allowClear
-            enterButton
-
-            style={{
-              width: "100%",
-            }}
-          />
-        )}
-      </div>
-
-      {/* 侧边菜单 */}
-      <SideMenu isDarkMode={isDarkMode} searchTerm={searchTerm} onAlgorithmClick={handleAlgorithmClick} />
-
-      {/* Drawer：算法详情 
-      // TODO: Drawer for algorithm details
-      */}
-      <Drawer
-        title={selectedAlgorithm?.title || "Algorithm Details"}
-        placement="left"
-        onClose={() => setDrawerVisible(false)}
-        visible={drawerVisible}
-        width={400}
-        drawerStyle={{
-          background: currentThemeToken.colorBgContainer,
-        }}
-        closeIcon={
-          <span
-            style={{
-              color: currentThemeToken.colorText,
-              fontSize: "18px",
-            }}
-          >
-            <CloseOutlined />
-          </span>
-        }
-        extra={
-          <Space>
-            <Button onClose={() => setDrawerVisible(false)} color="white" variant="solid">Cancel</Button>
-            <Button onClose={() => setDrawerVisible(false)} color="default" variant="solid">
-              Submit
-            </Button>
-          </Space>
-        }
-
-      >
-        {selectedAlgorithm ? (
-          <Form layout="vertical" hideRequiredMark>
-            <p><strong>Description:</strong> Here will be the algorithm details...sss ssss sssss </p>
-            {/* 可以在这里添加算法参数配置，例如输入框、选择框等 */}
-            <Form.Item
-              name="owner"
-              label="Source Vertex"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter source vertex',
-                },
-              ]}
-            >
-              <Select placeholder="Please select an owner">
-                <Option value="xiao">Xiaoxiao Fu</Option>
-                <Option value="mao">Maomao Zhou</Option>
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              name="owner"
-              label="Target Vertex"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter target vertex',
-                },
-              ]}
-            >
-              <Select placeholder="Please select an owner">
-                <Option value="xiao">Xiaoxiao Fu</Option>
-                <Option value="mao">Maomao Zhou</Option>
-              </Select>
-            </Form.Item>
-
-
-          </Form>
-
-        ) : (
-          <p>No Algorithm Selected</p>
-        )}
-      </Drawer>
-    </Sider>
-  );
-};
 
 
 
@@ -305,6 +160,22 @@ function App() {
   const [loading, setLoading] = useState(null);
 
   const [missingEdgeDefaults, setMissingEdgeDefaults] = useState({});
+
+
+  const [searchTerm, setSearchTerm] = useState(""); // 搜索框输入状态
+  const [drawerVisible, setDrawerVisible] = useState(false); // 控制Drawer可见性
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState(null); // 选中的算法信息
+
+
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleAlgorithmClick = (algorithm) => {
+    setSelectedAlgorithm(algorithm);
+    setDrawerVisible(true);
+  };
 
   useEffect(() => {
     createModule().then((mod) => {
@@ -407,22 +278,140 @@ function App() {
           <p className="loading-text">{loading}</p>
         </div>
       )}
-      {/* <Snackbar
-        open={error !== null}
-        autoHideDuration={6000}
-        onClose={() => setError(null)}
-      >
-        <Alert severity="error" variant="filled" onClose={() => setError(null)}>
-          {error}
-        </Alert>
-    
-      </Snackbar> */}
       <Layout style={{ minHeight: '100vh' }}>
-        <LeftSider
+
+        <Sider
+          width={350}
+          collapsible
           collapsed={collapsed}
-          setCollapsed={setCollapsed}
-          isDarkMode={isDarkMode}
-        />
+          onCollapse={(value) => setCollapsed(value)}
+          theme={isDarkMode ? "dark" : "light"}
+        >
+          {/* Logo */}
+          <a href="/app">
+            <div className="font-logo" style={{ color: isDarkMode ? "#fff" : "#000", padding: "10px" }}>
+              {collapsed ? (
+                <span style={{ fontFamily: "ITC Eras Demi" }}>N</span>
+              ) : (
+                <>
+                  <span style={{ fontFamily: "ITC Eras Book" }}>Nova</span>
+                  <span style={{ fontFamily: "ITC Eras Demi" }}>graph</span>
+                </>
+              )}
+            </div>
+          </a>
+
+          {/* 搜索框 */}
+          <div style={{ padding: "10px" }}>
+            {collapsed ? (
+              <SearchOutlined
+                onClick={() => setCollapsed(false)}
+                style={{
+                  fontSize: "20px",
+                  cursor: "pointer",
+                  marginLeft: "20px",
+
+                }}
+                wasmModule={wasmModule}
+              />
+            ) : (
+              <Search
+                placeholder="Search Algorithms Here"
+                onChange={handleSearch}
+                allowClear
+                enterButton
+
+                style={{
+                  width: "100%",
+                }}
+              />
+            )}
+          </div>
+
+          {/* 侧边菜单 */}
+          <SideMenu isDarkMode={isDarkMode} searchTerm={searchTerm} onAlgorithmClick={handleAlgorithmClick} />
+
+          {/* Drawer：算法详情 
+      // TODO: Drawer for algorithm details
+      */}
+          <Drawer
+            title={selectedAlgorithm?.title || "Algorithm Details"}
+            placement="left"
+            onClose={() => setDrawerVisible(false)}
+            visible={drawerVisible}
+            width={400}
+            drawerStyle={{
+              background: currentThemeToken.colorBgContainer,
+            }}
+            closeIcon={
+              <span
+                style={{
+                  color: currentThemeToken.colorText,
+                  fontSize: "18px",
+                }}
+              >
+                <CloseOutlined />
+              </span>
+            }
+            extra={
+              <Space>
+                <Button onClose={() => setDrawerVisible(false)} color="white" variant="solid">Cancel</Button>
+                <Button onClose={() => setDrawerVisible(false)} color="default" htmlType="submit" form="algorithmForm" variant="solid">
+                  Run Algorithm
+                </Button>
+              </Space>
+            }
+
+          >
+
+            {selectedAlgorithm ? (
+              <Form
+                id="algorithmForm"
+                layout="vertical"
+                hideRequiredMark
+                onFinish={(values) => {
+                  if (!wasmModule || !selectedAlgorithm) return;
+
+                  console.log("Running algorithm with values:", values);
+
+                  // 运行算法，将 source 和 target 作为参数传递
+                  const response = wasmModule[selectedAlgorithm.key](values.source, values.target);
+                  postAlgorithmState(selectedAlgorithm, response);
+
+                  setDrawerVisible(false);
+                }}
+              >
+                <p><strong>Description:</strong> {selectedAlgorithm.description || "No description available"}</p>
+
+                {selectedAlgorithm.key === "AtoB" && (
+                  <>
+                    <Form.Item name="source" label="Source Vertex" rules={[{ required: true, message: "Please select a source vertex" }]}>
+                      <Select placeholder="Select a source vertex">
+                        {nodes.map(node => (
+                          <Option key={node.id} value={node.id}>{node.name || node.id}</Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+
+                    <Form.Item name="target" label="Target Vertex" rules={[{ required: true, message: "Please select a target vertex" }]}>
+                      <Select placeholder="Select a target vertex">
+                        {nodes.map(node => (
+                          <Option key={node.id} value={node.id}>{node.name || node.id}</Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </>
+                )}
+
+                <Button type="primary" htmlType="submit">Run Algorithm</Button>
+              </Form>
+
+
+            ) : (
+              <p>No Algorithm Selected</p>
+            )}
+          </Drawer>
+        </Sider>
         <Layout style={{ minHeight: '100vh' }}>
           <Header
             className='header'
