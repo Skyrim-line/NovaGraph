@@ -40,7 +40,7 @@ import HelperCarousel from "./components/HelperCarousel";
 
 // 下面的是demo界面的主体代码
 import { useContext } from 'react';
-import { ConfigProvider, Layout, Breadcrumb, Menu, Input, Drawer, Space, Form, Button, Row, Col, Select } from 'antd';
+import { ConfigProvider, Layout, Breadcrumb, Menu, Input, Drawer, Space, Form, Button, message, Select } from 'antd';
 import { DarkMode, Brightness7 } from "@mui/icons-material";
 import { ThemeContext } from './context/theme';  // 引入创建好的上下文
 // import LeftSider from './pages/components/sider';
@@ -161,10 +161,11 @@ function App() {
 
   const [missingEdgeDefaults, setMissingEdgeDefaults] = useState({});
 
-
+  const [form] = Form.useForm();
   const [searchTerm, setSearchTerm] = useState(""); // 搜索框输入状态
   const [drawerVisible, setDrawerVisible] = useState(false); // 控制Drawer可见性
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(null); // 选中的算法信息
+
 
 
 
@@ -331,6 +332,7 @@ function App() {
           {/* 侧边菜单 */}
           <SideMenu isDarkMode={isDarkMode} searchTerm={searchTerm} onAlgorithmClick={handleAlgorithmClick} />
 
+
           {/* Drawer：算法详情 
       // TODO: Drawer for algorithm details
       */}
@@ -353,18 +355,24 @@ function App() {
                 <CloseOutlined />
               </span>
             }
-            extra={
-              <Space>
-                <Button onClose={() => setDrawerVisible(false)} color="white" variant="solid">Cancel</Button>
-                <Button onClose={() => setDrawerVisible(false)} color="default" htmlType="submit" form="algorithmForm" variant="solid">
-                  Run Algorithm
-                </Button>
-              </Space>
-            }
-
           >
-
-            {selectedAlgorithm ? (
+            <AlgorithmInput
+              wasmFunction={wasmModule && wasmModule.degree_centrality}
+              postState={postAlgorithmState.bind(
+                null,
+                Algorithm.DEGREE_CENTRALITY
+              )}
+              setLoading={setLoading}
+              algorithmName="Degree Centrality"
+              desc={[
+                "Degree centrality measures the number of edges connected to a node.",
+              ]}
+              nodes={nodes}
+              setHoveredAlgorithm={setHoveredAlgorithm}
+              hoveredAlgorithm={Algorithm.DEGREE_CENTRALITY}
+              inputs={[]}
+            />
+            {/* {selectedAlgorithm ? (
               <Form
                 id="algorithmForm"
                 layout="vertical"
@@ -374,43 +382,78 @@ function App() {
 
                   console.log("Running algorithm with values:", values);
 
-                  // 运行算法，将 source 和 target 作为参数传递
-                  const response = wasmModule[selectedAlgorithm.key](values.source, values.target);
-                  postAlgorithmState(selectedAlgorithm, response);
+                  try {
+                    const wasmFunction = wasmModule[selectedAlgorithm.dijkstra_source_to_target];
+                    console.log("wasmFunction", wasmFunction);
+                    if (!wasmFunction) {
+                      message.error(`WASM function "${selectedAlgorithm.key}" not found`);
+                      return;
+                    }
 
-                  setDrawerVisible(false);
+                    // 按需调整这里的参数提取，比如 Source Vertex 和 Target Vertex
+                    const args = [values.sourceVertex, values.targetVertex];
+
+                    const response = wasmFunction(...args);
+                    postAlgorithmState(selectedAlgorithm, response);
+
+                    message.success(`${selectedAlgorithm.title} executed successfully`);
+                    setDrawerVisible(false);
+                  } catch (error) {
+                    console.error(`Execution of ${selectedAlgorithm.title} failed`, error);
+                    message.error(`Execution failed: ${error.message}`);
+                  }
                 }}
               >
-                <p><strong>Description:</strong> {selectedAlgorithm.description || "No description available"}</p>
+                <p>
+                  <strong>Description:</strong>{" "}
+                  {selectedAlgorithm.description || "No description available"}
+                </p>
 
-                {selectedAlgorithm.key === "AtoB" && (
-                  <>
-                    <Form.Item name="source" label="Source Vertex" rules={[{ required: true, message: "Please select a source vertex" }]}>
-                      <Select placeholder="Select a source vertex">
-                        {nodes.map(node => (
-                          <Option key={node.id} value={node.id}>{node.name || node.id}</Option>
-                        ))}
-                      </Select>
-                    </Form.Item>
+                <Form.Item
+                  label="Source Vertex"
+                  name="sourceVertex"
+                  rules={[{ required: true, message: "Please select Source Vertex" }]}
+                >
+                  <Select placeholder="Select Source Vertex">
+                    {nodes.map((node) => (
+                      <Select.Option key={node.id} value={node.id}>
+                        {node.name || node.id}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
 
-                    <Form.Item name="target" label="Target Vertex" rules={[{ required: true, message: "Please select a target vertex" }]}>
-                      <Select placeholder="Select a target vertex">
-                        {nodes.map(node => (
-                          <Option key={node.id} value={node.id}>{node.name || node.id}</Option>
-                        ))}
-                      </Select>
-                    </Form.Item>
-                  </>
-                )}
+                <Form.Item
+                  label="Target Vertex"
+                  name="targetVertex"
+                  rules={[{ required: true, message: "Please select Target Vertex" }]}
+                >
+                  <Select placeholder="Select Target Vertex">
+                    {nodes.map((node) => (
+                      <Select.Option key={node.id} value={node.id}>
+                        {node.name || node.id}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
 
-                <Button type="primary" htmlType="submit">Run Algorithm</Button>
+                <Form.Item>
+                  <Space>
+                    <Button onClick={() => setDrawerVisible(false)} color="white" variant="solid">
+                      Cancel
+                    </Button>
+                    <Button color="default" htmlType="submit" variant="solid">
+                      Run Algorithm
+                    </Button>
+                  </Space>
+                </Form.Item>
               </Form>
-
 
             ) : (
               <p>No Algorithm Selected</p>
-            )}
-          </Drawer>
+            )} */}
+          </Drawer>;
+
         </Sider>
         <Layout style={{ minHeight: '100vh' }}>
           <Header
