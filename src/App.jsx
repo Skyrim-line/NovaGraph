@@ -40,7 +40,7 @@ import HelperCarousel from "./components/HelperCarousel";
 
 // 下面的是demo界面的主体代码
 import { useContext } from 'react';
-import { ConfigProvider, Layout, Breadcrumb, Menu, Input, Drawer, Space, Form, Button, message, Select } from 'antd';
+import { ConfigProvider, Layout, Breadcrumb, Menu, Input, Drawer, Space, Form, Button, Modal, Select } from 'antd';
 import { DarkMode, Brightness7 } from "@mui/icons-material";
 import { ThemeContext } from './context/theme';  // 引入创建好的上下文
 // import LeftSider from './pages/components/sider';
@@ -257,6 +257,8 @@ function App() {
   const { isDarkMode, setIsDarkMode, currentThemeToken } = useContext(ThemeContext);
 
 
+
+
   return (
     <ConfigProvider
       theme={{
@@ -268,6 +270,12 @@ function App() {
             linkHoverColor: currentThemeToken.colorPrimary,
             lastItemColor: currentThemeToken.colorPrimary,
             separatorColor: currentThemeToken.colorText,
+          },
+          Modal: {
+            contentBg: currentThemeToken.color2, // Modal整体背景色
+            headerBg: currentThemeToken.color2, // Modal标题背景色
+            titleColor: currentThemeToken.colorText, // Modal标题文字颜色
+            footerBg: currentThemeToken.colorPrimary, // Modal底部背景色
           },
 
         }
@@ -330,130 +338,157 @@ function App() {
           </div>
 
           {/* 侧边菜单 */}
+
           <SideMenu isDarkMode={isDarkMode} searchTerm={searchTerm} onAlgorithmClick={handleAlgorithmClick} />
-
-
-          {/* Drawer：算法详情 
-      // TODO: Drawer for algorithm details
-      */}
-          <Drawer
+          <Modal
             title={selectedAlgorithm?.title || "Algorithm Details"}
-            placement="left"
-            onClose={() => setDrawerVisible(false)}
-            visible={drawerVisible}
-            width={400}
-            drawerStyle={{
-              background: currentThemeToken.colorBgContainer,
-            }}
-            closeIcon={
-              <span
-                style={{
-                  color: currentThemeToken.colorText,
-                  fontSize: "18px",
-                }}
-              >
-                <CloseOutlined />
-              </span>
-            }
+            // bodyStyle={{ backgroundColor: isDarkMode ? "#1F1F1F" : "#fff" }} // 根据暗黑模式切换背景色
+
+            open={drawerVisible}
+            onCancel={() => setDrawerVisible(false)}
+            footer={null}
+            width={600}
           >
-            <AlgorithmInput
-              wasmFunction={wasmModule && wasmModule.degree_centrality}
-              postState={postAlgorithmState.bind(
-                null,
-                Algorithm.DEGREE_CENTRALITY
-              )}
-              setLoading={setLoading}
-              algorithmName="Degree Centrality"
-              desc={[
-                "Degree centrality measures the number of edges connected to a node.",
-              ]}
-              nodes={nodes}
-              setHoveredAlgorithm={setHoveredAlgorithm}
-              hoveredAlgorithm={Algorithm.DEGREE_CENTRALITY}
-              inputs={[]}
-            />
-            {/* {selectedAlgorithm ? (
-              <Form
-                id="algorithmForm"
-                layout="vertical"
-                hideRequiredMark
-                onFinish={(values) => {
-                  if (!wasmModule || !selectedAlgorithm) return;
+            {/* 左侧算法展示Sider
+              */}
 
-                  console.log("Running algorithm with values:", values);
+            {selectedAlgorithm ? (
+              (() => {
+                switch (selectedAlgorithm.key) {
+                  case "AtoB":
+                    return (
 
-                  try {
-                    const wasmFunction = wasmModule[selectedAlgorithm.dijkstra_source_to_target];
-                    console.log("wasmFunction", wasmFunction);
-                    if (!wasmFunction) {
-                      message.error(`WASM function "${selectedAlgorithm.key}" not found`);
-                      return;
-                    }
-
-                    // 按需调整这里的参数提取，比如 Source Vertex 和 Target Vertex
-                    const args = [values.sourceVertex, values.targetVertex];
-
-                    const response = wasmFunction(...args);
-                    postAlgorithmState(selectedAlgorithm, response);
-
-                    message.success(`${selectedAlgorithm.title} executed successfully`);
-                    setDrawerVisible(false);
-                  } catch (error) {
-                    console.error(`Execution of ${selectedAlgorithm.title} failed`, error);
-                    message.error(`Execution failed: ${error.message}`);
-                  }
-                }}
-              >
-                <p>
-                  <strong>Description:</strong>{" "}
-                  {selectedAlgorithm.description || "No description available"}
-                </p>
-
-                <Form.Item
-                  label="Source Vertex"
-                  name="sourceVertex"
-                  rules={[{ required: true, message: "Please select Source Vertex" }]}
-                >
-                  <Select placeholder="Select Source Vertex">
-                    {nodes.map((node) => (
-                      <Select.Option key={node.id} value={node.id}>
-                        {node.name || node.id}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-
-                <Form.Item
-                  label="Target Vertex"
-                  name="targetVertex"
-                  rules={[{ required: true, message: "Please select Target Vertex" }]}
-                >
-                  <Select placeholder="Select Target Vertex">
-                    {nodes.map((node) => (
-                      <Select.Option key={node.id} value={node.id}>
-                        {node.name || node.id}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-
-                <Form.Item>
-                  <Space>
-                    <Button onClick={() => setDrawerVisible(false)} color="white" variant="solid">
-                      Cancel
-                    </Button>
-                    <Button color="default" htmlType="submit" variant="solid">
-                      Run Algorithm
-                    </Button>
-                  </Space>
-                </Form.Item>
-              </Form>
-
+                      <AlgorithmInput
+                        wasmFunction={wasmModule && wasmModule[algorithmConfig.DIJKSTRA_A_TO_B.wasm_function_name]}
+                        postState={postAlgorithmState.bind(null, Algorithm.DIJKSTRA_A_TO_B)}
+                        setLoading={setLoading}
+                        algorithmName="Dijkstra (A to B)"
+                        desc={["Find the shortest path from node A to node B."]}
+                        nodes={nodes}
+                        setHoveredAlgorithm={setHoveredAlgorithm}
+                        // hoveredAlgorithm={Algorithm.DIJKSTRA_A_TO_B}
+                        inputs={[
+                          { label: "Start Node", type: "node" },
+                          { label: "End Node", type: "node" },
+                        ]}
+                      />
+                    );
+                  case "AtoAll":
+                    return (
+                      <AlgorithmInput
+                        wasmFunction={wasmModule?.dijkstra_a_to_all}
+                        postState={postAlgorithmState.bind(null, Algorithm.DIJKSTRA_A_TO_ALL)}
+                        setLoading={setLoading}
+                        algorithmName="Dijkstra (A to All)"
+                        desc={["Find the shortest path from node A to all other nodes."]}
+                        nodes={nodes}
+                        setHoveredAlgorithm={setHoveredAlgorithm}
+                        hoveredAlgorithm={Algorithm.DIJKSTRA_A_TO_ALL}
+                        inputs={[
+                          { label: "Start Node", type: "node" },
+                        ]}
+                      />
+                    );
+                  case "bfs":
+                    return (
+                      <AlgorithmInput
+                        wasmFunction={wasmModule?.bfs}
+                        postState={postAlgorithmState.bind(null, Algorithm.BFS)}
+                        setLoading={setLoading}
+                        algorithmName="Breadth-First Search"
+                        desc={["Traverse the graph using BFS starting from a node."]}
+                        nodes={nodes}
+                        setHoveredAlgorithm={setHoveredAlgorithm}
+                        hoveredAlgorithm={Algorithm.BFS}
+                        inputs={[
+                          { label: "Start Node", type: "node" },
+                        ]}
+                      />
+                    );
+                  case "degree":
+                    return (
+                      <AlgorithmInput
+                        wasmFunction={wasmModule?.degree_centrality}
+                        postState={postAlgorithmState.bind(null, Algorithm.DEGREE_CENTRALITY)}
+                        setLoading={setLoading}
+                        algorithmName="Degree Centrality"
+                        desc={["Degree centrality measures the number of edges connected to a node."]}
+                        nodes={nodes}
+                        setHoveredAlgorithm={setHoveredAlgorithm}
+                        hoveredAlgorithm={Algorithm.DEGREE_CENTRALITY}
+                        inputs={[]}
+                      />
+                    );
+                  case "closeness":
+                    return (
+                      <AlgorithmInput
+                        wasmFunction={wasmModule?.closeness_centrality}
+                        postState={postAlgorithmState.bind(null, Algorithm.CLOSENESS_CENTRALITY)}
+                        setLoading={setLoading}
+                        algorithmName="Closeness Centrality"
+                        desc={["Closeness centrality measures how close a node is to all other nodes."]}
+                        nodes={nodes}
+                        setHoveredAlgorithm={setHoveredAlgorithm}
+                        hoveredAlgorithm={Algorithm.CLOSENESS_CENTRALITY}
+                        inputs={[]}
+                      />
+                    );
+                  case "betweenness":
+                    return (
+                      <AlgorithmInput
+                        wasmFunction={wasmModule?.betweenness_centrality}
+                        postState={postAlgorithmState.bind(null, Algorithm.BETWEENNESS_CENTRALITY)}
+                        setLoading={setLoading}
+                        algorithmName="Betweenness Centrality"
+                        desc={["Betweenness centrality measures how often a node is on the shortest path between other nodes."]}
+                        nodes={nodes}
+                        setHoveredAlgorithm={setHoveredAlgorithm}
+                        hoveredAlgorithm={Algorithm.BETWEENNESS_CENTRALITY}
+                        inputs={[]}
+                      />
+                    );
+                  case "louvain":
+                    return (
+                      <AlgorithmInput
+                        wasmFunction={wasmModule?.louvain_method}
+                        postState={postAlgorithmState.bind(null, Algorithm.LOUVAIN)}
+                        setLoading={setLoading}
+                        algorithmName="Louvain Method"
+                        desc={["Detects communities in the graph using modularity optimization."]}
+                        nodes={nodes}
+                        setHoveredAlgorithm={setHoveredAlgorithm}
+                        hoveredAlgorithm={Algorithm.LOUVAIN}
+                        inputs={[]}
+                      />
+                    );
+                  case "girvan":
+                    return (
+                      <AlgorithmInput
+                        wasmFunction={wasmModule?.girvan_newman}
+                        postState={postAlgorithmState.bind(null, Algorithm.GIRVAN_NEWMAN)}
+                        setLoading={setLoading}
+                        algorithmName="Girvan-Newman Algorithm"
+                        desc={["Detects communities in the graph by progressively removing edges."]}
+                        nodes={nodes}
+                        setHoveredAlgorithm={setHoveredAlgorithm}
+                        hoveredAlgorithm={Algorithm.GIRVAN_NEWMAN}
+                        inputs={[]}
+                      />
+                    );
+                  default:
+                    return (
+                      <Typography.Text style={{ color: currentThemeToken.colorText }}>
+                        Please select an algorithm to view its details.
+                      </Typography.Text>
+                    );
+                }
+              })()
             ) : (
-              <p>No Algorithm Selected</p>
-            )} */}
-          </Drawer>;
-
+              <Typography.Text style={{ color: currentThemeToken.colorText }}>
+                Please select an algorithm to view its details.
+              </Typography.Text>
+            )}
+          </Modal>
         </Sider>
         <Layout style={{ minHeight: '100vh' }}>
           <Header
