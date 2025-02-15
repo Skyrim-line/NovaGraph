@@ -122,7 +122,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '75vh' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '91vh' }}>
 
             <CosmographProvider nodes={nodes} links={links}>
                 <CosmographSearch
