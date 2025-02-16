@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Button, Drawer, Form, InputNumber, Select, Typography, Space } from 'antd';
+import { useEffect, useState, useContext } from 'react';
+import { Button, Drawer, Form, InputNumber, Select, Typography, Space, ConfigProvider } from 'antd';
 import { ThemeContext } from '../context/theme';
+import { CloseOutlined } from '@ant-design/icons';
 
 const AlgorithmInput = ({
   wasmFunction,
@@ -48,15 +49,27 @@ const AlgorithmInput = ({
   };
 
   return (
-    <>
+    <ConfigProvider
+      theme={{
+        components: {
+          Select: {
+            borderColor: isDarkMode ? '#4d4d4d' : '#d9d9d9',
+            colorBgContainer: isDarkMode ? '#' : '#ffffff',
+            colorText: isDarkMode ? '#ffffff' : '#000000',
+            colorBorderHover: isDarkMode ? '#737373' : '#4096ff',
+            colorBgElevated: isDarkMode ? '#262626' : '#ffffff', // 下拉菜单背景色
+            optionSelectedBg: isDarkMode ? '#595959' : '#e6f7ff', // 选中项背景色
+            optionActiveBg: isDarkMode ? '#4d4d4d' : '#f5f5f5', // hover 项背景色
+          },
+        },
+      }}
+    >
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Button
-          type="primary"
+          type="solid"
           size="large"
           style={{
-            marginLeft: '20px',
-            backgroundColor: isDarkMode ? currentThemeToken.colorButton2 : currentThemeToken.colorButton2,
-            color: currentThemeToken.colorText2,
+            backgroundColor: currentThemeToken.colorButton2,
             border: 'none',
           }}
           onClick={handleOpen}
@@ -73,7 +86,6 @@ const AlgorithmInput = ({
         onClose={handleClose}
         open={open}
         width={400}
-
         styles={{
           body: {
             backgroundColor: isDarkMode ? '#1f1f1f' : '#ffffff',
@@ -87,10 +99,15 @@ const AlgorithmInput = ({
             backgroundColor: isDarkMode ? '#1f1f1f' : '#ffffff',
           },
         }}
+        closeIcon={
+          <CloseOutlined style={{ color: isDarkMode ? '#ffffff' : '#000000' }} />
+        }
         extra={
           <Space>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button type="primary" onClick={handleSubmit}>
+            <Button type="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button type="default" onClick={handleSubmit}>
               Submit
             </Button>
           </Space>
@@ -119,20 +136,20 @@ const AlgorithmInput = ({
                   controls={true}
                 />
               ) : (
+
                 <Select
                   options={nodes.map((node) => ({
                     value: node.id,
                     label: node.name || node.id,
                   }))}
-                  style={{ backgroundColor: isDarkMode ? '#333333' : '#ffffff', color: isDarkMode ? '#ffffff' : '#000000' }}
-                  dropdownStyle={{ backgroundColor: isDarkMode ? '#333333' : '#ffffff' }}
                 />
+
               )}
             </Form.Item>
           ))}
         </Form>
       </Drawer>
-    </>
+    </ConfigProvider>
   );
 };
 

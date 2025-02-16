@@ -5,26 +5,14 @@ import createModule from "./graph";
 import "./App.css";
 import { GraphRenderer } from "./components/GraphRenderer";
 import {
-  Alert,
+
   Box,
-  Collapse,
-  Divider,
-  ButtonGroup,
   IconButton,
-  MenuItem,
-  Snackbar,
   Tooltip,
   Typography,
 } from "@mui/material";
 import UploadIcon from "@mui/icons-material/Upload";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-} from "./components/Accordion";
-
 
 import ImportMenu from "./components/imports/ImportMenu";
 import { Algorithm } from "./algorithms";
@@ -126,15 +114,12 @@ const SideMenu = ({ isDarkMode, searchTerm, onAlgorithmClick }) => {
       mode="inline"
       openKeys={openKeys}
       onOpenChange={handleOpenChange}
+
     >
       {renderMenuItems(filteredMenu)}
     </Menu>
   );
 };
-
-
-
-
 
 
 function App() {
@@ -257,8 +242,6 @@ function App() {
   const { isDarkMode, setIsDarkMode, currentThemeToken } = useContext(ThemeContext);
 
 
-
-
   return (
     <ConfigProvider
       theme={{
@@ -276,6 +259,14 @@ function App() {
             headerBg: currentThemeToken.color2, // Modal标题背景色
             titleColor: currentThemeToken.colorText, // Modal标题文字颜色
             footerBg: currentThemeToken.colorPrimary, // Modal底部背景色
+          },
+          Input: {
+            activeBorderColor: currentThemeToken.color2, // 边框选中时颜色
+            hoverBorderColor: currentThemeToken.color2, // 边框hover颜色
+            borderColor: currentThemeToken.color2, // 默认边框颜色
+            colorBgContainer: currentThemeToken.color2, // 输入框背景色
+            colorText: currentThemeToken.colorText, // 输入框文字颜色
+            colorPlaceholder: currentThemeToken.colorPlaceholder, // Placeholder 文字颜色
           },
 
         }
@@ -331,7 +322,6 @@ function App() {
                 onChange={handleSearch}
                 allowClear
                 enterButton
-
                 style={{
                   width: "100%",
 
@@ -374,7 +364,7 @@ function App() {
                     border: "none",
                   }}
                 >
-                  Import
+                  Import Graph
                 </Button>
               </Tooltip>
             )}
@@ -413,7 +403,7 @@ function App() {
                   block
                   disabled={activeResponse === null}
                 >
-                  Export
+                  Export Algorithm Data
                 </Button>
               </Tooltip>
             )

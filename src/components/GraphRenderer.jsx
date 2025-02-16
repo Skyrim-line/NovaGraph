@@ -1,5 +1,5 @@
 import { Cosmograph, CosmographProvider, CosmographSearch } from '@cosmograph/react'
-import React, { useRef, useCallback, useEffect, useState, useLayoutEffect } from 'react';
+import { useRef, useContext, useCallback, useEffect, useState, useLayoutEffect } from 'react';
 import chroma from "chroma-js";
 import { Box, Button, Divider, Drawer, FormControlLabel, IconButton, RadioGroup, Radio, Tooltip, Typography } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -14,6 +14,8 @@ import LabelOffIcon from '@mui/icons-material/LabelOff';
 import { Mode } from '../renderModes';
 import { ErasBold, ErasMedium } from './Eras';
 import { Margin } from '@mui/icons-material';
+import { ThemeContext } from '../context/theme';
+
 
 export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     const cosmograph = useRef()
@@ -22,6 +24,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     const neutral = '#9f8fc3'
     const contrast_green = '#67baa7'
     const out_of_focus = '#332d48'
+    const { isDarkMode, currentThemeToken } = useContext(ThemeContext);
     /* Palette: https://mycolor.space/?hex=%236750C6&sub=1 (Spot Palette)
         - Dark: #6750c6
         - Default: #9f8fc3
@@ -122,7 +125,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '91vh' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '91.5vh' }}>
 
             <CosmographProvider nodes={nodes} links={links}>
                 <CosmographSearch
@@ -168,24 +171,34 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
 
             </CosmographProvider>
 
-            <Box display='flex'>
+            <Box display='flex' sx={{ backgroundColor: currentThemeToken.colorBottom, padding: 0.6 }}>
                 <Tooltip title="Play Simulation">
-                    <IconButton aria-label='play-simulation' onClick={() => cosmograph.current?.start()}>
+                    <IconButton aria-label='play-simulation' onClick={() => cosmograph.current?.start()}
+                        sx={{
+                            color: isDarkMode ? 'white' : 'black', // 图标颜色
+                        }}>
                         <PlayArrowIcon />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Pause Simulation">
-                    <IconButton aria-label='pause-simulation' onClick={() => cosmograph.current?.pause()}>
+                    <IconButton aria-label='pause-simulation' onClick={() => cosmograph.current?.pause()}
+                        sx={{
+                            color: isDarkMode ? 'white' : 'black', // 图标颜色
+                        }}>
                         <PauseIcon />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Restart Simulation">
-                    <IconButton aria-label='restart-simulation' onClick={() => cosmograph.current?.create()}>
+                    <IconButton aria-label='restart-simulation' onClick={() => cosmograph.current?.create()} sx={{
+                        color: isDarkMode ? 'white' : 'black', // 图标颜色
+                    }}>
                         <ReplayIcon />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Fit All">
-                    <IconButton aria-label='fit-view' onClick={zoomOut}>
+                    <IconButton aria-label='fit-view' onClick={zoomOut} sx={{
+                        color: isDarkMode ? 'white' : 'black', // 图标颜色
+                    }}>
                         <ZoomOutMapIcon />
                     </IconButton>
                 </Tooltip>
@@ -193,12 +206,16 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 <Box flexGrow={1} />
 
                 <Tooltip title="Zoom Out">
-                    <IconButton aria-label='zoom-out' onClick={zoomGraphOut}>
+                    <IconButton aria-label='zoom-out' onClick={zoomGraphOut} sx={{
+                        color: isDarkMode ? 'white' : 'black', // 图标颜色
+                    }}>
                         <ZoomOutIcon />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Zoom In">
-                    <IconButton aria-label='zoom-in' onClick={zoomGraphIn}>
+                    <IconButton aria-label='zoom-in' onClick={zoomGraphIn} sx={{
+                        color: isDarkMode ? 'white' : 'black', // 图标颜色
+                    }}>
                         <ZoomInIcon />
                     </IconButton>
                 </Tooltip>
@@ -206,13 +223,17 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 {
                     dynamicLabels ?
                         <Tooltip title="Hide Dynamic Labels">
-                            <IconButton aria-label='hide-labels' onClick={() => setDynamicLabels(false)}>
+                            <IconButton aria-label='hide-labels' onClick={() => setDynamicLabels(false)} sx={{
+                                color: isDarkMode ? 'white' : 'black', // 图标颜色
+                            }}>
                                 <LabelOutlinedIcon />
                             </IconButton>
                         </Tooltip>
                         :
                         <Tooltip title="Show Dynamic Labels">
-                            <IconButton aria-label='show-labels' onClick={() => setDynamicLabels(true)}>
+                            <IconButton aria-label='show-labels' onClick={() => setDynamicLabels(true)} sx={{
+                                color: isDarkMode ? 'white' : 'black', // 图标颜色
+                            }}>
                                 <LabelOffIcon />
                             </IconButton>
                         </Tooltip>
@@ -220,98 +241,100 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 }
 
                 <Tooltip title="Graph Options">
-                    <IconButton aria-label='graph-options' onClick={() => setOptionsDrawer(true)}>
+                    <IconButton aria-label='graph-options' onClick={() => setOptionsDrawer(true)} sx={{
+                        color: isDarkMode ? 'white' : 'black', // 图标颜色
+                    }}>
                         <SettingsIcon />
                     </IconButton>
                 </Tooltip>
 
                 <Drawer
-                    anchor='right'
+                    anchor="right"
                     open={optionsDrawer}
                     onClose={() => setOptionsDrawer(false)}
-                    slotProps={{ backdrop: { sx: { backgroundColor: 'transparent' } } }}
+                    slotProps={{
+                        backdrop: {
+                            sx: { backgroundColor: 'transparent' },
+                        },
+                    }}
                     elevation={0}
+                    PaperProps={{
+                        sx: {
+                            backgroundColor: currentThemeToken.colorBottom, // 根据主题模式调整背景色
+                            color: currentThemeToken.colorText, // 根据主题模式调整文字颜色
+                        },
+                    }}
                 >
-                    <div
-                        onMouseLeave={() => setOptionsDrawer(false)}
-                        style={{ height: '100%' }}
-                    >
-                        <Box
-                            width={{ xs: '10rem', sm: '15rem' }}
-                            p={3}
-                        >
-                            <ErasBold pb={2} align='center' fontSize={24}>Graph Options</ErasBold>
-                            <Divider />
+                    <div style={{ height: '100%' }}>
+                        <Box width={{ xs: '10rem', sm: '15rem' }} p={3}>
+                            <ErasBold pb={2} align="center" fontSize={24}>
+                                Graph Options
+                            </ErasBold>
+                            <Divider sx={{ backgroundColor: currentThemeToken.colorText }} />
 
                             <Box pt={3} sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                                 <Box>
-                                    <ErasMedium align='center'>Gravity Strength</ErasMedium>
-                                    <RadioGroup
-                                        value={gravity}
-                                        onChange={(event) => setGravity(parseFloat(event.target.value))}
-                                    >
+                                    <ErasMedium align="center">Gravity Strength</ErasMedium>
+                                    <RadioGroup value={gravity} onChange={(event) => setGravity(parseFloat(event.target.value))}>
                                         <FormControlLabel
                                             value={0}
-                                            control={<Radio color='info' />}
-                                            label={<Typography variant='body2'>Zero Gravity (default)</Typography>}
+                                            control={<Radio sx={{ color: currentThemeToken.colorText }} />}
+                                            label={
+                                                <Typography variant="body2" sx={{ color: currentThemeToken.colorText }}>
+                                                    Zero Gravity (default)
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
                                             value={0.1}
-                                            control={<Radio color='info' />}
-                                            label={<Typography variant='body2'>Low Gravity</Typography>}
+                                            control={<Radio sx={{ color: currentThemeToken.colorText }} />}
+                                            label={
+                                                <Typography variant="body2" sx={{ color: currentThemeToken.colorText }}>
+                                                    Low Gravity
+                                                </Typography>
+                                            }
                                         />
                                         <FormControlLabel
                                             value={0.5}
-                                            control={<Radio color='info' />}
-                                            label={<Typography variant='body2'>High Gravity</Typography>}
+                                            control={<Radio sx={{ color: currentThemeToken.colorText }} />}
+                                            label={
+                                                <Typography variant="body2" sx={{ color: currentThemeToken.colorText }}>
+                                                    High Gravity
+                                                </Typography>
+                                            }
                                         />
                                     </RadioGroup>
-                                    <Typography variant='body2'>
+                                    <Typography variant="body2" sx={{ color: currentThemeToken.colorText }}>
                                         Modifies the gravitational strength of the center of the graph.
                                     </Typography>
                                 </Box>
+
+
                                 <Box>
-                                    <ErasMedium align='center'>Node Scalar Size</ErasMedium>
+                                    <ErasMedium align="center">Node Scalar Size</ErasMedium>
                                     <RadioGroup
                                         value={nodeSizeScale}
                                         onChange={(event) => setNodeSizeScale(parseFloat(event.target.value))}
+
                                     >
-                                        <FormControlLabel
-                                            value={0}
-                                            control={<Radio color='info' />}
-                                            label={<Typography variant='body2'>Invisible</Typography>}
-                                        />
-                                        <FormControlLabel
-                                            value={0.25}
-                                            control={<Radio color='info' />}
-                                            label={<Typography variant='body2'>Extra Small</Typography>}
-                                        />
-                                        <FormControlLabel
-                                            value={0.5}
-                                            control={<Radio color='info' />}
-                                            label={<Typography variant='body2'>Small</Typography>}
-                                        />
-                                        <FormControlLabel
-                                            value={1}
-                                            control={<Radio color='info' />}
-                                            label={<Typography variant='body2'>Medium (default)</Typography>}
-                                        />
-                                        <FormControlLabel
-                                            value={1.5}
-                                            control={<Radio color='info' />}
-                                            label={<Typography variant='body2'>Large</Typography>}
-                                        />
-                                        <FormControlLabel
-                                            value={2}
-                                            control={<Radio color='info' />}
-                                            label={<Typography variant='body2'>Extra Large</Typography>}
-                                        />
+                                        {[0, 0.25, 0.5, 1, 1.5, 2].map((value, index) => (
+                                            <FormControlLabel
+                                                key={value}
+                                                value={value}
+                                                control={<Radio sx={{ color: currentThemeToken.colorText }} />}
+                                                label={
+                                                    <Typography variant="body2" sx={{ color: currentThemeToken.colorText }}>
+                                                        {['Invisible', 'Extra Small', 'Small', 'Medium (default)', 'Large', 'Extra Large'][index]}
+                                                    </Typography>
+                                                }
+                                            />
+                                        ))}
                                     </RadioGroup>
-                                    <Typography variant='body2'>Modify the sizes for all nodes.</Typography>
+                                    <Typography variant="body2" sx={{ color: currentThemeToken.colorText }}>
+                                        Modify the sizes for all nodes.
+                                    </Typography>
                                 </Box>
-
                             </Box>
-
                         </Box>
                     </div>
                 </Drawer>
