@@ -55,9 +55,9 @@ const AlgorithmInput = ({
           size="large"
           style={{
             marginLeft: '20px',
-            backgroundColor: isDarkMode ? currentThemeToken.colorPrimary : currentThemeToken.colorPrimary,
-            color: isDarkMode ? '#ffffff' : '#ffffff',
-            borderColor: isDarkMode ? currentThemeToken.colorPrimary : currentThemeToken.colorPrimary,
+            backgroundColor: isDarkMode ? currentThemeToken.colorButton2 : currentThemeToken.colorButton2,
+            color: currentThemeToken.colorText2,
+            border: 'none',
           }}
           onClick={handleOpen}
           onMouseEnter={() => setHoveredAlgorithm(hoveredAlgorithm)}
@@ -73,6 +73,7 @@ const AlgorithmInput = ({
         onClose={handleClose}
         open={open}
         width={400}
+
         styles={{
           body: {
             backgroundColor: isDarkMode ? '#1f1f1f' : '#ffffff',

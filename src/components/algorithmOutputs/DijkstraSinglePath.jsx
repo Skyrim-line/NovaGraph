@@ -1,47 +1,67 @@
-import { Button, Box, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { RTableCell as Cell, RTableRow as Row } from './ResultsTable';
-import { ErasBold } from '../Eras';
-import OutputDialog from './OutputDialog';
+import { useContext, useEffect, useState } from 'react';
+import { Button, Table, Typography, Space, Drawer } from 'antd';
+import { ThemeContext } from '../../context/theme';
+const { Title, Text } = Typography;
 
 const DijkstraSinglePath = ({ data }) => {
     const [open, setOpen] = useState(false);
+    const { isDarkMode, currentThemeToken } = useContext(ThemeContext);
+
     useEffect(() => {
         console.log(data);
     }, [data]);
 
     const handleClick = () => {
         setOpen(!open);
-    }
+    };
 
-    const loadItems = (ps, records) => {
-        return ps.slice(0, records).map((p, index) => (
-            <Row key={index}>
-                <Cell>{p.from}</Cell>
-                <Cell>{p.to}</Cell>
-                {data.weighted && <Cell>{p.weight}</Cell>}
-            </Row>
-        ));
-    }
+    const columns = data.weighted
+        ? [
+            { title: 'From', dataIndex: 'from', key: 'from' },
+            { title: 'To', dataIndex: 'to', key: 'to' },
+            { title: 'Weight', dataIndex: 'weight', key: 'weight' },
+        ]
+        : [
+            { title: 'From', dataIndex: 'from', key: 'from' },
+            { title: 'To', dataIndex: 'to', key: 'to' },
+        ];
 
-    return (<>
-        <ErasBold fontSize={20} mb={1}>Dijkstra's Shortest Path from [{data.source}] to [{data.target}]</ErasBold>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
-            <Box>
-                <Typography fontSize={15}>Path Length: {data.path.length}</Typography>
-                {data.weighted && <Typography fontSize={15}>Path Weight: {data.totalWeight}</Typography>}
-            </Box>
-            <Button variant='contained' color='info' onClick={handleClick}>More Details</Button>
-            <OutputDialog
-                title='Dijkstra Path Details'
-                columns={data.weighted ? ['From', 'To', 'Weight'] : ['From', 'To']}
+    return (
+        <div style={{
+            maxWidth: 600, backgroundColor: currentThemeToken.color3,
+            color: currentThemeToken.colorText, padding: '16px'
+        }}>
+            <Title level={2} style={{ color: currentThemeToken.colorText }}>Dijkstra's Shortest Path</Title>
+            <Text strong style={{ color: currentThemeToken.colorText }}>
+                From [{data.source}] to [{data.target}]
+            </Text>
+            <Space direction="vertical" style={{ marginTop: 16 }}>
+                <Text style={{ color: currentThemeToken.colorText }}>Path Length: {data.path.length}</Text>
+                {data.weighted && <Text style={{ color: currentThemeToken.colorText }}>Path Weight: {data.totalWeight}</Text>}
+                <Button
+                    block
+                    onClick={handleClick}
+                    style={{ justifyContent: 'center', backgroundColor: currentThemeToken.colorButton2, color: "white", border: "none", boxShadow: "0 2px 4px 0 rgba(0,0,0,0.2)", borderRadius: "5px" }}>
+                    View Path Details
+                </Button>
+            </Space>
+
+            <Drawer
+                title="Dijkstra Path Details"
+                placement="right"
+                onClose={handleClick}
                 open={open}
-                handleClick={handleClick}
-                dataArray={data.path}
-                loadItems={loadItems}
-            />
-        </Box>
-    </>);
-}
+                width={400}
+            >
+                <Table
+                    dataSource={data.path.map((p, index) => ({ key: index, ...p }))}
+                    columns={columns}
+                    pagination={false}
+
+                />
+            </Drawer>
+        </div>
+    );
+};
 
 export default DijkstraSinglePath;

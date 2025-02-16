@@ -44,7 +44,7 @@ import { ConfigProvider, Layout, Breadcrumb, Menu, Input, Drawer, Flex, Form, Bu
 import { DarkMode, Brightness7 } from "@mui/icons-material";
 import { ThemeContext } from './context/theme';  // 引入创建好的上下文
 // import LeftSider from './pages/components/sider';
-import { NodeIndexOutlined, MoreOutlined, TeamOutlined, PicCenterOutlined, SearchOutlined, ImportOutlined, ExportOutlined } from '@ant-design/icons';
+import { NodeIndexOutlined, MoreOutlined, TeamOutlined, PicCenterOutlined, SearchOutlined, ImportOutlined, ExportOutlined, CloseOutlined } from '@ant-design/icons';
 const { Search } = Input;
 const { Header, Sider } = Layout;
 const { Option } = Select;
@@ -267,8 +267,8 @@ function App() {
           Breadcrumb: {
             separatorMargin: '20px',
             linkColor: currentThemeToken.colorText,
-            linkHoverColor: currentThemeToken.colorPrimary,
-            lastItemColor: currentThemeToken.colorPrimary,
+            // linkHoverColor: currentThemeToken.colorPrimary,
+            lastItemColor: currentThemeToken.colorHeader,
             separatorColor: currentThemeToken.colorText,
           },
           Modal: {
@@ -334,38 +334,91 @@ function App() {
 
                 style={{
                   width: "100%",
+
                 }}
               />
             )}
           </div>
           <Flex vertical gap="small" style={{ padding: "10px" }}>
-            <Tooltip title="Import Graph">
-              <Button
-                icon={<ImportOutlined />}
-                aria-controls="import-menu"
-                aria-haspopup="true"
-                onClick={(event) => setAnchorEl(event.currentTarget)}
-                startIcon={<UploadIcon />}
-                color="default" variant="solid"
+            {collapsed ? (
+              <Tooltip title="Import Graph">
 
-                block
-              >
-                Import
-              </Button>
-            </Tooltip>
-            <Tooltip title="Export Algorithm Data">
-              <Button
-                icon={<ExportOutlined />}
-                onClick={() => setExportOpen(true)}
-                startIcon={<FileDownloadIcon />}
-                variant="solid"
-                color="default"
-                block
-                disabled={activeResponse === null}
-              >
-                Export
-              </Button>
-            </Tooltip>
+                <Button
+                  shape="circle"
+                  icon={<ImportOutlined />}
+                  onClick={(event) => setAnchorEl(event.currentTarget)}
+                  style={{
+                    backgroundColor: currentThemeToken.colorButton,
+                    width: "30px",
+                    height: "30px",
+                    lineHeight: "30px", // 确保垂直居中
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginLeft: "15px",
+                    border: "none",
+                  }}
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip title="Import Graph">
+
+                <Button
+                  icon={<ImportOutlined />}
+                  aria-controls="import-menu"
+                  aria-haspopup="true"
+                  onClick={(event) => setAnchorEl(event.currentTarget)}
+                  startIcon={<UploadIcon />}
+                  block
+                  style={{
+                    backgroundColor: currentThemeToken.colorButton, // 按钮背景色
+                    border: "none",
+                  }}
+                >
+                  Import
+                </Button>
+              </Tooltip>
+            )}
+            {collapsed ? (
+              <Tooltip title="Export Algorithm Data">
+                <Button
+                  shape="circle"
+                  icon={<ExportOutlined />}
+                  onClick={() => setExportOpen(true)}
+                  startIcon={<FileDownloadIcon />}
+                  style={{
+                    backgroundColor: currentThemeToken.colorButton,
+                    border: "none",
+                    width: "30px",
+                    height: "30px",
+                    lineHeight: "30px", // 确保垂直居中
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginLeft: "15px",
+                  }}
+
+                  disabled={activeResponse === null}
+                >
+                </Button>
+              </Tooltip>
+            ) : (
+              <Tooltip title="Export Algorithm Data">
+                <Button
+                  icon={<ExportOutlined />}
+                  onClick={() => setExportOpen(true)}
+                  startIcon={<FileDownloadIcon />}
+                  style={{
+                    backgroundColor: currentThemeToken.colorButton, // 按钮背景色
+                    border: "none",
+                  }}
+                  block
+                  disabled={activeResponse === null}
+                >
+                  Export
+                </Button>
+              </Tooltip>
+            )
+            }
+
             <ImportMenu
               id="import-menu"
               anchorEl={anchorEl}
@@ -386,16 +439,14 @@ function App() {
           <SideMenu isDarkMode={isDarkMode} searchTerm={searchTerm} onAlgorithmClick={handleAlgorithmClick} />
           <Modal
             title={selectedAlgorithm?.title || "Algorithm Details"}
-            // bodyStyle={{ backgroundColor: isDarkMode ? "#1F1F1F" : "#fff" }} // 根据暗黑模式切换背景色
-
             open={drawerVisible}
             onCancel={() => setDrawerVisible(false)}
             footer={null}
             width={600}
+            closeIcon={
+              <CloseOutlined style={{ color: isDarkMode ? '#ffffff' : '#000000' }} />
+            }
           >
-            {/* 左侧算法展示Sider
-              */}
-
             {selectedAlgorithm ? (
               (() => {
                 switch (selectedAlgorithm.key) {
@@ -420,8 +471,8 @@ function App() {
                   case "AtoAll":
                     return (
                       <AlgorithmInput
-                        wasmFunction={wasmModule?.dijkstra_a_to_all}
-                        postState={postAlgorithmState.bind(null, Algorithm.DIJKSTRA_A_TO_ALL)}
+                        wasmFunction={wasmModule && wasmModule[algorithmConfig.DIJKSTRA_A_TO_ALL.wasm_function_name]}
+                        postState={postAlgorithmState.bind(null, Algorithm.DIJKSTRA_ALL)}
                         setLoading={setLoading}
                         algorithmName="Dijkstra (A to All)"
                         desc={["Find the shortest path from node A to all other nodes."]}
@@ -586,11 +637,8 @@ function App() {
             <AlgorithmOutput
               algorithm={activeAlgorithm}
               response={activeResponse}
+
             />
-
-
-
-
           </Box>
         </Layout>
       </Layout>
