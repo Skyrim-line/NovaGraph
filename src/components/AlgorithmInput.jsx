@@ -54,7 +54,7 @@ const AlgorithmInput = ({
         components: {
           Select: {
             borderColor: isDarkMode ? '#4d4d4d' : '#d9d9d9',
-            colorBgContainer: isDarkMode ? '#' : '#ffffff',
+            colorBgContainer: isDarkMode ? '#EEEEEE' : '#ffffff',
             colorText: isDarkMode ? '#ffffff' : '#000000',
             colorBorderHover: isDarkMode ? '#737373' : '#4096ff',
             colorBgElevated: isDarkMode ? '#262626' : '#ffffff', // 下拉菜单背景色

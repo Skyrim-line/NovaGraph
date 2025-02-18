@@ -8,7 +8,8 @@ export const darkModeToken = {
   colorText: '#ffffff', // 文本颜色
   colorHeader:"#76ABAE", // header breadcrumb color
   colorPrimary: '#76ABAE', // 主色
-  colorBottom: '#002140',
+  colorBottom: '#222',
+  colorDrawer:"#002140",
   colorTextPlaceholder: '#EEEEEE', // placeholder 颜色
   borderRadiusLG: '8px', // 圆角
 };
@@ -21,6 +22,7 @@ export const lightModeToken = {
   colorButton2:"#95CBCE",
   colorText: '#000000', // 文本颜色
   colorBottom: '#95CBCE',
+  colorDrawer:"#EEEEEE",
   colorHeader:"#76ABAE", // header breadcrumb color
   colorPrimary: '#76ABAE', // 主色
   colorTextPlaceholder: '#424242', // placeholder 颜色

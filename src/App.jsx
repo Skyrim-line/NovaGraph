@@ -28,11 +28,11 @@ import HelperCarousel from "./components/HelperCarousel";
 
 // 下面的是demo界面的主体代码
 import { useContext } from 'react';
-import { ConfigProvider, Layout, Breadcrumb, Menu, Input, Drawer, Flex, Form, Button, Modal, Select } from 'antd';
+import { ConfigProvider, Layout, Breadcrumb, Menu, Input, Drawer, Flex, Form, Button, Modal, Select, Dropdown } from 'antd';
 import { DarkMode, Brightness7 } from "@mui/icons-material";
 import { ThemeContext } from './context/theme';  // 引入创建好的上下文
 // import LeftSider from './pages/components/sider';
-import { NodeIndexOutlined, MoreOutlined, TeamOutlined, PicCenterOutlined, SearchOutlined, ImportOutlined, ExportOutlined, CloseOutlined } from '@ant-design/icons';
+import { NodeIndexOutlined, MoreOutlined, TeamOutlined, PicCenterOutlined, SearchOutlined, ImportOutlined, ExportOutlined, CloseOutlined, DownOutlined } from '@ant-design/icons';
 const { Search } = Input;
 const { Header, Sider } = Layout;
 const { Option } = Select;
@@ -101,6 +101,7 @@ const SideMenu = ({ isDarkMode, searchTerm, onAlgorithmClick }) => {
           </Menu.SubMenu>
         );
       }
+
       return (
         <Menu.Item key={item.key} onClick={() => onAlgorithmClick(item)}>
           {item.title}
@@ -240,6 +241,7 @@ function App() {
   // TODO: Demo 界面原先layout
   const [collapsed, setCollapsed] = useState(false);
   const { isDarkMode, setIsDarkMode, currentThemeToken } = useContext(ThemeContext);
+
 
 
   return (
@@ -427,6 +429,8 @@ function App() {
           {/* 侧边菜单 */}
 
           <SideMenu isDarkMode={isDarkMode} searchTerm={searchTerm} onAlgorithmClick={handleAlgorithmClick} />
+
+
           <Modal
             title={selectedAlgorithm?.title || "Algorithm Details"}
             open={drawerVisible}

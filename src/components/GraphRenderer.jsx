@@ -13,17 +13,20 @@ import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 import LabelOffIcon from '@mui/icons-material/LabelOff';
 import { Mode } from '../renderModes';
 import { ErasBold, ErasMedium } from './Eras';
-import { Margin } from '@mui/icons-material';
 import { ThemeContext } from '../context/theme';
+
 
 
 export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
     const cosmograph = useRef()
-    const scale = chroma.scale(['#e4c1ff', '#6750C6']);
+    // const scale = chroma.scale(['#e4c1ff', '#6750C6']);
+    const scale = chroma.scale(['#FFD65A', '#FF9D23']);
     const error = '#F05480'
-    const neutral = '#9f8fc3'
+    const neutral = '#F7F7F7' // 黄色的node
+    // const neutral = '#9f8fc3' // 紫色的node
     const contrast_green = '#67baa7'
-    const out_of_focus = '#332d48'
+    const link_color = '#98D8EF'
+    const out_of_focus = '#95CBCE'
     const { isDarkMode, currentThemeToken } = useContext(ThemeContext);
     /* Palette: https://mycolor.space/?hex=%236750C6&sub=1 (Spot Palette)
         - Dark: #6750c6
@@ -97,14 +100,14 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
         if (mode === Mode.COLOR_SHADE_DEFAULT && isNaN(colors[id])) {
             return 5
         }
-        return sizes[id] ? sizes[id] : 20
+        return sizes[id] ? sizes[id] : 7
     }
 
     const getLinkColor = link => {
         if (colors[`${link.source}-${link.target}`] > 0) {
-            return contrast_green
+            return link_color
         } else if (!directed && colors[`${link.target}-${link.source}`] > 0) {
-            return contrast_green
+            return link_color
         } else if (colors[`${link.target}-${link.source}`] === 0) {
             return scale(1).hex()
         } else if (!directed && colors[`${link.source}-${link.target}`] === 0) {
@@ -116,16 +119,16 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
 
     const getLinkWidth = link => {
         if (colors[`${link.source}-${link.target}`] >= 0) {
-            return 3
+            return 8
         } else if (!directed && colors[`${link.target}-${link.source}`] >= 0) {
-            return 3
+            return 8
         } else {
-            return 0.1
+            return 4
         }
     }
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '91.5vh' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '91.5vh', backgroundColor: '#222' }}>
 
             <CosmographProvider nodes={nodes} links={links}>
                 <CosmographSearch
@@ -134,48 +137,44 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                         { label: 'Name', accessor: n => n.name },
                         { label: 'ID', accessor: n => n.id }
                     ]}
-
-
+                    style={{ padding: '20px' }} // 设置内边距为10px，可根据需要调整
                 />
 
                 <Cosmograph
 
                     ref={cosmograph}
+                    nodeLabelColor={(node, id) => {
+                        return '#3674B5'; // 设置文字颜色为红色，或根据节点数据自定义
+                    }}
                     initialZoomLevel={1}
                     disableSimulation={false}
-
                     nodeSize={(_node, id) => getSize(id)}
                     nodeColor={(_node, id) => getColor(colors[id])}
                     linkColor={link => getLinkColor(link)}
                     nodeGreyoutOpacity={0.1}
                     linkWidth={link => getLinkWidth(link)}
-
                     nodeLabelAccessor={(node) => node.name ? node.name : node.id}
                     linkArrows={directed}
                     showDynamicLabels={dynamicLabels}
-
                     renderHoveredNodeRing={true}
                     hoveredNodeRingColor={contrast_green}
-
                     linkGreyoutOpacity={0}
-                    simulationLinkSpring={0.01}
+                    simulationLinkSpring={0.02}
                     simulationDecay={100000}
-
                     nodeSizeScale={nodeSizeScale}
                     simulationRepulsion={2}
                     simulationGravity={gravity}
                     simulationLinkDistance={20}
-
                     onClick={zoomToNode}
                 />
 
             </CosmographProvider>
 
-            <Box display='flex' sx={{ backgroundColor: currentThemeToken.colorBottom, padding: 0.6 }}>
+            <Box display='flex' sx={{ backgroundColor: '#222', padding: 0.6 }}>
                 <Tooltip title="Play Simulation">
                     <IconButton aria-label='play-simulation' onClick={() => cosmograph.current?.start()}
                         sx={{
-                            color: isDarkMode ? 'white' : 'black', // 图标颜色
+                            color: 'white', // 图标颜色
                         }}>
                         <PlayArrowIcon />
                     </IconButton>
@@ -183,21 +182,21 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                 <Tooltip title="Pause Simulation">
                     <IconButton aria-label='pause-simulation' onClick={() => cosmograph.current?.pause()}
                         sx={{
-                            color: isDarkMode ? 'white' : 'black', // 图标颜色
+                            color: 'white', // 图标颜色
                         }}>
                         <PauseIcon />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Restart Simulation">
                     <IconButton aria-label='restart-simulation' onClick={() => cosmograph.current?.create()} sx={{
-                        color: isDarkMode ? 'white' : 'black', // 图标颜色
+                        color: 'white', // 图标颜色
                     }}>
                         <ReplayIcon />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Fit All">
                     <IconButton aria-label='fit-view' onClick={zoomOut} sx={{
-                        color: isDarkMode ? 'white' : 'black', // 图标颜色
+                        color: 'white', // 图标颜色
                     }}>
                         <ZoomOutMapIcon />
                     </IconButton>
@@ -207,14 +206,14 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
 
                 <Tooltip title="Zoom Out">
                     <IconButton aria-label='zoom-out' onClick={zoomGraphOut} sx={{
-                        color: isDarkMode ? 'white' : 'black', // 图标颜色
+                        color: 'white', // 图标颜色
                     }}>
                         <ZoomOutIcon />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Zoom In">
                     <IconButton aria-label='zoom-in' onClick={zoomGraphIn} sx={{
-                        color: isDarkMode ? 'white' : 'black', // 图标颜色
+                        color: 'white', // 图标颜色
                     }}>
                         <ZoomInIcon />
                     </IconButton>
@@ -224,7 +223,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                     dynamicLabels ?
                         <Tooltip title="Hide Dynamic Labels">
                             <IconButton aria-label='hide-labels' onClick={() => setDynamicLabels(false)} sx={{
-                                color: isDarkMode ? 'white' : 'black', // 图标颜色
+                                color: 'white', // 图标颜色
                             }}>
                                 <LabelOutlinedIcon />
                             </IconButton>
@@ -232,7 +231,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                         :
                         <Tooltip title="Show Dynamic Labels">
                             <IconButton aria-label='show-labels' onClick={() => setDynamicLabels(true)} sx={{
-                                color: isDarkMode ? 'white' : 'black', // 图标颜色
+                                color: 'white', // 图标颜色
                             }}>
                                 <LabelOffIcon />
                             </IconButton>
@@ -242,7 +241,7 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
 
                 <Tooltip title="Graph Options">
                     <IconButton aria-label='graph-options' onClick={() => setOptionsDrawer(true)} sx={{
-                        color: isDarkMode ? 'white' : 'black', // 图标颜色
+                        color: 'white', // 图标颜色
                     }}>
                         <SettingsIcon />
                     </IconButton>
@@ -260,21 +259,38 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
                     elevation={0}
                     PaperProps={{
                         sx: {
-                            backgroundColor: currentThemeToken.colorBottom, // 根据主题模式调整背景色
+                            backgroundColor: currentThemeToken.colorDrawer, // 根据主题模式调整背景色
                             color: currentThemeToken.colorText, // 根据主题模式调整文字颜色
                         },
                     }}
                 >
                     <div style={{ height: '100%' }}>
                         <Box width={{ xs: '10rem', sm: '15rem' }} p={3}>
-                            <ErasBold pb={2} align="center" fontSize={24}>
+                            <Typography
+                                variant="h2"
+                                sx={{
+                                    color: currentThemeToken.colorText,
+                                    fontSize: '27px',
+                                    textAlign: 'center',
+                                    mb: 3,
+                                }}
+                            >
                                 Graph Options
-                            </ErasBold>
+                            </Typography>
                             <Divider sx={{ backgroundColor: currentThemeToken.colorText }} />
 
                             <Box pt={3} sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                                 <Box>
-                                    <ErasMedium align="center">Gravity Strength</ErasMedium>
+                                    <Typography
+                                        variant="h4"
+                                        sx={{
+                                            color: currentThemeToken.colorText,
+                                            fontSize: '20px',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        Graph Strength
+                                    </Typography>
                                     <RadioGroup value={gravity} onChange={(event) => setGravity(parseFloat(event.target.value))}>
                                         <FormControlLabel
                                             value={0}
@@ -311,7 +327,16 @@ export function GraphRenderer({ colors, sizes, nodes, links, directed, mode }) {
 
 
                                 <Box>
-                                    <ErasMedium align="center">Node Scalar Size</ErasMedium>
+                                    <Typography
+                                        variant="h4"
+                                        sx={{
+                                            color: currentThemeToken.colorText,
+                                            fontSize: '20px',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        Node Scalar Size
+                                    </Typography>
                                     <RadioGroup
                                         value={nodeSizeScale}
                                         onChange={(event) => setNodeSizeScale(parseFloat(event.target.value))}
