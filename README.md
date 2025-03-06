@@ -83,12 +83,12 @@ This issue is related to Emscripten and igraph’s build configuration, specific
 The problem originates from the test logic in etc/cmake/ieee754_endianness.cmake. Modify the file to skip the IEEE754 endianness check because Emscripten is always little-endian by default.
 
 **2. Edit the File**
-
 Open the ieee754_endianness.cmake file:
 
 ```shell
 src/wasm/igraph/etc/cmake/ieee754_endianness.cmake
 ```
+
 
 **3. Locate the Following Code (around line 38):**
 
