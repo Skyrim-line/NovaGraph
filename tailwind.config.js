@@ -8,24 +8,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        eras: ['"ITC Eras Book"', 'sans-serif'], // 定义字体
-      },
-      colors: {
-        primary: {
-          light: "#3b82f6", // 亮色主题主要颜色
-          dark: "#1e3a8a", // 暗色主题主要颜色
-        },
-        background: {
-          light: "#ffffff",
-          dark: "#333333", // 更偏灰色的暗色背景
-        },
-        text: {
-          light: "#000000",
-          dark: "#f5f5f5", // 浅灰色文本，避免纯白太刺眼
-        },
+        eras: ['"ITC Eras Book"', "sans-serif"], // 定义字体
       },
     },
   },
-  darkMode: "class", // 启用 class 模式切换
+  darkMode: "class",
   plugins: [], // 在这里使用插件
 };

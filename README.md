@@ -1,60 +1,125 @@
+![make](https://img.shields.io/badge/make-4.3-brightgreen.svg)
+![cmake](https://img.shields.io/badge/cmake-3.22.1-brightgreen.svg)
+![C++](https://img.shields.io/badge/C++-11.4.0-blue.svg)
+![NodeJs](https://img.shields.io/badge/Node-12.22.9-blue.svg)
+![npm](https://img.shields.io/badge/npm-8.5.1-blue.svg)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
+![Platform](https://img.shields.io/badge/platform-Linux-lightgrey.svg)
+
+
 # Novagraph
+
 A WebAssembly Project which uses C++ to deliver high-performance graph analytics.
 
 This project is part of my UNSW Honours Thesis and the description can be found at [TMS](https://thesis.cse.unsw.edu.au/topic/767).
 
-## Setup Environment 
+## Pre-requirement
 
-### 1. git clone 
+Before proceeding, ensure that `emcmake` is installed. You can refer to the following guide for installation instructions: https://gist.github.com/WesThorburn/00c47b267a0e8c8431e06b14997778e4.
 
-After you git cloned **Novagraph**, git clone three repositories: **igraph**, **rapidjson**,**pugixml**. 
+## Step 1: Clone NovaGraph Repository
 
-First clone **pugixml** and **rapidjson**
+First, clone the `NovaGraph `repository:
 
-#### pugximl
+```
+git clone <NovaGraph_repository_URL>
+```
 
-```shell
+## Step 2: Clone and Build Dependencies
+
+Navigate to the `src/wasm` directory to manage dependencies.
+
+### 1. Clone and Build pugixml
+
+```
 cd src/wasm
 git clone https://github.com/zeux/pugixml.git
-# Then set up build dir
 cd pugixml
 mkdir build
 cd build
-# Using Emscripten(emcmake + emmake):
 emcmake cmake ..
 emmake make
 ```
 
-After finish this step you will get the result like this
+### 2. Clone rapidjson
 
-![image-20250225230433665](/Users/skyrim/Library/Application Support/typora-user-images/image-20250225230433665.png)
-
-#### rapidjson
-
-```shell
+```
 cd src/wasm
 git clone https://github.com/Tencent/rapidjson.git
 ```
 
-#### igraph
+### 3. Clone and Build igraph
 
-NovaGraph uses the igraph C library for graph analytics and computations. To build, the igraph library needs to be built locally. The igraph library is not being tracked but can be built for WebAssembly with Emscripten and cmake installed:
+`NovaGraph ` relies on the igraph C library for graph analytics. To build `igraph` for WebAssembly:
 
-```bash
+```
 cd src/wasm
 git clone https://github.com/igraph/igraph.git
 cd igraph
 mkdir build
 cd build
 emcmake cmake ..
-cmake --build . # or emmake make
+cmake --build .  # or use: emmake make
 ```
 
-One of the problems I ran into was the "TestEndianess" check. To fix this, I had to add the line `SET(CMAKE_16BIT_TYPE "unsigned short")` in the file "/usr/share/cmake-3.28/Modules/TestBigEndian.cmake".
+Once all dependencies are cloned and built, you can proceed with the `NovaGraph` setup and development.
 
-Other problems may also pop up during the build which may require certain programs to be installed or small file modifications like the above to bypass. These will depend on what has been written in the library's `CMakeLists.txt` file.
+## Final Step
 
-#### Problems you might meet
+To compile, ensure the `igraph` library has been built and `build-wasm` includes the correct header files.
+
+```
+chmod +x build-wasm
+./build-wasm
+```
+
+Steps to build igraph are located in `src/wasm`.
+
+## Successfully Installed All Modules
+
+If you followed the steps above, you should get a result like this, and then you can successfully run the website locally:
+
+![problem6](README.assets/problem6.jpg)
+
+![sucessful](README.assets/sucessful.jpg)
+
+To run locally, first use `npm i` to install all node packages, then run the server using:
+
+```bash
+npm run dev
+```
+
+## Adding New Algorithms
+
+Currently, adding another algorithm requires a lot of file modification. The steps are:
+
+1. Create the function in C++
+   - the algorithm should be in a file located at `src/wasm/algorithms`
+   - takes in input passed from JavaScript
+   - return a `val` object with necessary fields for rendering output
+2. Add this function to `EMSCRIPTEN_BINDINGS` in `src/wasm/graph.cpp`
+3. Add the algorithm enum to `src/algorithms.js`
+4. Add the input button to `src/App.jsx`
+   - the button should be of type `AlgorithmInput`
+   - the button should fall in the relevant accordian (collapsible)
+5. Add algorithm explanation (hover text)
+   - `src/components/AlgorithmExplanation`
+6. Create the algorithm output file in `src/components/algorithmOutputs/NewAlgorithm.jsx`
+7. Add to `src/components/algorithmOutputs/AlgorithmOutput.jsx` in the `components` list
+
+> Work is currently being done to make this easier with the new `algorithm-config.jsx` file. As of October 2024, this has been completed for Path Finding & Search algorithms. These steps will be updated once finished with all algorithms.
+
+<!---
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+  -->
+  
+  
+## Problems you might meet
 
 if you run   npm run dev directly in src directory you will be warned that graph.js can not be found
 
@@ -72,7 +137,7 @@ so that you need to fix these problems before you run
 
 ##### Problem 1
 
-![Problem1](/Users/skyrim/UNSW/2024-Summer-Project/Set-Up/Problem1.jpg)
+![Problem1](README.assets/Problem1.jpg)
 
 This issue is related to Emscripten and igraph’s build configuration, specifically because the IEEE754 floating-point endianness test does not run correctly in the Emscripten environment. This is a known problem since igraph’s CMakeLists.txt assumes it is being executed in a local build environment rather than a cross-compilation environment.
 
@@ -117,7 +182,7 @@ emcmake cmake ..
 
 After you solved problem 1 Step5 you might meet problem like this
 
- ![Problem2](/Users/skyrim/UNSW/2024-Summer-Project/Set-Up/Problem2.jpg)
+![Problem2](README.assets/Problem2.jpg)
 
 The issue occurs because the igraph configuration script detected an inconsistency between the endianness of floating-point (double) values and uint64_t. This is a known issue, especially when cross-compiling to WebAssembly (WASM), since WebAssembly inherently uses little-endian format.
 
@@ -205,7 +270,7 @@ chmod +x build-wasm
 
 you might get the same result as mine:
 
-![Problem3](/Users/skyrim/UNSW/2024-Summer-Project/Set-Up/Problem3.jpg)
+![Problem3](README.assets/Problem3.jpg)
 
 Based on the error log, this is a **Node.js environment issue**, rather than a direct problem with the igraph build. Specifically, the arithchk.js script is using require, but since your project’s package.json specifies "type": "module", Node.js interprets .js files as **ES Modules**, which do not support require.
 
@@ -234,54 +299,3 @@ Modify it to:
 ```
 
 After making this change, save the file and try running your build process again.
-
-### Final Step
-
-TO compile, ensure the igraph library has been built and `build-wasm` includes the correct header files.
-```bash
-chmod +x build-wasm
-./build-wasm
-```
-
-Steps to build igraph is located in `src/wasm`.
-
-### Successful installed all modules
-
-if you followed the steps above you should get the result like this and then you can successfully run the website in local
-
-![problem6](/Users/skyrim/UNSW/2024-Summer-Project/Set-Up/problem6.jpg)
-
-![sucessful](/Users/skyrim/UNSW/2024-Summer-Project/Set-Up/sucessful.jpg)
-
-To run locally, first use `npm i` to install all node packages, then run the server using:
-
-```bash
-npm run dev
-```
-
-## Adding New Algorithms
-Currently, adding another algorithm requires a lot of file modification. The steps are:
-1. Create the function in C++
-    - the algorithm should be in a file located at `src/wasm/algorithms`
-    - takes in input passed from JavaScript
-    - return a `val` object with necessary fields for rendering output
-2. Add this function to `EMSCRIPTEN_BINDINGS` in `src/wasm/graph.cpp`
-3. Add the algorithm enum to `src/algorithms.js`
-4. Add the input button to `src/App.jsx`
-    - the button should be of type `AlgorithmInput`
-    - the button should fall in the relevant accordian (collapsible)
-5. Add algorithm explanation (hover text)
-    - `src/components/AlgorithmExplanation`
-6. Create the algorithm output file in `src/components/algorithmOutputs/NewAlgorithm.jsx`
-7. Add to `src/components/algorithmOutputs/AlgorithmOutput.jsx` in the `components` list
-
-> Work is currently being done to make this easier with the new `algorithm-config.jsx` file. As of October 2024, this has been completed for Path Finding & Search algorithms. These steps will be updated once finished with all algorithms.
-
-<!---
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
--->

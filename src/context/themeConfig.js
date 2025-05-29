@@ -1,31 +1,41 @@
 // themeConfig.js
 export const darkModeToken = {
-  colorBgContainer: '#8C8C8C', // 背景颜色
+  colorBgBase: "#0D0D15",
+  colorBgLayout: "#0D0D15",
+  colorBgElevated: "#0D0D15",
+  colorBgContainer: "#0D0D15",
   color2: "#222831",
-  color3: "#001529",   // header 
-  colorButton: "#76ABAE",
-  colorButton2:"#1677FF", // default button color
-  colorText: '#ffffff', // 文本颜色
-  colorHeader:"#76ABAE", // header breadcrumb color
-  colorPrimary: '#76ABAE', // 主色
-  colorBottom: '#222',
-  colorDrawer:"#002140",
-  colorTextPlaceholder: '#EEEEEE', // placeholder 颜色
-  borderRadiusLG: '8px', // 圆角
+  color3: "#0D0D15", // header
+  colorButton: "#5F5FFA",
+  colorButton2: "#1677FF", // default button color
+  colorText: "#ffffff", // text color
+  colorHeader: "#5F5FFA", // header breadcrumb color
+  colorPrimary: "#5F5FFA", // primary color
+  colorBottom: "#222",
+  colorDrawer: "#002140",
+  colorTextPlaceholder: "#EEEEEE", // placeholder color
+  colorTextDisabled: "rgba(255, 255, 255, 0.35)",
+  colorPrimaryDisabled: "rgba(255, 255, 255, 0.05)",
+  borderRadiusLG: "8px", // rounded corners
 };
 
 export const lightModeToken = {
-  colorBgContainer: '#95CBCE', // Sider背景颜色
+  colorBgBase: "#FFFFFF",
+  colorBgLayout: "#FFFFFF",
+  colorBgElevated: "#FFFFFF",
+  colorBgContainer: "#FFFFFF",
   color2: "#D9D9D9",
-  color3: "#EEEEEE",  // header 颜色
-  colorButton: "#EEEEEE",
-  colorButton2:"#95CBCE",
-  colorText: '#000000', // 文本颜色
-  colorBottom: '#95CBCE',
-  colorDrawer:"#EEEEEE",
-  colorHeader:"#76ABAE", // header breadcrumb color
-  colorPrimary: '#76ABAE', // 主色
-  colorTextPlaceholder: '#424242', // placeholder 颜色
-  borderRadiusLG: '8px', // 圆角
-  itemHoverBg: '#FFFFFF', // hover 颜色
+  color3: "#FFFFFF", // header color
+  colorButton: "#5F5FFA",
+  colorButton2: "#95CBCE",
+  colorText: "#000000", // text color
+  colorBottom: "#95CBCE",
+  colorDrawer: "#EEEEEE",
+  colorHeader: "#5F5FFA", // header breadcrumb color
+  colorPrimary: "#5F5FFA", // primary color
+  colorTextPlaceholder: "#424242", // placeholder color
+  colorTextDisabled: "rgba(0, 0, 0, 0.35)",
+  colorPrimaryDisabled: "rgba(0, 0, 0, 0.05)",
+  borderRadiusLG: "8px", // rounded corners
+  itemHoverBg: "#FFFFFF", // hover coolor
 };

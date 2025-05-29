@@ -1,72 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-
-
-html, body {
-
+html,
+body {
   margin: 0;
   padding: 0;
+  font-family: "Poppins";
 }
 
-:root {
-  --light-text-color: #000; 
-  --dark-text-color: #fff; 
+.logo {
+  display: flex;
+  gap: 0.5rem;
+  .font-logo {
+    font-size: 20px;
+    font-weight: 600;
+  }
 }
 
-.font-logo{
-  font-size: 40px;
-  font-weight: bold;
-  text-align: center;
-  margin: 16px;
-}
-
-.header{
-  height: 90px;
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 2rem 1.5rem;
 }
 
-.content {  
-  padding: 24px;
-  height: 600px;
-}
-
-.content-light {
-  background: #000000; 
-  color: var(--light-text-color);    
-}
-
-.content-dark {
-  background: #001529; 
-  color: #fff;         /* 暗黑模式字体颜色 */
-}
-
-
-.title{
+.title {
   margin-left: 20px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 24px;
   font-weight: medium;
 }
-
-
 
 .user-guide {
   display: flex;
-  align-items: center;
-  margin-left: auto;
-  margin-right: 20px;
-  font-size: 24px;
-  font-weight: medium;
-  font-family: 'Montserrat', sans-serif;
-  color: var(--link-color);
+  gap: 0.5rem;
 }
 
+.sider-container {
+  position: relative;
+  isolation: isolate;
+  z-index: 1;
+}
 
+.left-sider-trigger {
+  position: absolute;
+  border-radius: 0 0.5rem 0.5rem 0;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+}
 
-
+.right-sider-trigger {
+  position: absolute;
+  border-radius: 0.5rem 0 0 0.5rem;
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%);
+}

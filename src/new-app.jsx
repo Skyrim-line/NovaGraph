@@ -1,22 +1,19 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/home";
-import Guide from "./pages/guide";
-import { ThemeProvider } from "./context/theme";
-import Demo from "./pages/demo";
-import App from "./App";
+import { lazy } from "react";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+
 import "./App.css";
+// import Home from "./pages/home";
+import Demo from "./demopage";
+const Home = lazy(() => import("./pages/home"));
+
 function NewApp() {
   return (
-    <ThemeProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="demo" element={<Demo />} />
-          <Route path="guide" element={<Guide />} />
-          <Route path="app" element={<App />} />
-        </Routes>
-      </Router>
-    </ThemeProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/app" element={<Demo />} />
+      </Routes>
+    </Router>
   );
 }
 

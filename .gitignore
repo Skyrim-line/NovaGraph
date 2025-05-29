@@ -24,8 +24,14 @@ dist-ssr
 *.sw?
 
 # WASM
-src/wasm/igraph*
+src/wasm/igraph
 src/wasm/rapidjson
 src/wasm/pugixml
 src/graph.js
 src/graph.wasm
+
+# Test
+tests/local_tests
+
+# Front end visual
+tests/Front-end_test/KuzuTestInterface.jsx

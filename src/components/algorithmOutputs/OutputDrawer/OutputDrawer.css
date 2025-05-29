@@ -1,0 +1,31 @@
+.output-drawer-closed {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  border-radius: 0;
+  p {
+    font-weight: 600;
+  }
+}
+
+.output-drawer-open-button {
+  top: 0;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  border-radius: 0;
+  p {
+    font-weight: 600;
+  }
+}

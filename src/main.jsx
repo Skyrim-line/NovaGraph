@@ -1,16 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-// import App from "./App.jsx";
+import { ThemeProvider } from "./context/theme";
 import { GraphProvider } from "./context/GraphUpdate";
 import NewAPP from "./new-app.jsx";
-// import "./index.css";
 
-// 强制为暗黑模式
-// document.documentElement.classList.add("light");
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <GraphProvider>
-      <NewAPP />
-    </GraphProvider>
+    <ThemeProvider>
+      <GraphProvider>
+        <NewAPP />
+      </GraphProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );

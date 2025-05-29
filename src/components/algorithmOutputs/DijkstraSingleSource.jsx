@@ -1,43 +1,94 @@
-import { Button, Box, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { RTableCell as Cell, RTableRow as Row } from './ResultsTable';
-import { ErasBold } from '../Eras';
-import OutputDialog from './OutputDialog';
+import { useContext, useEffect } from "react";
+import { Table, Typography, Space, Card, ConfigProvider } from "antd";
+import { ThemeContext } from "../../context/theme";
 
+const { Title } = Typography;
 const DijkstraSingleSource = ({ data }) => {
-    const [open, setOpen] = useState(false);
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
+  const { isDarkMode, currentThemeToken } = useContext(ThemeContext);
+  useEffect(() => {
+    // console.log(data);
+  }, [data]);
 
-    const handleClick = () => {
-        setOpen(!open);
-    }
+  const columns = [
+    {
+      title: "To",
+      dataIndex: "target",
+      key: "target",
+    },
+    {
+      title: "Path",
+      dataIndex: "path",
+      key: "path",
+      render: (path) => path?.join(" → "),
+    },
+    data.weighted
+      ? {
+          title: "Weight",
+          dataIndex: "weight",
+          key: "weight",
+        }
+      : {
+          title: "Length",
+          dataIndex: "path",
+          key: "length",
+          render: (path) => path?.length,
+        },
+  ];
 
-    const loadItems = (paths, records) => {
-        return paths.slice(0, records).map((path, index) => (
-            <Row key={index}>
-                <Cell>{path.target}</Cell>
-                <Cell style={{ wordWrap: 'break-word', maxWidth: 250 }}>{path.path.join(' → ')}</Cell>
-                <Cell align='center'>{data.weighted ? path.weight : path.path.length}</Cell>
-            </Row>
-        ));
-    }
+  return (
+    <>
+      <ConfigProvider
+        theme={{
+          components: {
+            Drawer: {
+              colorBgElevated: isDarkMode
+                ? currentThemeToken.color3
+                : "#ffffff",
+              colorText: currentThemeToken.colorText,
+            },
+            Table: {
+              headerBg: isDarkMode ? "#333333" : "#f5f5f5",
+              headerColor: isDarkMode ? "#ffffff" : "#000000",
+              borderColor: isDarkMode ? "#444444" : "#d9d9d9",
+              rowHoverBg: isDarkMode ? "#444444" : "#f5f5f5",
+              colorText: currentThemeToken.colorText,
+              colorBgContainer: isDarkMode
+                ? currentThemeToken.color3
+                : "#ffffff",
+            },
+          },
+        }}>
+        <Card
+          style={{
+            backgroundColor: currentThemeToken.color3,
+            color: currentThemeToken.colorText,
+            borderRadius: "0px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          }}
+          bordered={false}>
+          <Title
+            level={3}
+            style={{
+              color: currentThemeToken.colorText,
+              marginBottom: "8px",
+              fontSize: "28px",
+              marginTop: 0,
+            }}>
+            Dijkstra's Shortest Path from [{data.source}] to All
+          </Title>
 
-    return (<>
-        <ErasBold fontSize={20} mb={1}>Dijkstra's Shortest Path from [{data.source}] to All</ErasBold>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 10 }}>
-            <Button variant='contained' color='info' onClick={handleClick}>Details</Button>
-            <OutputDialog
-                title={`Dijkstra Paths from [${data.source}]`}
-                columns={['To', 'Path', data.weighted ? 'Weight' : 'Length']}
-                open={open}
-                handleClick={handleClick}
-                dataArray={data.paths}
-                loadItems={loadItems}
+          <Space direction="vertical" style={{ marginTop: 16, width: "100%" }}>
+            <Table
+              dataSource={data.paths.map((p, index) => ({ key: index, ...p }))}
+              columns={columns}
+              pagination={false}
+              style={{ marginTop: 16 }}
             />
-        </Box>
-    </>);
-}
+          </Space>
+        </Card>
+      </ConfigProvider>
+    </>
+  );
+};
 
 export default DijkstraSingleSource;
